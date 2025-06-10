@@ -5,7 +5,6 @@ import 'package:iptv_player/models/movie.dart';
 import 'package:iptv_player/models/progress_step.dart';
 import 'package:iptv_player/models/series.dart';
 import 'package:iptv_player/models/server_info.dart';
-import 'package:iptv_player/models/user_info.dart';
 import 'package:iptv_player/repositories/iptv_repository_interface.dart';
 
 class IptvController extends ChangeNotifier {

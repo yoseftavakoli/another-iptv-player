@@ -1,6 +1,5 @@
 // views/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
-import 'package:iptv_player/models/api_configuration_model.dart';
 import 'package:iptv_player/views/screens/progress/progress_loading_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../controllers/playlist_controller.dart';

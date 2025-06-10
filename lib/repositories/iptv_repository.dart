@@ -1,6 +1,5 @@
 // repositories/iptv_repository.dart
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/api_configuration_model.dart';
@@ -9,7 +8,6 @@ import 'package:iptv_player/models/channel.dart';
 import 'package:iptv_player/models/movie.dart';
 import 'package:iptv_player/models/series.dart';
 import 'package:iptv_player/models/server_info.dart';
-import 'package:iptv_player/models/user_info.dart';
 import 'package:iptv_player/repositories/iptv_repository_interface.dart';
 
 class IptvRepository implements IptvRepositoryInterface {

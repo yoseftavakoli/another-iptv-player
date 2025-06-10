@@ -4,7 +4,6 @@ import 'package:iptv_player/models/channel.dart';
 import 'package:iptv_player/models/movie.dart';
 import 'package:iptv_player/models/series.dart';
 import 'package:iptv_player/models/server_info.dart';
-import 'package:iptv_player/models/user_info.dart';
 
 abstract class IptvRepositoryInterface {
   // Player bilgileri

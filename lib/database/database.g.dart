@@ -2288,6 +2288,482 @@ class ServerInfosCompanion extends UpdateCompanion<ServerInfosData> {
   }
 }
 
+class $LiveStreamsTable extends LiveStreams
+    with TableInfo<$LiveStreamsTable, LiveStreamsData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LiveStreamsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _streamIdMeta = const VerificationMeta(
+    'streamId',
+  );
+  @override
+  late final GeneratedColumn<String> streamId = GeneratedColumn<String>(
+    'stream_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _streamIconMeta = const VerificationMeta(
+    'streamIcon',
+  );
+  @override
+  late final GeneratedColumn<String> streamIcon = GeneratedColumn<String>(
+    'stream_icon',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _categoryIdMeta = const VerificationMeta(
+    'categoryId',
+  );
+  @override
+  late final GeneratedColumn<String> categoryId = GeneratedColumn<String>(
+    'category_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _epgChannelIdMeta = const VerificationMeta(
+    'epgChannelId',
+  );
+  @override
+  late final GeneratedColumn<String> epgChannelId = GeneratedColumn<String>(
+    'epg_channel_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _playlistIdMeta = const VerificationMeta(
+    'playlistId',
+  );
+  @override
+  late final GeneratedColumn<String> playlistId = GeneratedColumn<String>(
+    'playlist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    streamId,
+    name,
+    streamIcon,
+    categoryId,
+    epgChannelId,
+    playlistId,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'live_streams';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<LiveStreamsData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('stream_id')) {
+      context.handle(
+        _streamIdMeta,
+        streamId.isAcceptableOrUnknown(data['stream_id']!, _streamIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_streamIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('stream_icon')) {
+      context.handle(
+        _streamIconMeta,
+        streamIcon.isAcceptableOrUnknown(data['stream_icon']!, _streamIconMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_streamIconMeta);
+    }
+    if (data.containsKey('category_id')) {
+      context.handle(
+        _categoryIdMeta,
+        categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryIdMeta);
+    }
+    if (data.containsKey('epg_channel_id')) {
+      context.handle(
+        _epgChannelIdMeta,
+        epgChannelId.isAcceptableOrUnknown(
+          data['epg_channel_id']!,
+          _epgChannelIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_epgChannelIdMeta);
+    }
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+        _playlistIdMeta,
+        playlistId.isAcceptableOrUnknown(data['playlist_id']!, _playlistIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {streamId, playlistId};
+  @override
+  LiveStreamsData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LiveStreamsData(
+      streamId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}stream_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      streamIcon: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}stream_icon'],
+      )!,
+      categoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category_id'],
+      )!,
+      epgChannelId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}epg_channel_id'],
+      )!,
+      playlistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}playlist_id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $LiveStreamsTable createAlias(String alias) {
+    return $LiveStreamsTable(attachedDatabase, alias);
+  }
+}
+
+class LiveStreamsData extends DataClass implements Insertable<LiveStreamsData> {
+  final String streamId;
+  final String name;
+  final String streamIcon;
+  final String categoryId;
+  final String epgChannelId;
+  final String playlistId;
+  final DateTime createdAt;
+  const LiveStreamsData({
+    required this.streamId,
+    required this.name,
+    required this.streamIcon,
+    required this.categoryId,
+    required this.epgChannelId,
+    required this.playlistId,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['stream_id'] = Variable<String>(streamId);
+    map['name'] = Variable<String>(name);
+    map['stream_icon'] = Variable<String>(streamIcon);
+    map['category_id'] = Variable<String>(categoryId);
+    map['epg_channel_id'] = Variable<String>(epgChannelId);
+    map['playlist_id'] = Variable<String>(playlistId);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  LiveStreamsCompanion toCompanion(bool nullToAbsent) {
+    return LiveStreamsCompanion(
+      streamId: Value(streamId),
+      name: Value(name),
+      streamIcon: Value(streamIcon),
+      categoryId: Value(categoryId),
+      epgChannelId: Value(epgChannelId),
+      playlistId: Value(playlistId),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory LiveStreamsData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LiveStreamsData(
+      streamId: serializer.fromJson<String>(json['streamId']),
+      name: serializer.fromJson<String>(json['name']),
+      streamIcon: serializer.fromJson<String>(json['streamIcon']),
+      categoryId: serializer.fromJson<String>(json['categoryId']),
+      epgChannelId: serializer.fromJson<String>(json['epgChannelId']),
+      playlistId: serializer.fromJson<String>(json['playlistId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'streamId': serializer.toJson<String>(streamId),
+      'name': serializer.toJson<String>(name),
+      'streamIcon': serializer.toJson<String>(streamIcon),
+      'categoryId': serializer.toJson<String>(categoryId),
+      'epgChannelId': serializer.toJson<String>(epgChannelId),
+      'playlistId': serializer.toJson<String>(playlistId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  LiveStreamsData copyWith({
+    String? streamId,
+    String? name,
+    String? streamIcon,
+    String? categoryId,
+    String? epgChannelId,
+    String? playlistId,
+    DateTime? createdAt,
+  }) => LiveStreamsData(
+    streamId: streamId ?? this.streamId,
+    name: name ?? this.name,
+    streamIcon: streamIcon ?? this.streamIcon,
+    categoryId: categoryId ?? this.categoryId,
+    epgChannelId: epgChannelId ?? this.epgChannelId,
+    playlistId: playlistId ?? this.playlistId,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  LiveStreamsData copyWithCompanion(LiveStreamsCompanion data) {
+    return LiveStreamsData(
+      streamId: data.streamId.present ? data.streamId.value : this.streamId,
+      name: data.name.present ? data.name.value : this.name,
+      streamIcon: data.streamIcon.present
+          ? data.streamIcon.value
+          : this.streamIcon,
+      categoryId: data.categoryId.present
+          ? data.categoryId.value
+          : this.categoryId,
+      epgChannelId: data.epgChannelId.present
+          ? data.epgChannelId.value
+          : this.epgChannelId,
+      playlistId: data.playlistId.present
+          ? data.playlistId.value
+          : this.playlistId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LiveStreamsData(')
+          ..write('streamId: $streamId, ')
+          ..write('name: $name, ')
+          ..write('streamIcon: $streamIcon, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('epgChannelId: $epgChannelId, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    streamId,
+    name,
+    streamIcon,
+    categoryId,
+    epgChannelId,
+    playlistId,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LiveStreamsData &&
+          other.streamId == this.streamId &&
+          other.name == this.name &&
+          other.streamIcon == this.streamIcon &&
+          other.categoryId == this.categoryId &&
+          other.epgChannelId == this.epgChannelId &&
+          other.playlistId == this.playlistId &&
+          other.createdAt == this.createdAt);
+}
+
+class LiveStreamsCompanion extends UpdateCompanion<LiveStreamsData> {
+  final Value<String> streamId;
+  final Value<String> name;
+  final Value<String> streamIcon;
+  final Value<String> categoryId;
+  final Value<String> epgChannelId;
+  final Value<String> playlistId;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const LiveStreamsCompanion({
+    this.streamId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.streamIcon = const Value.absent(),
+    this.categoryId = const Value.absent(),
+    this.epgChannelId = const Value.absent(),
+    this.playlistId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  LiveStreamsCompanion.insert({
+    required String streamId,
+    required String name,
+    required String streamIcon,
+    required String categoryId,
+    required String epgChannelId,
+    required String playlistId,
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : streamId = Value(streamId),
+       name = Value(name),
+       streamIcon = Value(streamIcon),
+       categoryId = Value(categoryId),
+       epgChannelId = Value(epgChannelId),
+       playlistId = Value(playlistId);
+  static Insertable<LiveStreamsData> custom({
+    Expression<String>? streamId,
+    Expression<String>? name,
+    Expression<String>? streamIcon,
+    Expression<String>? categoryId,
+    Expression<String>? epgChannelId,
+    Expression<String>? playlistId,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (streamId != null) 'stream_id': streamId,
+      if (name != null) 'name': name,
+      if (streamIcon != null) 'stream_icon': streamIcon,
+      if (categoryId != null) 'category_id': categoryId,
+      if (epgChannelId != null) 'epg_channel_id': epgChannelId,
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LiveStreamsCompanion copyWith({
+    Value<String>? streamId,
+    Value<String>? name,
+    Value<String>? streamIcon,
+    Value<String>? categoryId,
+    Value<String>? epgChannelId,
+    Value<String>? playlistId,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return LiveStreamsCompanion(
+      streamId: streamId ?? this.streamId,
+      name: name ?? this.name,
+      streamIcon: streamIcon ?? this.streamIcon,
+      categoryId: categoryId ?? this.categoryId,
+      epgChannelId: epgChannelId ?? this.epgChannelId,
+      playlistId: playlistId ?? this.playlistId,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (streamId.present) {
+      map['stream_id'] = Variable<String>(streamId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (streamIcon.present) {
+      map['stream_icon'] = Variable<String>(streamIcon.value);
+    }
+    if (categoryId.present) {
+      map['category_id'] = Variable<String>(categoryId.value);
+    }
+    if (epgChannelId.present) {
+      map['epg_channel_id'] = Variable<String>(epgChannelId.value);
+    }
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LiveStreamsCompanion(')
+          ..write('streamId: $streamId, ')
+          ..write('name: $name, ')
+          ..write('streamIcon: $streamIcon, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('epgChannelId: $epgChannelId, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2295,6 +2771,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $UserInfosTable userInfos = $UserInfosTable(this);
   late final $ServerInfosTable serverInfos = $ServerInfosTable(this);
+  late final $LiveStreamsTable liveStreams = $LiveStreamsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2304,6 +2781,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     categories,
     userInfos,
     serverInfos,
+    liveStreams,
   ];
 }
 
@@ -3438,6 +3916,252 @@ typedef $$ServerInfosTableProcessedTableManager =
       ServerInfosData,
       PrefetchHooks Function()
     >;
+typedef $$LiveStreamsTableCreateCompanionBuilder =
+    LiveStreamsCompanion Function({
+      required String streamId,
+      required String name,
+      required String streamIcon,
+      required String categoryId,
+      required String epgChannelId,
+      required String playlistId,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $$LiveStreamsTableUpdateCompanionBuilder =
+    LiveStreamsCompanion Function({
+      Value<String> streamId,
+      Value<String> name,
+      Value<String> streamIcon,
+      Value<String> categoryId,
+      Value<String> epgChannelId,
+      Value<String> playlistId,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$LiveStreamsTableFilterComposer
+    extends Composer<_$AppDatabase, $LiveStreamsTable> {
+  $$LiveStreamsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get streamId => $composableBuilder(
+    column: $table.streamId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get streamIcon => $composableBuilder(
+    column: $table.streamIcon,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get epgChannelId => $composableBuilder(
+    column: $table.epgChannelId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$LiveStreamsTableOrderingComposer
+    extends Composer<_$AppDatabase, $LiveStreamsTable> {
+  $$LiveStreamsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get streamId => $composableBuilder(
+    column: $table.streamId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get streamIcon => $composableBuilder(
+    column: $table.streamIcon,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get epgChannelId => $composableBuilder(
+    column: $table.epgChannelId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$LiveStreamsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LiveStreamsTable> {
+  $$LiveStreamsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get streamId =>
+      $composableBuilder(column: $table.streamId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get streamIcon => $composableBuilder(
+    column: $table.streamIcon,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get epgChannelId => $composableBuilder(
+    column: $table.epgChannelId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$LiveStreamsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $LiveStreamsTable,
+          LiveStreamsData,
+          $$LiveStreamsTableFilterComposer,
+          $$LiveStreamsTableOrderingComposer,
+          $$LiveStreamsTableAnnotationComposer,
+          $$LiveStreamsTableCreateCompanionBuilder,
+          $$LiveStreamsTableUpdateCompanionBuilder,
+          (
+            LiveStreamsData,
+            BaseReferences<_$AppDatabase, $LiveStreamsTable, LiveStreamsData>,
+          ),
+          LiveStreamsData,
+          PrefetchHooks Function()
+        > {
+  $$LiveStreamsTableTableManager(_$AppDatabase db, $LiveStreamsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LiveStreamsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LiveStreamsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LiveStreamsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> streamId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> streamIcon = const Value.absent(),
+                Value<String> categoryId = const Value.absent(),
+                Value<String> epgChannelId = const Value.absent(),
+                Value<String> playlistId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => LiveStreamsCompanion(
+                streamId: streamId,
+                name: name,
+                streamIcon: streamIcon,
+                categoryId: categoryId,
+                epgChannelId: epgChannelId,
+                playlistId: playlistId,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String streamId,
+                required String name,
+                required String streamIcon,
+                required String categoryId,
+                required String epgChannelId,
+                required String playlistId,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => LiveStreamsCompanion.insert(
+                streamId: streamId,
+                name: name,
+                streamIcon: streamIcon,
+                categoryId: categoryId,
+                epgChannelId: epgChannelId,
+                playlistId: playlistId,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$LiveStreamsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $LiveStreamsTable,
+      LiveStreamsData,
+      $$LiveStreamsTableFilterComposer,
+      $$LiveStreamsTableOrderingComposer,
+      $$LiveStreamsTableAnnotationComposer,
+      $$LiveStreamsTableCreateCompanionBuilder,
+      $$LiveStreamsTableUpdateCompanionBuilder,
+      (
+        LiveStreamsData,
+        BaseReferences<_$AppDatabase, $LiveStreamsTable, LiveStreamsData>,
+      ),
+      LiveStreamsData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3450,4 +4174,6 @@ class $AppDatabaseManager {
       $$UserInfosTableTableManager(_db, _db.userInfos);
   $$ServerInfosTableTableManager get serverInfos =>
       $$ServerInfosTableTableManager(_db, _db.serverInfos);
+  $$LiveStreamsTableTableManager get liveStreams =>
+      $$LiveStreamsTableTableManager(_db, _db.liveStreams);
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' hide Category;
 import 'package:iptv_player/models/api_response.dart';
 import 'package:iptv_player/models/category.dart';
-import 'package:iptv_player/models/channel.dart';
+import 'package:iptv_player/models/live_stream.dart';
 import 'package:iptv_player/models/movie.dart';
 import 'package:iptv_player/models/progress_step.dart';
 import 'package:iptv_player/models/series.dart';
@@ -14,10 +14,10 @@ class IptvController extends ChangeNotifier {
 
   // State
   ApiResponse? _userInfo;
-  List<Category>? _liveCategories ;
+  List<Category>? _liveCategories;
   List<Category>? _vodCategories;
   List<Category>? _seriesCategories;
-  List<Channel>? _liveChannels;
+  List<LiveStream>? _liveChannels;
   List<Movie>? _movies;
   List<Series>? _series;
 
@@ -31,7 +31,7 @@ class IptvController extends ChangeNotifier {
   List<Category>? get liveCategories => _liveCategories;
   List<Category>? get vodCategories => _vodCategories;
   List<Category>? get seriesCategories => _seriesCategories;
-  List<Channel>? get liveChannels => _liveChannels;
+  List<LiveStream>? get liveChannels => _liveChannels;
   List<Movie>? get movies => _movies;
   List<Series>? get series => _series;
   bool get isLoading => _isLoading;
@@ -94,11 +94,11 @@ class IptvController extends ChangeNotifier {
     }
   }
 
-    // Tek tip kategori yükle
+  // Tek tip kategori yükle
   Future<bool> loadCategoriesByType(CategoryType type) async {
     try {
       List<Category>? categories;
-      
+
       switch (type) {
         case CategoryType.live:
           categories = await _repository.getLiveCategories();
@@ -113,7 +113,7 @@ class IptvController extends ChangeNotifier {
           if (categories != null) _seriesCategories = categories;
           break;
       }
-      
+
       notifyListeners();
       return categories != null;
     } catch (e) {

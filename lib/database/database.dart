@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:iptv_player/models/category.dart';
+import 'package:iptv_player/models/live_stream.dart';
 import 'package:iptv_player/models/server_info.dart';
 import 'package:iptv_player/models/user_info.dart';
 import 'package:path_provider/path_provider.dart';
@@ -70,12 +71,28 @@ class ServerInfos extends Table {
   TextColumn get timeNow => text()();
 }
 
-@DriftDatabase(tables: [Playlists, Categories, UserInfos, ServerInfos])
+@DataClassName('LiveStreamsData')
+class LiveStreams extends Table {
+  TextColumn get streamId => text()();
+  TextColumn get name => text()();
+  TextColumn get streamIcon => text()();
+  TextColumn get categoryId => text()();
+  TextColumn get epgChannelId => text()();
+  TextColumn get playlistId => text()(); // Ekstra property
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {streamId, playlistId};
+}
+
+@DriftDatabase(
+  tables: [Playlists, Categories, UserInfos, ServerInfos, LiveStreams],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3; // Kategori tablosu eklendiği için versiyon artırıldı
+  int get schemaVersion => 4; // LiveStreams tablosu eklendiği için versiyon artırıldı
 
   // === PLAYLIST İŞLEMLERİ ===
 
@@ -534,6 +551,55 @@ class AppDatabase extends _$AppDatabase {
     )..where((tbl) => tbl.playlistId.equals(playlistId))).go();
   }
 
+  // Live Streams
+  Future<void> insertLiveStreams(List<LiveStream> liveStreams) async {
+    final liveStreamsCompanions = liveStreams
+        .map(
+          (liveStream) => LiveStreamsCompanion(
+            streamId: Value(liveStream.streamId),
+            name: Value(liveStream.name),
+            streamIcon: Value(liveStream.streamIcon),
+            categoryId: Value(liveStream.categoryId),
+            epgChannelId: Value(liveStream.epgChannelId),
+            playlistId: Value(liveStream.playlistId ?? ''),
+          ),
+        )
+        .toList();
+
+    await batch((batch) {
+      batch.insertAllOnConflictUpdate(this.liveStreams, liveStreamsCompanions);
+    });
+  }
+
+  Future<List<LiveStream>> getLiveStreams(String playlistId) async {
+    final rows = await (select(
+      liveStreams,
+    )..where((ls) => ls.playlistId.equals(playlistId))).get();
+
+    return rows.map((row) => LiveStream.fromDriftLiveStream(row)).toList();
+  }
+
+  Future<List<LiveStream>> getLiveStreamsByCategoryId(
+    String playlistId,
+    String categoryId,
+  ) async {
+    final rows =
+        await (select(liveStreams)..where(
+              (ls) =>
+                  ls.playlistId.equals(playlistId) &
+                  ls.categoryId.equals(categoryId),
+            ))
+            .get();
+
+    return rows.map((row) => LiveStream.fromDriftLiveStream(row)).toList();
+  }
+
+  Future<void> deleteLiveStreamsByPlaylistId(String playlistId) async {
+    await (delete(
+      liveStreams,
+    )..where((ls) => ls.playlistId.equals(playlistId))).go();
+  }
+
   // Database migration
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -549,6 +615,10 @@ class AppDatabase extends _$AppDatabase {
         // UserInfo ve ServerInfo tablolarını ekle
         await m.createTable(userInfos);
         await m.createTable(serverInfos);
+      }
+      if (from < 4) {
+        // LiveStreams tablosunu oluştur
+        await m.createTable(liveStreams);
       }
     },
   );

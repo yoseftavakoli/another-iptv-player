@@ -4,7 +4,7 @@ import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/api_configuration_model.dart';
 import 'package:iptv_player/models/api_response.dart';
 import 'package:iptv_player/models/category.dart';
-import 'package:iptv_player/models/channel.dart';
+import 'package:iptv_player/models/live_stream.dart';
 import 'package:iptv_player/models/movie.dart';
 import 'package:iptv_player/models/series.dart';
 
@@ -39,7 +39,11 @@ class IptvRepository {
         var serverInfo = await _database.getServerInfoByPlaylistId(_playlistId);
 
         if (userInfo != null && serverInfo != null) {
-          return ApiResponse(userInfo: userInfo, serverInfo: serverInfo, playlistId: _playlistId);
+          return ApiResponse(
+            userInfo: userInfo,
+            serverInfo: serverInfo,
+            playlistId: _playlistId,
+          );
         }
       }
 
@@ -65,8 +69,19 @@ class IptvRepository {
   }
 
   @override
-  Future<List<Channel>?> getLiveChannels({String? categoryId}) async {
+  Future<List<LiveStream>?> getLiveChannels({
+    String? categoryId,
+    bool forceRefresh = false,
+  }) async {
     try {
+      if (!forceRefresh) {
+        var liveStreams = await _database.getLiveStreams(_playlistId);
+
+        if (liveStreams.isNotEmpty) {
+          return liveStreams;
+        }
+      }
+
       final additionalParams = <String, String>{'action': 'get_live_streams'};
 
       if (categoryId != null) {
@@ -80,7 +95,13 @@ class IptvRepository {
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-        return jsonData.map((json) => Channel.fromJson(json)).toList();
+        var liveStreams = jsonData
+            .map((json) => LiveStream.fromJson(json, _playlistId))
+            .toList();
+
+        await _database.deleteLiveStreamsByPlaylistId(_playlistId);
+        await _database.insertLiveStreams(liveStreams);
+        return liveStreams;
       } else {
         throw Exception(
           'HTTP ${response.statusCode}: ${response.reasonPhrase}',

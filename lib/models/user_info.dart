@@ -1,4 +1,6 @@
 class UserInfo {
+  final int? id;
+  final String playlistId;
   final String username;
   final String password;
   final String message;
@@ -12,6 +14,8 @@ class UserInfo {
   final List<String> allowedOutputFormats;
 
   UserInfo({
+    this.id,
+    required this.playlistId,
     required this.username,
     required this.password,
     required this.message,
@@ -25,8 +29,9 @@ class UserInfo {
     required this.allowedOutputFormats,
   });
 
-  factory UserInfo.fromJson(Map<String, dynamic> json) {
+  factory UserInfo.fromJson(Map<String, dynamic> json, String playlistId) {
     return UserInfo(
+      playlistId: playlistId,
       username: json['username'] ?? '',
       password: json['password'] ?? '',
       message: json['message'] ?? '',
@@ -41,5 +46,22 @@ class UserInfo {
           ? List<String>.from(json['allowed_output_formats'])
           : [],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'playlistId': playlistId,
+      'username': username,
+      'password': password,
+      'message': message,
+      'auth': auth,
+      'status': status,
+      'expDate': expDate,
+      'isTrial': isTrial,
+      'activeCons': activeCons,
+      'createdAt': createdAt,
+      'maxConnections': maxConnections,
+      'allowedOutputFormats': allowedOutputFormats,
+    };
   }
 }

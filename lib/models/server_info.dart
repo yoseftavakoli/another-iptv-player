@@ -1,7 +1,6 @@
-// models/server_info.dart
-import 'package:iptv_player/models/user_info.dart';
-
 class ServerInfo {
+  final int? id;
+  final String playlistId;
   final String url;
   final String port;
   final String httpsPort;
@@ -12,6 +11,8 @@ class ServerInfo {
   final String timeNow;
 
   ServerInfo({
+    this.id,
+    required this.playlistId,
     required this.url,
     required this.port,
     required this.httpsPort,
@@ -22,8 +23,9 @@ class ServerInfo {
     required this.timeNow,
   });
 
-  factory ServerInfo.fromJson(Map<String, dynamic> json) {
+  factory ServerInfo.fromJson(Map<String, dynamic> json, String playlistId) {
     return ServerInfo(
+      playlistId: playlistId,
       url: json['url'] ?? '',
       port: json['port'] ?? '',
       httpsPort: json['https_port'] ?? '',
@@ -34,19 +36,18 @@ class ServerInfo {
       timeNow: json['time_now'] ?? '',
     );
   }
-}
 
-// models/api_response.dart
-class ApiResponse {
-  final UserInfo userInfo;
-  final ServerInfo serverInfo;
-
-  ApiResponse({required this.userInfo, required this.serverInfo});
-
-  factory ApiResponse.fromJson(Map<String, dynamic> json) {
-    return ApiResponse(
-      userInfo: UserInfo.fromJson(json['user_info'] ?? {}),
-      serverInfo: ServerInfo.fromJson(json['server_info'] ?? {}),
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'playlistId': playlistId,
+      'url': url,
+      'port': port,
+      'httpsPort': httpsPort,
+      'serverProtocol': serverProtocol,
+      'rtmpPort': rtmpPort,
+      'timezone': timezone,
+      'timestampNow': timestampNow,
+      'timeNow': timeNow,
+    };
   }
 }

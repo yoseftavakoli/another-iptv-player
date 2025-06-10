@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:iptv_player/models/category.dart';
+import 'package:iptv_player/models/server_info.dart';
+import 'package:iptv_player/models/user_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../models/playlist_model.dart';
@@ -37,12 +39,43 @@ class Categories extends Table {
   Set<Column> get primaryKey => {categoryId, playlistId, type};
 }
 
-@DriftDatabase(tables: [Playlists, Categories])
+@DataClassName('UserInfosData')
+class UserInfos extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get playlistId => text()();
+  TextColumn get username => text()();
+  TextColumn get password => text()();
+  TextColumn get message => text()();
+  IntColumn get auth => integer()();
+  TextColumn get status => text()();
+  TextColumn get expDate => text()();
+  TextColumn get isTrial => text()();
+  TextColumn get activeCons => text()();
+  TextColumn get createdAt => text()();
+  TextColumn get maxConnections => text()();
+  TextColumn get allowedOutputFormats => text()();
+}
+
+@DataClassName('ServerInfosData')
+class ServerInfos extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get playlistId => text()();
+  TextColumn get url => text()();
+  TextColumn get port => text()();
+  TextColumn get httpsPort => text()();
+  TextColumn get serverProtocol => text()();
+  TextColumn get rtmpPort => text()();
+  TextColumn get timezone => text()();
+  IntColumn get timestampNow => integer()();
+  TextColumn get timeNow => text()();
+}
+
+@DriftDatabase(tables: [Playlists, Categories, UserInfos, ServerInfos])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2; // Kategori tablosu eklendiği için versiyon artırıldı
+  int get schemaVersion => 3; // Kategori tablosu eklendiği için versiyon artırıldı
 
   // === PLAYLIST İŞLEMLERİ ===
 
@@ -303,6 +336,204 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
+  // === USER INFO İŞLEMLERİ ===
+
+  // UserInfo ekleme/güncelleme (upsert)
+  Future<int> insertOrUpdateUserInfo(UserInfo userInfo) async {
+    final existingUser = await getUserInfoByPlaylistId(userInfo.playlistId);
+
+    if (existingUser != null) {
+      // Güncelle
+      return await (update(
+        userInfos,
+      )..where((tbl) => tbl.playlistId.equals(userInfo.playlistId))).write(
+        UserInfosCompanion(
+          username: Value(userInfo.username),
+          password: Value(userInfo.password),
+          message: Value(userInfo.message),
+          auth: Value(userInfo.auth),
+          status: Value(userInfo.status),
+          expDate: Value(userInfo.expDate),
+          isTrial: Value(userInfo.isTrial),
+          activeCons: Value(userInfo.activeCons),
+          createdAt: Value(userInfo.createdAt),
+          maxConnections: Value(userInfo.maxConnections),
+          allowedOutputFormats: Value(userInfo.allowedOutputFormats.join(',')),
+        ),
+      );
+    } else {
+      // Yeni ekle
+      return await into(userInfos).insert(
+        UserInfosCompanion.insert(
+          playlistId: userInfo.playlistId,
+          username: userInfo.username,
+          password: userInfo.password,
+          message: userInfo.message,
+          auth: userInfo.auth,
+          status: userInfo.status,
+          expDate: userInfo.expDate,
+          isTrial: userInfo.isTrial,
+          activeCons: userInfo.activeCons,
+          createdAt: userInfo.createdAt,
+          maxConnections: userInfo.maxConnections,
+          allowedOutputFormats: userInfo.allowedOutputFormats.join(','),
+        ),
+      );
+    }
+  }
+
+  // PlaylistId'ye göre UserInfo getirme
+  Future<UserInfo?> getUserInfoByPlaylistId(String playlistId) async {
+    final query = select(userInfos)
+      ..where((tbl) => tbl.playlistId.equals(playlistId));
+
+    final result = await query.getSingleOrNull();
+    if (result == null) return null;
+
+    return UserInfo(
+      id: result.id,
+      playlistId: result.playlistId,
+      username: result.username,
+      password: result.password,
+      message: result.message,
+      auth: result.auth,
+      status: result.status,
+      expDate: result.expDate,
+      isTrial: result.isTrial,
+      activeCons: result.activeCons,
+      createdAt: result.createdAt,
+      maxConnections: result.maxConnections,
+      allowedOutputFormats: result.allowedOutputFormats.isNotEmpty
+          ? result.allowedOutputFormats.split(',')
+          : [],
+    );
+  }
+
+  // Tüm UserInfo'ları getirme
+  Future<List<UserInfo>> getAllUserInfos() async {
+    final results = await select(userInfos).get();
+    return results
+        .map(
+          (result) => UserInfo(
+            id: result.id,
+            playlistId: result.playlistId,
+            username: result.username,
+            password: result.password,
+            message: result.message,
+            auth: result.auth,
+            status: result.status,
+            expDate: result.expDate,
+            isTrial: result.isTrial,
+            activeCons: result.activeCons,
+            createdAt: result.createdAt,
+            maxConnections: result.maxConnections,
+            allowedOutputFormats: result.allowedOutputFormats.isNotEmpty
+                ? result.allowedOutputFormats.split(',')
+                : [],
+          ),
+        )
+        .toList();
+  }
+
+  // PlaylistId'ye göre UserInfo silme
+  Future<int> deleteUserInfoByPlaylistId(String playlistId) async {
+    return await (delete(
+      userInfos,
+    )..where((tbl) => tbl.playlistId.equals(playlistId))).go();
+  }
+
+  // === SERVER INFO İŞLEMLERİ ===
+
+  // ServerInfo ekleme/güncelleme (upsert)
+  Future<int> insertOrUpdateServerInfo(ServerInfo serverInfo) async {
+    final existingServer = await getServerInfoByPlaylistId(
+      serverInfo.playlistId,
+    );
+
+    if (existingServer != null) {
+      // Güncelle
+      return await (update(
+        serverInfos,
+      )..where((tbl) => tbl.playlistId.equals(serverInfo.playlistId))).write(
+        ServerInfosCompanion(
+          url: Value(serverInfo.url),
+          port: Value(serverInfo.port),
+          httpsPort: Value(serverInfo.httpsPort),
+          serverProtocol: Value(serverInfo.serverProtocol),
+          rtmpPort: Value(serverInfo.rtmpPort),
+          timezone: Value(serverInfo.timezone),
+          timestampNow: Value(serverInfo.timestampNow),
+          timeNow: Value(serverInfo.timeNow),
+        ),
+      );
+    } else {
+      // Yeni ekle
+      return await into(serverInfos).insert(
+        ServerInfosCompanion.insert(
+          playlistId: serverInfo.playlistId,
+          url: serverInfo.url,
+          port: serverInfo.port,
+          httpsPort: serverInfo.httpsPort,
+          serverProtocol: serverInfo.serverProtocol,
+          rtmpPort: serverInfo.rtmpPort,
+          timezone: serverInfo.timezone,
+          timestampNow: serverInfo.timestampNow,
+          timeNow: serverInfo.timeNow,
+        ),
+      );
+    }
+  }
+
+  // PlaylistId'ye göre ServerInfo getirme
+  Future<ServerInfo?> getServerInfoByPlaylistId(String playlistId) async {
+    final query = select(serverInfos)
+      ..where((tbl) => tbl.playlistId.equals(playlistId));
+
+    final result = await query.getSingleOrNull();
+    if (result == null) return null;
+
+    return ServerInfo(
+      id: result.id,
+      playlistId: result.playlistId,
+      url: result.url,
+      port: result.port,
+      httpsPort: result.httpsPort,
+      serverProtocol: result.serverProtocol,
+      rtmpPort: result.rtmpPort,
+      timezone: result.timezone,
+      timestampNow: result.timestampNow,
+      timeNow: result.timeNow,
+    );
+  }
+
+  // Tüm ServerInfo'ları getirme
+  Future<List<ServerInfo>> getAllServerInfos() async {
+    final results = await select(serverInfos).get();
+    return results
+        .map(
+          (result) => ServerInfo(
+            id: result.id,
+            playlistId: result.playlistId,
+            url: result.url,
+            port: result.port,
+            httpsPort: result.httpsPort,
+            serverProtocol: result.serverProtocol,
+            rtmpPort: result.rtmpPort,
+            timezone: result.timezone,
+            timestampNow: result.timestampNow,
+            timeNow: result.timeNow,
+          ),
+        )
+        .toList();
+  }
+
+  // PlaylistId'ye göre ServerInfo silme
+  Future<int> deleteServerInfoByPlaylistId(String playlistId) async {
+    return await (delete(
+      serverInfos,
+    )..where((tbl) => tbl.playlistId.equals(playlistId))).go();
+  }
+
   // Database migration
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -313,6 +544,11 @@ class AppDatabase extends _$AppDatabase {
       if (from < 2) {
         // Kategori tablosunu ekle
         await m.createTable(categories);
+      }
+      if (from < 3) {
+        // UserInfo ve ServerInfo tablolarını ekle
+        await m.createTable(userInfos);
+        await m.createTable(serverInfos);
       }
     },
   );

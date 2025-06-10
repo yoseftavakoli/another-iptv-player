@@ -925,16 +925,1386 @@ class CategoriesCompanion extends UpdateCompanion<CategoriesData> {
   }
 }
 
+class $UserInfosTable extends UserInfos
+    with TableInfo<$UserInfosTable, UserInfosData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserInfosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _playlistIdMeta = const VerificationMeta(
+    'playlistId',
+  );
+  @override
+  late final GeneratedColumn<String> playlistId = GeneratedColumn<String>(
+    'playlist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _usernameMeta = const VerificationMeta(
+    'username',
+  );
+  @override
+  late final GeneratedColumn<String> username = GeneratedColumn<String>(
+    'username',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _passwordMeta = const VerificationMeta(
+    'password',
+  );
+  @override
+  late final GeneratedColumn<String> password = GeneratedColumn<String>(
+    'password',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _messageMeta = const VerificationMeta(
+    'message',
+  );
+  @override
+  late final GeneratedColumn<String> message = GeneratedColumn<String>(
+    'message',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _authMeta = const VerificationMeta('auth');
+  @override
+  late final GeneratedColumn<int> auth = GeneratedColumn<int>(
+    'auth',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _expDateMeta = const VerificationMeta(
+    'expDate',
+  );
+  @override
+  late final GeneratedColumn<String> expDate = GeneratedColumn<String>(
+    'exp_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isTrialMeta = const VerificationMeta(
+    'isTrial',
+  );
+  @override
+  late final GeneratedColumn<String> isTrial = GeneratedColumn<String>(
+    'is_trial',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _activeConsMeta = const VerificationMeta(
+    'activeCons',
+  );
+  @override
+  late final GeneratedColumn<String> activeCons = GeneratedColumn<String>(
+    'active_cons',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<String> createdAt = GeneratedColumn<String>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _maxConnectionsMeta = const VerificationMeta(
+    'maxConnections',
+  );
+  @override
+  late final GeneratedColumn<String> maxConnections = GeneratedColumn<String>(
+    'max_connections',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _allowedOutputFormatsMeta =
+      const VerificationMeta('allowedOutputFormats');
+  @override
+  late final GeneratedColumn<String> allowedOutputFormats =
+      GeneratedColumn<String>(
+        'allowed_output_formats',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    playlistId,
+    username,
+    password,
+    message,
+    auth,
+    status,
+    expDate,
+    isTrial,
+    activeCons,
+    createdAt,
+    maxConnections,
+    allowedOutputFormats,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_infos';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UserInfosData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+        _playlistIdMeta,
+        playlistId.isAcceptableOrUnknown(data['playlist_id']!, _playlistIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('username')) {
+      context.handle(
+        _usernameMeta,
+        username.isAcceptableOrUnknown(data['username']!, _usernameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_usernameMeta);
+    }
+    if (data.containsKey('password')) {
+      context.handle(
+        _passwordMeta,
+        password.isAcceptableOrUnknown(data['password']!, _passwordMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_passwordMeta);
+    }
+    if (data.containsKey('message')) {
+      context.handle(
+        _messageMeta,
+        message.isAcceptableOrUnknown(data['message']!, _messageMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_messageMeta);
+    }
+    if (data.containsKey('auth')) {
+      context.handle(
+        _authMeta,
+        auth.isAcceptableOrUnknown(data['auth']!, _authMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_authMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('exp_date')) {
+      context.handle(
+        _expDateMeta,
+        expDate.isAcceptableOrUnknown(data['exp_date']!, _expDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_expDateMeta);
+    }
+    if (data.containsKey('is_trial')) {
+      context.handle(
+        _isTrialMeta,
+        isTrial.isAcceptableOrUnknown(data['is_trial']!, _isTrialMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_isTrialMeta);
+    }
+    if (data.containsKey('active_cons')) {
+      context.handle(
+        _activeConsMeta,
+        activeCons.isAcceptableOrUnknown(data['active_cons']!, _activeConsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_activeConsMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('max_connections')) {
+      context.handle(
+        _maxConnectionsMeta,
+        maxConnections.isAcceptableOrUnknown(
+          data['max_connections']!,
+          _maxConnectionsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_maxConnectionsMeta);
+    }
+    if (data.containsKey('allowed_output_formats')) {
+      context.handle(
+        _allowedOutputFormatsMeta,
+        allowedOutputFormats.isAcceptableOrUnknown(
+          data['allowed_output_formats']!,
+          _allowedOutputFormatsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_allowedOutputFormatsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  UserInfosData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserInfosData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      playlistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}playlist_id'],
+      )!,
+      username: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}username'],
+      )!,
+      password: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}password'],
+      )!,
+      message: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}message'],
+      )!,
+      auth: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}auth'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      expDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}exp_date'],
+      )!,
+      isTrial: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}is_trial'],
+      )!,
+      activeCons: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}active_cons'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_at'],
+      )!,
+      maxConnections: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}max_connections'],
+      )!,
+      allowedOutputFormats: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}allowed_output_formats'],
+      )!,
+    );
+  }
+
+  @override
+  $UserInfosTable createAlias(String alias) {
+    return $UserInfosTable(attachedDatabase, alias);
+  }
+}
+
+class UserInfosData extends DataClass implements Insertable<UserInfosData> {
+  final int id;
+  final String playlistId;
+  final String username;
+  final String password;
+  final String message;
+  final int auth;
+  final String status;
+  final String expDate;
+  final String isTrial;
+  final String activeCons;
+  final String createdAt;
+  final String maxConnections;
+  final String allowedOutputFormats;
+  const UserInfosData({
+    required this.id,
+    required this.playlistId,
+    required this.username,
+    required this.password,
+    required this.message,
+    required this.auth,
+    required this.status,
+    required this.expDate,
+    required this.isTrial,
+    required this.activeCons,
+    required this.createdAt,
+    required this.maxConnections,
+    required this.allowedOutputFormats,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['playlist_id'] = Variable<String>(playlistId);
+    map['username'] = Variable<String>(username);
+    map['password'] = Variable<String>(password);
+    map['message'] = Variable<String>(message);
+    map['auth'] = Variable<int>(auth);
+    map['status'] = Variable<String>(status);
+    map['exp_date'] = Variable<String>(expDate);
+    map['is_trial'] = Variable<String>(isTrial);
+    map['active_cons'] = Variable<String>(activeCons);
+    map['created_at'] = Variable<String>(createdAt);
+    map['max_connections'] = Variable<String>(maxConnections);
+    map['allowed_output_formats'] = Variable<String>(allowedOutputFormats);
+    return map;
+  }
+
+  UserInfosCompanion toCompanion(bool nullToAbsent) {
+    return UserInfosCompanion(
+      id: Value(id),
+      playlistId: Value(playlistId),
+      username: Value(username),
+      password: Value(password),
+      message: Value(message),
+      auth: Value(auth),
+      status: Value(status),
+      expDate: Value(expDate),
+      isTrial: Value(isTrial),
+      activeCons: Value(activeCons),
+      createdAt: Value(createdAt),
+      maxConnections: Value(maxConnections),
+      allowedOutputFormats: Value(allowedOutputFormats),
+    );
+  }
+
+  factory UserInfosData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserInfosData(
+      id: serializer.fromJson<int>(json['id']),
+      playlistId: serializer.fromJson<String>(json['playlistId']),
+      username: serializer.fromJson<String>(json['username']),
+      password: serializer.fromJson<String>(json['password']),
+      message: serializer.fromJson<String>(json['message']),
+      auth: serializer.fromJson<int>(json['auth']),
+      status: serializer.fromJson<String>(json['status']),
+      expDate: serializer.fromJson<String>(json['expDate']),
+      isTrial: serializer.fromJson<String>(json['isTrial']),
+      activeCons: serializer.fromJson<String>(json['activeCons']),
+      createdAt: serializer.fromJson<String>(json['createdAt']),
+      maxConnections: serializer.fromJson<String>(json['maxConnections']),
+      allowedOutputFormats: serializer.fromJson<String>(
+        json['allowedOutputFormats'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'playlistId': serializer.toJson<String>(playlistId),
+      'username': serializer.toJson<String>(username),
+      'password': serializer.toJson<String>(password),
+      'message': serializer.toJson<String>(message),
+      'auth': serializer.toJson<int>(auth),
+      'status': serializer.toJson<String>(status),
+      'expDate': serializer.toJson<String>(expDate),
+      'isTrial': serializer.toJson<String>(isTrial),
+      'activeCons': serializer.toJson<String>(activeCons),
+      'createdAt': serializer.toJson<String>(createdAt),
+      'maxConnections': serializer.toJson<String>(maxConnections),
+      'allowedOutputFormats': serializer.toJson<String>(allowedOutputFormats),
+    };
+  }
+
+  UserInfosData copyWith({
+    int? id,
+    String? playlistId,
+    String? username,
+    String? password,
+    String? message,
+    int? auth,
+    String? status,
+    String? expDate,
+    String? isTrial,
+    String? activeCons,
+    String? createdAt,
+    String? maxConnections,
+    String? allowedOutputFormats,
+  }) => UserInfosData(
+    id: id ?? this.id,
+    playlistId: playlistId ?? this.playlistId,
+    username: username ?? this.username,
+    password: password ?? this.password,
+    message: message ?? this.message,
+    auth: auth ?? this.auth,
+    status: status ?? this.status,
+    expDate: expDate ?? this.expDate,
+    isTrial: isTrial ?? this.isTrial,
+    activeCons: activeCons ?? this.activeCons,
+    createdAt: createdAt ?? this.createdAt,
+    maxConnections: maxConnections ?? this.maxConnections,
+    allowedOutputFormats: allowedOutputFormats ?? this.allowedOutputFormats,
+  );
+  UserInfosData copyWithCompanion(UserInfosCompanion data) {
+    return UserInfosData(
+      id: data.id.present ? data.id.value : this.id,
+      playlistId: data.playlistId.present
+          ? data.playlistId.value
+          : this.playlistId,
+      username: data.username.present ? data.username.value : this.username,
+      password: data.password.present ? data.password.value : this.password,
+      message: data.message.present ? data.message.value : this.message,
+      auth: data.auth.present ? data.auth.value : this.auth,
+      status: data.status.present ? data.status.value : this.status,
+      expDate: data.expDate.present ? data.expDate.value : this.expDate,
+      isTrial: data.isTrial.present ? data.isTrial.value : this.isTrial,
+      activeCons: data.activeCons.present
+          ? data.activeCons.value
+          : this.activeCons,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      maxConnections: data.maxConnections.present
+          ? data.maxConnections.value
+          : this.maxConnections,
+      allowedOutputFormats: data.allowedOutputFormats.present
+          ? data.allowedOutputFormats.value
+          : this.allowedOutputFormats,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserInfosData(')
+          ..write('id: $id, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('username: $username, ')
+          ..write('password: $password, ')
+          ..write('message: $message, ')
+          ..write('auth: $auth, ')
+          ..write('status: $status, ')
+          ..write('expDate: $expDate, ')
+          ..write('isTrial: $isTrial, ')
+          ..write('activeCons: $activeCons, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('maxConnections: $maxConnections, ')
+          ..write('allowedOutputFormats: $allowedOutputFormats')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    playlistId,
+    username,
+    password,
+    message,
+    auth,
+    status,
+    expDate,
+    isTrial,
+    activeCons,
+    createdAt,
+    maxConnections,
+    allowedOutputFormats,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserInfosData &&
+          other.id == this.id &&
+          other.playlistId == this.playlistId &&
+          other.username == this.username &&
+          other.password == this.password &&
+          other.message == this.message &&
+          other.auth == this.auth &&
+          other.status == this.status &&
+          other.expDate == this.expDate &&
+          other.isTrial == this.isTrial &&
+          other.activeCons == this.activeCons &&
+          other.createdAt == this.createdAt &&
+          other.maxConnections == this.maxConnections &&
+          other.allowedOutputFormats == this.allowedOutputFormats);
+}
+
+class UserInfosCompanion extends UpdateCompanion<UserInfosData> {
+  final Value<int> id;
+  final Value<String> playlistId;
+  final Value<String> username;
+  final Value<String> password;
+  final Value<String> message;
+  final Value<int> auth;
+  final Value<String> status;
+  final Value<String> expDate;
+  final Value<String> isTrial;
+  final Value<String> activeCons;
+  final Value<String> createdAt;
+  final Value<String> maxConnections;
+  final Value<String> allowedOutputFormats;
+  const UserInfosCompanion({
+    this.id = const Value.absent(),
+    this.playlistId = const Value.absent(),
+    this.username = const Value.absent(),
+    this.password = const Value.absent(),
+    this.message = const Value.absent(),
+    this.auth = const Value.absent(),
+    this.status = const Value.absent(),
+    this.expDate = const Value.absent(),
+    this.isTrial = const Value.absent(),
+    this.activeCons = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.maxConnections = const Value.absent(),
+    this.allowedOutputFormats = const Value.absent(),
+  });
+  UserInfosCompanion.insert({
+    this.id = const Value.absent(),
+    required String playlistId,
+    required String username,
+    required String password,
+    required String message,
+    required int auth,
+    required String status,
+    required String expDate,
+    required String isTrial,
+    required String activeCons,
+    required String createdAt,
+    required String maxConnections,
+    required String allowedOutputFormats,
+  }) : playlistId = Value(playlistId),
+       username = Value(username),
+       password = Value(password),
+       message = Value(message),
+       auth = Value(auth),
+       status = Value(status),
+       expDate = Value(expDate),
+       isTrial = Value(isTrial),
+       activeCons = Value(activeCons),
+       createdAt = Value(createdAt),
+       maxConnections = Value(maxConnections),
+       allowedOutputFormats = Value(allowedOutputFormats);
+  static Insertable<UserInfosData> custom({
+    Expression<int>? id,
+    Expression<String>? playlistId,
+    Expression<String>? username,
+    Expression<String>? password,
+    Expression<String>? message,
+    Expression<int>? auth,
+    Expression<String>? status,
+    Expression<String>? expDate,
+    Expression<String>? isTrial,
+    Expression<String>? activeCons,
+    Expression<String>? createdAt,
+    Expression<String>? maxConnections,
+    Expression<String>? allowedOutputFormats,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (username != null) 'username': username,
+      if (password != null) 'password': password,
+      if (message != null) 'message': message,
+      if (auth != null) 'auth': auth,
+      if (status != null) 'status': status,
+      if (expDate != null) 'exp_date': expDate,
+      if (isTrial != null) 'is_trial': isTrial,
+      if (activeCons != null) 'active_cons': activeCons,
+      if (createdAt != null) 'created_at': createdAt,
+      if (maxConnections != null) 'max_connections': maxConnections,
+      if (allowedOutputFormats != null)
+        'allowed_output_formats': allowedOutputFormats,
+    });
+  }
+
+  UserInfosCompanion copyWith({
+    Value<int>? id,
+    Value<String>? playlistId,
+    Value<String>? username,
+    Value<String>? password,
+    Value<String>? message,
+    Value<int>? auth,
+    Value<String>? status,
+    Value<String>? expDate,
+    Value<String>? isTrial,
+    Value<String>? activeCons,
+    Value<String>? createdAt,
+    Value<String>? maxConnections,
+    Value<String>? allowedOutputFormats,
+  }) {
+    return UserInfosCompanion(
+      id: id ?? this.id,
+      playlistId: playlistId ?? this.playlistId,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      message: message ?? this.message,
+      auth: auth ?? this.auth,
+      status: status ?? this.status,
+      expDate: expDate ?? this.expDate,
+      isTrial: isTrial ?? this.isTrial,
+      activeCons: activeCons ?? this.activeCons,
+      createdAt: createdAt ?? this.createdAt,
+      maxConnections: maxConnections ?? this.maxConnections,
+      allowedOutputFormats: allowedOutputFormats ?? this.allowedOutputFormats,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (username.present) {
+      map['username'] = Variable<String>(username.value);
+    }
+    if (password.present) {
+      map['password'] = Variable<String>(password.value);
+    }
+    if (message.present) {
+      map['message'] = Variable<String>(message.value);
+    }
+    if (auth.present) {
+      map['auth'] = Variable<int>(auth.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (expDate.present) {
+      map['exp_date'] = Variable<String>(expDate.value);
+    }
+    if (isTrial.present) {
+      map['is_trial'] = Variable<String>(isTrial.value);
+    }
+    if (activeCons.present) {
+      map['active_cons'] = Variable<String>(activeCons.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(createdAt.value);
+    }
+    if (maxConnections.present) {
+      map['max_connections'] = Variable<String>(maxConnections.value);
+    }
+    if (allowedOutputFormats.present) {
+      map['allowed_output_formats'] = Variable<String>(
+        allowedOutputFormats.value,
+      );
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserInfosCompanion(')
+          ..write('id: $id, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('username: $username, ')
+          ..write('password: $password, ')
+          ..write('message: $message, ')
+          ..write('auth: $auth, ')
+          ..write('status: $status, ')
+          ..write('expDate: $expDate, ')
+          ..write('isTrial: $isTrial, ')
+          ..write('activeCons: $activeCons, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('maxConnections: $maxConnections, ')
+          ..write('allowedOutputFormats: $allowedOutputFormats')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ServerInfosTable extends ServerInfos
+    with TableInfo<$ServerInfosTable, ServerInfosData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ServerInfosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _playlistIdMeta = const VerificationMeta(
+    'playlistId',
+  );
+  @override
+  late final GeneratedColumn<String> playlistId = GeneratedColumn<String>(
+    'playlist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _urlMeta = const VerificationMeta('url');
+  @override
+  late final GeneratedColumn<String> url = GeneratedColumn<String>(
+    'url',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _portMeta = const VerificationMeta('port');
+  @override
+  late final GeneratedColumn<String> port = GeneratedColumn<String>(
+    'port',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _httpsPortMeta = const VerificationMeta(
+    'httpsPort',
+  );
+  @override
+  late final GeneratedColumn<String> httpsPort = GeneratedColumn<String>(
+    'https_port',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _serverProtocolMeta = const VerificationMeta(
+    'serverProtocol',
+  );
+  @override
+  late final GeneratedColumn<String> serverProtocol = GeneratedColumn<String>(
+    'server_protocol',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _rtmpPortMeta = const VerificationMeta(
+    'rtmpPort',
+  );
+  @override
+  late final GeneratedColumn<String> rtmpPort = GeneratedColumn<String>(
+    'rtmp_port',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _timezoneMeta = const VerificationMeta(
+    'timezone',
+  );
+  @override
+  late final GeneratedColumn<String> timezone = GeneratedColumn<String>(
+    'timezone',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _timestampNowMeta = const VerificationMeta(
+    'timestampNow',
+  );
+  @override
+  late final GeneratedColumn<int> timestampNow = GeneratedColumn<int>(
+    'timestamp_now',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _timeNowMeta = const VerificationMeta(
+    'timeNow',
+  );
+  @override
+  late final GeneratedColumn<String> timeNow = GeneratedColumn<String>(
+    'time_now',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    playlistId,
+    url,
+    port,
+    httpsPort,
+    serverProtocol,
+    rtmpPort,
+    timezone,
+    timestampNow,
+    timeNow,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'server_infos';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ServerInfosData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+        _playlistIdMeta,
+        playlistId.isAcceptableOrUnknown(data['playlist_id']!, _playlistIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('url')) {
+      context.handle(
+        _urlMeta,
+        url.isAcceptableOrUnknown(data['url']!, _urlMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_urlMeta);
+    }
+    if (data.containsKey('port')) {
+      context.handle(
+        _portMeta,
+        port.isAcceptableOrUnknown(data['port']!, _portMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_portMeta);
+    }
+    if (data.containsKey('https_port')) {
+      context.handle(
+        _httpsPortMeta,
+        httpsPort.isAcceptableOrUnknown(data['https_port']!, _httpsPortMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_httpsPortMeta);
+    }
+    if (data.containsKey('server_protocol')) {
+      context.handle(
+        _serverProtocolMeta,
+        serverProtocol.isAcceptableOrUnknown(
+          data['server_protocol']!,
+          _serverProtocolMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_serverProtocolMeta);
+    }
+    if (data.containsKey('rtmp_port')) {
+      context.handle(
+        _rtmpPortMeta,
+        rtmpPort.isAcceptableOrUnknown(data['rtmp_port']!, _rtmpPortMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_rtmpPortMeta);
+    }
+    if (data.containsKey('timezone')) {
+      context.handle(
+        _timezoneMeta,
+        timezone.isAcceptableOrUnknown(data['timezone']!, _timezoneMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_timezoneMeta);
+    }
+    if (data.containsKey('timestamp_now')) {
+      context.handle(
+        _timestampNowMeta,
+        timestampNow.isAcceptableOrUnknown(
+          data['timestamp_now']!,
+          _timestampNowMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_timestampNowMeta);
+    }
+    if (data.containsKey('time_now')) {
+      context.handle(
+        _timeNowMeta,
+        timeNow.isAcceptableOrUnknown(data['time_now']!, _timeNowMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_timeNowMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ServerInfosData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ServerInfosData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      playlistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}playlist_id'],
+      )!,
+      url: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}url'],
+      )!,
+      port: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}port'],
+      )!,
+      httpsPort: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}https_port'],
+      )!,
+      serverProtocol: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}server_protocol'],
+      )!,
+      rtmpPort: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}rtmp_port'],
+      )!,
+      timezone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}timezone'],
+      )!,
+      timestampNow: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}timestamp_now'],
+      )!,
+      timeNow: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}time_now'],
+      )!,
+    );
+  }
+
+  @override
+  $ServerInfosTable createAlias(String alias) {
+    return $ServerInfosTable(attachedDatabase, alias);
+  }
+}
+
+class ServerInfosData extends DataClass implements Insertable<ServerInfosData> {
+  final int id;
+  final String playlistId;
+  final String url;
+  final String port;
+  final String httpsPort;
+  final String serverProtocol;
+  final String rtmpPort;
+  final String timezone;
+  final int timestampNow;
+  final String timeNow;
+  const ServerInfosData({
+    required this.id,
+    required this.playlistId,
+    required this.url,
+    required this.port,
+    required this.httpsPort,
+    required this.serverProtocol,
+    required this.rtmpPort,
+    required this.timezone,
+    required this.timestampNow,
+    required this.timeNow,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['playlist_id'] = Variable<String>(playlistId);
+    map['url'] = Variable<String>(url);
+    map['port'] = Variable<String>(port);
+    map['https_port'] = Variable<String>(httpsPort);
+    map['server_protocol'] = Variable<String>(serverProtocol);
+    map['rtmp_port'] = Variable<String>(rtmpPort);
+    map['timezone'] = Variable<String>(timezone);
+    map['timestamp_now'] = Variable<int>(timestampNow);
+    map['time_now'] = Variable<String>(timeNow);
+    return map;
+  }
+
+  ServerInfosCompanion toCompanion(bool nullToAbsent) {
+    return ServerInfosCompanion(
+      id: Value(id),
+      playlistId: Value(playlistId),
+      url: Value(url),
+      port: Value(port),
+      httpsPort: Value(httpsPort),
+      serverProtocol: Value(serverProtocol),
+      rtmpPort: Value(rtmpPort),
+      timezone: Value(timezone),
+      timestampNow: Value(timestampNow),
+      timeNow: Value(timeNow),
+    );
+  }
+
+  factory ServerInfosData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ServerInfosData(
+      id: serializer.fromJson<int>(json['id']),
+      playlistId: serializer.fromJson<String>(json['playlistId']),
+      url: serializer.fromJson<String>(json['url']),
+      port: serializer.fromJson<String>(json['port']),
+      httpsPort: serializer.fromJson<String>(json['httpsPort']),
+      serverProtocol: serializer.fromJson<String>(json['serverProtocol']),
+      rtmpPort: serializer.fromJson<String>(json['rtmpPort']),
+      timezone: serializer.fromJson<String>(json['timezone']),
+      timestampNow: serializer.fromJson<int>(json['timestampNow']),
+      timeNow: serializer.fromJson<String>(json['timeNow']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'playlistId': serializer.toJson<String>(playlistId),
+      'url': serializer.toJson<String>(url),
+      'port': serializer.toJson<String>(port),
+      'httpsPort': serializer.toJson<String>(httpsPort),
+      'serverProtocol': serializer.toJson<String>(serverProtocol),
+      'rtmpPort': serializer.toJson<String>(rtmpPort),
+      'timezone': serializer.toJson<String>(timezone),
+      'timestampNow': serializer.toJson<int>(timestampNow),
+      'timeNow': serializer.toJson<String>(timeNow),
+    };
+  }
+
+  ServerInfosData copyWith({
+    int? id,
+    String? playlistId,
+    String? url,
+    String? port,
+    String? httpsPort,
+    String? serverProtocol,
+    String? rtmpPort,
+    String? timezone,
+    int? timestampNow,
+    String? timeNow,
+  }) => ServerInfosData(
+    id: id ?? this.id,
+    playlistId: playlistId ?? this.playlistId,
+    url: url ?? this.url,
+    port: port ?? this.port,
+    httpsPort: httpsPort ?? this.httpsPort,
+    serverProtocol: serverProtocol ?? this.serverProtocol,
+    rtmpPort: rtmpPort ?? this.rtmpPort,
+    timezone: timezone ?? this.timezone,
+    timestampNow: timestampNow ?? this.timestampNow,
+    timeNow: timeNow ?? this.timeNow,
+  );
+  ServerInfosData copyWithCompanion(ServerInfosCompanion data) {
+    return ServerInfosData(
+      id: data.id.present ? data.id.value : this.id,
+      playlistId: data.playlistId.present
+          ? data.playlistId.value
+          : this.playlistId,
+      url: data.url.present ? data.url.value : this.url,
+      port: data.port.present ? data.port.value : this.port,
+      httpsPort: data.httpsPort.present ? data.httpsPort.value : this.httpsPort,
+      serverProtocol: data.serverProtocol.present
+          ? data.serverProtocol.value
+          : this.serverProtocol,
+      rtmpPort: data.rtmpPort.present ? data.rtmpPort.value : this.rtmpPort,
+      timezone: data.timezone.present ? data.timezone.value : this.timezone,
+      timestampNow: data.timestampNow.present
+          ? data.timestampNow.value
+          : this.timestampNow,
+      timeNow: data.timeNow.present ? data.timeNow.value : this.timeNow,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ServerInfosData(')
+          ..write('id: $id, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('url: $url, ')
+          ..write('port: $port, ')
+          ..write('httpsPort: $httpsPort, ')
+          ..write('serverProtocol: $serverProtocol, ')
+          ..write('rtmpPort: $rtmpPort, ')
+          ..write('timezone: $timezone, ')
+          ..write('timestampNow: $timestampNow, ')
+          ..write('timeNow: $timeNow')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    playlistId,
+    url,
+    port,
+    httpsPort,
+    serverProtocol,
+    rtmpPort,
+    timezone,
+    timestampNow,
+    timeNow,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ServerInfosData &&
+          other.id == this.id &&
+          other.playlistId == this.playlistId &&
+          other.url == this.url &&
+          other.port == this.port &&
+          other.httpsPort == this.httpsPort &&
+          other.serverProtocol == this.serverProtocol &&
+          other.rtmpPort == this.rtmpPort &&
+          other.timezone == this.timezone &&
+          other.timestampNow == this.timestampNow &&
+          other.timeNow == this.timeNow);
+}
+
+class ServerInfosCompanion extends UpdateCompanion<ServerInfosData> {
+  final Value<int> id;
+  final Value<String> playlistId;
+  final Value<String> url;
+  final Value<String> port;
+  final Value<String> httpsPort;
+  final Value<String> serverProtocol;
+  final Value<String> rtmpPort;
+  final Value<String> timezone;
+  final Value<int> timestampNow;
+  final Value<String> timeNow;
+  const ServerInfosCompanion({
+    this.id = const Value.absent(),
+    this.playlistId = const Value.absent(),
+    this.url = const Value.absent(),
+    this.port = const Value.absent(),
+    this.httpsPort = const Value.absent(),
+    this.serverProtocol = const Value.absent(),
+    this.rtmpPort = const Value.absent(),
+    this.timezone = const Value.absent(),
+    this.timestampNow = const Value.absent(),
+    this.timeNow = const Value.absent(),
+  });
+  ServerInfosCompanion.insert({
+    this.id = const Value.absent(),
+    required String playlistId,
+    required String url,
+    required String port,
+    required String httpsPort,
+    required String serverProtocol,
+    required String rtmpPort,
+    required String timezone,
+    required int timestampNow,
+    required String timeNow,
+  }) : playlistId = Value(playlistId),
+       url = Value(url),
+       port = Value(port),
+       httpsPort = Value(httpsPort),
+       serverProtocol = Value(serverProtocol),
+       rtmpPort = Value(rtmpPort),
+       timezone = Value(timezone),
+       timestampNow = Value(timestampNow),
+       timeNow = Value(timeNow);
+  static Insertable<ServerInfosData> custom({
+    Expression<int>? id,
+    Expression<String>? playlistId,
+    Expression<String>? url,
+    Expression<String>? port,
+    Expression<String>? httpsPort,
+    Expression<String>? serverProtocol,
+    Expression<String>? rtmpPort,
+    Expression<String>? timezone,
+    Expression<int>? timestampNow,
+    Expression<String>? timeNow,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (url != null) 'url': url,
+      if (port != null) 'port': port,
+      if (httpsPort != null) 'https_port': httpsPort,
+      if (serverProtocol != null) 'server_protocol': serverProtocol,
+      if (rtmpPort != null) 'rtmp_port': rtmpPort,
+      if (timezone != null) 'timezone': timezone,
+      if (timestampNow != null) 'timestamp_now': timestampNow,
+      if (timeNow != null) 'time_now': timeNow,
+    });
+  }
+
+  ServerInfosCompanion copyWith({
+    Value<int>? id,
+    Value<String>? playlistId,
+    Value<String>? url,
+    Value<String>? port,
+    Value<String>? httpsPort,
+    Value<String>? serverProtocol,
+    Value<String>? rtmpPort,
+    Value<String>? timezone,
+    Value<int>? timestampNow,
+    Value<String>? timeNow,
+  }) {
+    return ServerInfosCompanion(
+      id: id ?? this.id,
+      playlistId: playlistId ?? this.playlistId,
+      url: url ?? this.url,
+      port: port ?? this.port,
+      httpsPort: httpsPort ?? this.httpsPort,
+      serverProtocol: serverProtocol ?? this.serverProtocol,
+      rtmpPort: rtmpPort ?? this.rtmpPort,
+      timezone: timezone ?? this.timezone,
+      timestampNow: timestampNow ?? this.timestampNow,
+      timeNow: timeNow ?? this.timeNow,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (url.present) {
+      map['url'] = Variable<String>(url.value);
+    }
+    if (port.present) {
+      map['port'] = Variable<String>(port.value);
+    }
+    if (httpsPort.present) {
+      map['https_port'] = Variable<String>(httpsPort.value);
+    }
+    if (serverProtocol.present) {
+      map['server_protocol'] = Variable<String>(serverProtocol.value);
+    }
+    if (rtmpPort.present) {
+      map['rtmp_port'] = Variable<String>(rtmpPort.value);
+    }
+    if (timezone.present) {
+      map['timezone'] = Variable<String>(timezone.value);
+    }
+    if (timestampNow.present) {
+      map['timestamp_now'] = Variable<int>(timestampNow.value);
+    }
+    if (timeNow.present) {
+      map['time_now'] = Variable<String>(timeNow.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ServerInfosCompanion(')
+          ..write('id: $id, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('url: $url, ')
+          ..write('port: $port, ')
+          ..write('httpsPort: $httpsPort, ')
+          ..write('serverProtocol: $serverProtocol, ')
+          ..write('rtmpPort: $rtmpPort, ')
+          ..write('timezone: $timezone, ')
+          ..write('timestampNow: $timestampNow, ')
+          ..write('timeNow: $timeNow')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $PlaylistsTable playlists = $PlaylistsTable(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
+  late final $UserInfosTable userInfos = $UserInfosTable(this);
+  late final $ServerInfosTable serverInfos = $ServerInfosTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [playlists, categories];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    playlists,
+    categories,
+    userInfos,
+    serverInfos,
+  ];
 }
 
 typedef $$PlaylistsTableCreateCompanionBuilder =
@@ -1419,6 +2789,655 @@ typedef $$CategoriesTableProcessedTableManager =
       CategoriesData,
       PrefetchHooks Function()
     >;
+typedef $$UserInfosTableCreateCompanionBuilder =
+    UserInfosCompanion Function({
+      Value<int> id,
+      required String playlistId,
+      required String username,
+      required String password,
+      required String message,
+      required int auth,
+      required String status,
+      required String expDate,
+      required String isTrial,
+      required String activeCons,
+      required String createdAt,
+      required String maxConnections,
+      required String allowedOutputFormats,
+    });
+typedef $$UserInfosTableUpdateCompanionBuilder =
+    UserInfosCompanion Function({
+      Value<int> id,
+      Value<String> playlistId,
+      Value<String> username,
+      Value<String> password,
+      Value<String> message,
+      Value<int> auth,
+      Value<String> status,
+      Value<String> expDate,
+      Value<String> isTrial,
+      Value<String> activeCons,
+      Value<String> createdAt,
+      Value<String> maxConnections,
+      Value<String> allowedOutputFormats,
+    });
+
+class $$UserInfosTableFilterComposer
+    extends Composer<_$AppDatabase, $UserInfosTable> {
+  $$UserInfosTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get username => $composableBuilder(
+    column: $table.username,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get password => $composableBuilder(
+    column: $table.password,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get message => $composableBuilder(
+    column: $table.message,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get auth => $composableBuilder(
+    column: $table.auth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get expDate => $composableBuilder(
+    column: $table.expDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get isTrial => $composableBuilder(
+    column: $table.isTrial,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get activeCons => $composableBuilder(
+    column: $table.activeCons,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get maxConnections => $composableBuilder(
+    column: $table.maxConnections,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get allowedOutputFormats => $composableBuilder(
+    column: $table.allowedOutputFormats,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$UserInfosTableOrderingComposer
+    extends Composer<_$AppDatabase, $UserInfosTable> {
+  $$UserInfosTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get username => $composableBuilder(
+    column: $table.username,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get password => $composableBuilder(
+    column: $table.password,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get message => $composableBuilder(
+    column: $table.message,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get auth => $composableBuilder(
+    column: $table.auth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get expDate => $composableBuilder(
+    column: $table.expDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get isTrial => $composableBuilder(
+    column: $table.isTrial,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get activeCons => $composableBuilder(
+    column: $table.activeCons,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get maxConnections => $composableBuilder(
+    column: $table.maxConnections,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get allowedOutputFormats => $composableBuilder(
+    column: $table.allowedOutputFormats,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$UserInfosTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserInfosTable> {
+  $$UserInfosTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get username =>
+      $composableBuilder(column: $table.username, builder: (column) => column);
+
+  GeneratedColumn<String> get password =>
+      $composableBuilder(column: $table.password, builder: (column) => column);
+
+  GeneratedColumn<String> get message =>
+      $composableBuilder(column: $table.message, builder: (column) => column);
+
+  GeneratedColumn<int> get auth =>
+      $composableBuilder(column: $table.auth, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get expDate =>
+      $composableBuilder(column: $table.expDate, builder: (column) => column);
+
+  GeneratedColumn<String> get isTrial =>
+      $composableBuilder(column: $table.isTrial, builder: (column) => column);
+
+  GeneratedColumn<String> get activeCons => $composableBuilder(
+    column: $table.activeCons,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get maxConnections => $composableBuilder(
+    column: $table.maxConnections,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get allowedOutputFormats => $composableBuilder(
+    column: $table.allowedOutputFormats,
+    builder: (column) => column,
+  );
+}
+
+class $$UserInfosTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UserInfosTable,
+          UserInfosData,
+          $$UserInfosTableFilterComposer,
+          $$UserInfosTableOrderingComposer,
+          $$UserInfosTableAnnotationComposer,
+          $$UserInfosTableCreateCompanionBuilder,
+          $$UserInfosTableUpdateCompanionBuilder,
+          (
+            UserInfosData,
+            BaseReferences<_$AppDatabase, $UserInfosTable, UserInfosData>,
+          ),
+          UserInfosData,
+          PrefetchHooks Function()
+        > {
+  $$UserInfosTableTableManager(_$AppDatabase db, $UserInfosTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$UserInfosTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UserInfosTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UserInfosTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> playlistId = const Value.absent(),
+                Value<String> username = const Value.absent(),
+                Value<String> password = const Value.absent(),
+                Value<String> message = const Value.absent(),
+                Value<int> auth = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String> expDate = const Value.absent(),
+                Value<String> isTrial = const Value.absent(),
+                Value<String> activeCons = const Value.absent(),
+                Value<String> createdAt = const Value.absent(),
+                Value<String> maxConnections = const Value.absent(),
+                Value<String> allowedOutputFormats = const Value.absent(),
+              }) => UserInfosCompanion(
+                id: id,
+                playlistId: playlistId,
+                username: username,
+                password: password,
+                message: message,
+                auth: auth,
+                status: status,
+                expDate: expDate,
+                isTrial: isTrial,
+                activeCons: activeCons,
+                createdAt: createdAt,
+                maxConnections: maxConnections,
+                allowedOutputFormats: allowedOutputFormats,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String playlistId,
+                required String username,
+                required String password,
+                required String message,
+                required int auth,
+                required String status,
+                required String expDate,
+                required String isTrial,
+                required String activeCons,
+                required String createdAt,
+                required String maxConnections,
+                required String allowedOutputFormats,
+              }) => UserInfosCompanion.insert(
+                id: id,
+                playlistId: playlistId,
+                username: username,
+                password: password,
+                message: message,
+                auth: auth,
+                status: status,
+                expDate: expDate,
+                isTrial: isTrial,
+                activeCons: activeCons,
+                createdAt: createdAt,
+                maxConnections: maxConnections,
+                allowedOutputFormats: allowedOutputFormats,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UserInfosTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserInfosTable,
+      UserInfosData,
+      $$UserInfosTableFilterComposer,
+      $$UserInfosTableOrderingComposer,
+      $$UserInfosTableAnnotationComposer,
+      $$UserInfosTableCreateCompanionBuilder,
+      $$UserInfosTableUpdateCompanionBuilder,
+      (
+        UserInfosData,
+        BaseReferences<_$AppDatabase, $UserInfosTable, UserInfosData>,
+      ),
+      UserInfosData,
+      PrefetchHooks Function()
+    >;
+typedef $$ServerInfosTableCreateCompanionBuilder =
+    ServerInfosCompanion Function({
+      Value<int> id,
+      required String playlistId,
+      required String url,
+      required String port,
+      required String httpsPort,
+      required String serverProtocol,
+      required String rtmpPort,
+      required String timezone,
+      required int timestampNow,
+      required String timeNow,
+    });
+typedef $$ServerInfosTableUpdateCompanionBuilder =
+    ServerInfosCompanion Function({
+      Value<int> id,
+      Value<String> playlistId,
+      Value<String> url,
+      Value<String> port,
+      Value<String> httpsPort,
+      Value<String> serverProtocol,
+      Value<String> rtmpPort,
+      Value<String> timezone,
+      Value<int> timestampNow,
+      Value<String> timeNow,
+    });
+
+class $$ServerInfosTableFilterComposer
+    extends Composer<_$AppDatabase, $ServerInfosTable> {
+  $$ServerInfosTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get url => $composableBuilder(
+    column: $table.url,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get port => $composableBuilder(
+    column: $table.port,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get httpsPort => $composableBuilder(
+    column: $table.httpsPort,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get serverProtocol => $composableBuilder(
+    column: $table.serverProtocol,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get rtmpPort => $composableBuilder(
+    column: $table.rtmpPort,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get timezone => $composableBuilder(
+    column: $table.timezone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get timestampNow => $composableBuilder(
+    column: $table.timestampNow,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get timeNow => $composableBuilder(
+    column: $table.timeNow,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ServerInfosTableOrderingComposer
+    extends Composer<_$AppDatabase, $ServerInfosTable> {
+  $$ServerInfosTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get url => $composableBuilder(
+    column: $table.url,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get port => $composableBuilder(
+    column: $table.port,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get httpsPort => $composableBuilder(
+    column: $table.httpsPort,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get serverProtocol => $composableBuilder(
+    column: $table.serverProtocol,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rtmpPort => $composableBuilder(
+    column: $table.rtmpPort,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get timezone => $composableBuilder(
+    column: $table.timezone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timestampNow => $composableBuilder(
+    column: $table.timestampNow,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get timeNow => $composableBuilder(
+    column: $table.timeNow,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ServerInfosTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ServerInfosTable> {
+  $$ServerInfosTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get url =>
+      $composableBuilder(column: $table.url, builder: (column) => column);
+
+  GeneratedColumn<String> get port =>
+      $composableBuilder(column: $table.port, builder: (column) => column);
+
+  GeneratedColumn<String> get httpsPort =>
+      $composableBuilder(column: $table.httpsPort, builder: (column) => column);
+
+  GeneratedColumn<String> get serverProtocol => $composableBuilder(
+    column: $table.serverProtocol,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get rtmpPort =>
+      $composableBuilder(column: $table.rtmpPort, builder: (column) => column);
+
+  GeneratedColumn<String> get timezone =>
+      $composableBuilder(column: $table.timezone, builder: (column) => column);
+
+  GeneratedColumn<int> get timestampNow => $composableBuilder(
+    column: $table.timestampNow,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get timeNow =>
+      $composableBuilder(column: $table.timeNow, builder: (column) => column);
+}
+
+class $$ServerInfosTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ServerInfosTable,
+          ServerInfosData,
+          $$ServerInfosTableFilterComposer,
+          $$ServerInfosTableOrderingComposer,
+          $$ServerInfosTableAnnotationComposer,
+          $$ServerInfosTableCreateCompanionBuilder,
+          $$ServerInfosTableUpdateCompanionBuilder,
+          (
+            ServerInfosData,
+            BaseReferences<_$AppDatabase, $ServerInfosTable, ServerInfosData>,
+          ),
+          ServerInfosData,
+          PrefetchHooks Function()
+        > {
+  $$ServerInfosTableTableManager(_$AppDatabase db, $ServerInfosTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ServerInfosTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ServerInfosTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ServerInfosTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> playlistId = const Value.absent(),
+                Value<String> url = const Value.absent(),
+                Value<String> port = const Value.absent(),
+                Value<String> httpsPort = const Value.absent(),
+                Value<String> serverProtocol = const Value.absent(),
+                Value<String> rtmpPort = const Value.absent(),
+                Value<String> timezone = const Value.absent(),
+                Value<int> timestampNow = const Value.absent(),
+                Value<String> timeNow = const Value.absent(),
+              }) => ServerInfosCompanion(
+                id: id,
+                playlistId: playlistId,
+                url: url,
+                port: port,
+                httpsPort: httpsPort,
+                serverProtocol: serverProtocol,
+                rtmpPort: rtmpPort,
+                timezone: timezone,
+                timestampNow: timestampNow,
+                timeNow: timeNow,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String playlistId,
+                required String url,
+                required String port,
+                required String httpsPort,
+                required String serverProtocol,
+                required String rtmpPort,
+                required String timezone,
+                required int timestampNow,
+                required String timeNow,
+              }) => ServerInfosCompanion.insert(
+                id: id,
+                playlistId: playlistId,
+                url: url,
+                port: port,
+                httpsPort: httpsPort,
+                serverProtocol: serverProtocol,
+                rtmpPort: rtmpPort,
+                timezone: timezone,
+                timestampNow: timestampNow,
+                timeNow: timeNow,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ServerInfosTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ServerInfosTable,
+      ServerInfosData,
+      $$ServerInfosTableFilterComposer,
+      $$ServerInfosTableOrderingComposer,
+      $$ServerInfosTableAnnotationComposer,
+      $$ServerInfosTableCreateCompanionBuilder,
+      $$ServerInfosTableUpdateCompanionBuilder,
+      (
+        ServerInfosData,
+        BaseReferences<_$AppDatabase, $ServerInfosTable, ServerInfosData>,
+      ),
+      ServerInfosData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1427,4 +3446,8 @@ class $AppDatabaseManager {
       $$PlaylistsTableTableManager(_db, _db.playlists);
   $$CategoriesTableTableManager get categories =>
       $$CategoriesTableTableManager(_db, _db.categories);
+  $$UserInfosTableTableManager get userInfos =>
+      $$UserInfosTableTableManager(_db, _db.userInfos);
+  $$ServerInfosTableTableManager get serverInfos =>
+      $$ServerInfosTableTableManager(_db, _db.serverInfos);
 }

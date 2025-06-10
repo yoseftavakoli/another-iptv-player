@@ -1,16 +1,14 @@
-// repositories/iptv_repository.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/api_configuration_model.dart';
+import 'package:iptv_player/models/api_response.dart';
 import 'package:iptv_player/models/category.dart';
 import 'package:iptv_player/models/channel.dart';
 import 'package:iptv_player/models/movie.dart';
 import 'package:iptv_player/models/series.dart';
-import 'package:iptv_player/models/server_info.dart';
-import 'package:iptv_player/repositories/iptv_repository_interface.dart';
 
-class IptvRepository implements IptvRepositoryInterface {
+class IptvRepository {
   final ApiConfig _config;
   final AppDatabase _database;
   final String _playlistId;
@@ -34,13 +32,27 @@ class IptvRepository implements IptvRepositoryInterface {
   }
 
   @override
-  Future<ApiResponse?> getPlayerInfo() async {
+  Future<ApiResponse?> getPlayerInfo({bool forceRefresh = false}) async {
     try {
+      if (!forceRefresh) {
+        var userInfo = await _database.getUserInfoByPlaylistId(_playlistId);
+        var serverInfo = await _database.getServerInfoByPlaylistId(_playlistId);
+
+        if (userInfo != null && serverInfo != null) {
+          return ApiResponse(userInfo: userInfo, serverInfo: serverInfo, playlistId: _playlistId);
+        }
+      }
+
       final response = await _makeRequest('player_api.php');
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
-        return ApiResponse.fromJson(jsonData);
+        var apiResponse = ApiResponse.fromJson(jsonData, _playlistId);
+
+        await _database.insertOrUpdateUserInfo(apiResponse.userInfo);
+        await _database.insertOrUpdateServerInfo(apiResponse.serverInfo);
+
+        return apiResponse;
       } else {
         throw Exception(
           'HTTP ${response.statusCode}: ${response.reasonPhrase}',

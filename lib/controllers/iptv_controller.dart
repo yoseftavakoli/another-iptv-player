@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart' hide Category;
+import 'package:iptv_player/models/api_response.dart';
 import 'package:iptv_player/models/category.dart';
 import 'package:iptv_player/models/channel.dart';
 import 'package:iptv_player/models/movie.dart';
 import 'package:iptv_player/models/progress_step.dart';
 import 'package:iptv_player/models/series.dart';
-import 'package:iptv_player/models/server_info.dart';
-import 'package:iptv_player/repositories/iptv_repository_interface.dart';
+import 'package:iptv_player/repositories/iptv_repository.dart';
 
 class IptvController extends ChangeNotifier {
-  final IptvRepositoryInterface _repository;
+  final IptvRepository _repository;
 
   IptvController(this._repository);
 

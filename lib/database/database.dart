@@ -213,7 +213,7 @@ class AppDatabase extends _$AppDatabase {
                     tbl.playlistId.equals(playlistId) &
                     tbl.type.equals(type.value),
               )
-              ..orderBy([(tbl) => OrderingTerm.asc(tbl.categoryName)]))
+            )
             .get();
 
     return categoriesData.map((cat) => Category.fromDrift(cat)).toList();

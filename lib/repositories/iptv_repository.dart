@@ -113,6 +113,53 @@ class IptvRepository {
     }
   }
 
+  Future<List<LiveStream>?> getLiveChannelsByCategoryId({
+    required String categoryId,
+    bool forceRefresh = false,
+  }) async {
+    try {
+      if (!forceRefresh) {
+        var liveStreams = await _database.getLiveStreamsByCategoryId(
+          _playlistId,
+          categoryId,
+        );
+
+        if (liveStreams.isNotEmpty) {
+          return liveStreams;
+        }
+      }
+
+      final additionalParams = <String, String>{'action': 'get_live_streams'};
+
+      if (categoryId != null) {
+        additionalParams['category_id'] = categoryId;
+      }
+
+      final response = await _makeRequest(
+        'player_api.php',
+        additionalParams: additionalParams,
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        var liveStreams = jsonData
+            .map((json) => LiveStream.fromJson(json, _playlistId))
+            .toList();
+
+        await _database.deleteLiveStreamsByPlaylistId(_playlistId);
+        await _database.insertLiveStreams(liveStreams);
+        return liveStreams;
+      } else {
+        throw Exception(
+          'HTTP ${response.statusCode}: ${response.reasonPhrase}',
+        );
+      }
+    } catch (e) {
+      print('Live Channels Error: $e');
+      return null;
+    }
+  }
+
   @override
   Future<List<VodStream>?> getMovies({
     String? categoryId,
@@ -120,10 +167,23 @@ class IptvRepository {
   }) async {
     try {
       if (!forceRefresh) {
-        var vodStreams = await _database.getVodStreamsByPlaylistId(_playlistId);
+        if (categoryId != null) {
+          var vodStreams = await _database.getVodStreamsByCategoryAndPlaylistId(
+            categoryId: categoryId,
+            playlistId: _playlistId,
+          );
 
-        if (vodStreams.isNotEmpty) {
-          return vodStreams;
+          if (vodStreams.isNotEmpty) {
+            return vodStreams;
+          }
+        } else {
+          var vodStreams = await _database.getVodStreamsByPlaylistId(
+            _playlistId,
+          );
+
+          if (vodStreams.isNotEmpty) {
+            return vodStreams;
+          }
         }
       }
 
@@ -166,10 +226,22 @@ class IptvRepository {
   }) async {
     try {
       if (!forceRefresh) {
-        var series = await _database.getSeriesStreamsByPlaylistId(_playlistId);
+        if (categoryId != null) {
+          var series = await _database.getSeriesStreamsByCategoryAndPlaylistId(
+            categoryId: categoryId, playlistId: _playlistId
+          );
 
-        if (series.isNotEmpty) {
-          return series;
+          if (series.isNotEmpty) {
+            return series;
+          }
+        } else {
+          var series = await _database.getSeriesStreamsByPlaylistId(
+            _playlistId,
+          );
+
+          if (series.isNotEmpty) {
+            return series;
+          }
         }
       }
 

@@ -1,5 +1,6 @@
 // views/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:iptv_player/views/screens/playlist/playlist_content_screen.dart';
 import 'package:iptv_player/views/screens/progress/progress_loading_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../controllers/playlist_controller.dart';
@@ -311,10 +312,18 @@ class _HomeScreenState extends State<HomeScreen> {
     //   ),
     // );
 
-    Navigator.pushReplacement(
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => ProgressLoadingScreen(playlist: playlist),
+    //   ),
+    // );
+
+    Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProgressLoadingScreen(playlist: playlist),
+        builder: (context) =>
+            PlaylistContentScreen(playlist: playlist),
       ),
     );
   }

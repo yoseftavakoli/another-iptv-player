@@ -19,7 +19,7 @@ class IptvController extends ChangeNotifier {
   List<Category>? _seriesCategories;
   List<LiveStream>? _liveChannels;
   List<VodStream>? _movies;
-  List<Series>? _series;
+  List<SeriesStream>? _series;
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -33,7 +33,7 @@ class IptvController extends ChangeNotifier {
   List<Category>? get seriesCategories => _seriesCategories;
   List<LiveStream>? get liveChannels => _liveChannels;
   List<VodStream>? get movies => _movies;
-  List<Series>? get series => _series;
+  List<SeriesStream>? get series => _series;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   ProgressStep get currentStep => _currentStep;

@@ -160,8 +160,19 @@ class IptvRepository {
   }
 
   @override
-  Future<List<Series>?> getSeries({String? categoryId}) async {
+  Future<List<SeriesStream>?> getSeries({
+    String? categoryId,
+    bool forceRefresh = false,
+  }) async {
     try {
+      if (!forceRefresh) {
+        var series = await _database.getSeriesStreamsByPlaylistId(_playlistId);
+
+        if (series.isNotEmpty) {
+          return series;
+        }
+      }
+
       final additionalParams = <String, String>{'action': 'get_series'};
 
       if (categoryId != null) {
@@ -175,7 +186,14 @@ class IptvRepository {
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-        return jsonData.map((json) => Series.fromJson(json)).toList();
+        var series = jsonData
+            .map((json) => SeriesStream.fromJson(json, _playlistId))
+            .toList();
+
+        await _database.deleteSeriesStreamsByPlaylistId(_playlistId);
+        await _database.insertSeriesStreams(series);
+
+        return series;
       } else {
         throw Exception(
           'HTTP ${response.statusCode}: ${response.reasonPhrase}',

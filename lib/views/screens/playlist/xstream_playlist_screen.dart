@@ -1,5 +1,6 @@
 // views/screens/playlist/xstream_playlist_screen.dart
 import 'package:flutter/material.dart';
+import 'package:iptv_player/views/screens/progress/progress_loading_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../controllers/playlist_controller.dart';
 import '../../../models/playlist_model.dart';
@@ -457,7 +458,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
         listen: false,
       );
 
-      final success = await controller.createPlaylist(
+      final playlist = await controller.createPlaylist(
         name: _nameController.text.trim(),
         type: PlaylistType.xstream,
         url: _urlController.text.trim(),
@@ -465,9 +466,15 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
         password: _passwordController.text.trim(),
       );
 
-      if (success) {
+      if (playlist != null) {
         // Başarı durumunda ana sayfaya dön
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProgressLoadingScreen(playlist: playlist),
+          ),
+        );
+        // Navigator.of(context).popUntil((route) => route.isFirst);
 
         // Başarı mesajı göster
         ScaffoldMessenger.of(context).showSnackBar(
@@ -485,13 +492,6 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
             ),
             backgroundColor: Colors.green,
             duration: Duration(seconds: 3),
-            action: SnackBarAction(
-              label: 'Görüntüle',
-              textColor: Colors.white,
-              onPressed: () {
-                // TODO: Playlist detay sayfasına git
-              },
-            ),
           ),
         );
       }

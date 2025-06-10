@@ -43,7 +43,7 @@ class PlaylistController extends ChangeNotifier {
   }
 
   // Yeni playlist oluştur
-  Future<bool> createPlaylist({
+  Future<Playlist?> createPlaylist({
     required String name,
     required PlaylistType type,
     String? url,
@@ -57,7 +57,7 @@ class PlaylistController extends ChangeNotifier {
       // Duplicate name kontrolü
       if (_playlists.any((p) => p.name.toLowerCase() == name.toLowerCase())) {
         _setError('Bu isimde bir playlist zaten mevcut');
-        return false;
+        return null;
       }
 
       final playlist = Playlist(
@@ -74,10 +74,10 @@ class PlaylistController extends ChangeNotifier {
       _playlists.add(playlist);
       _sortPlaylists();
 
-      return true;
+      return playlist;
     } catch (e) {
       _setError('Playlist kaydedilemedi: ${e.toString()}');
-      return false;
+      return null;
     } finally {
       _setLoading(false);
     }

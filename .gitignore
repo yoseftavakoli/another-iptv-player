@@ -5,7 +5,12 @@
 *.swp
 .DS_Store
 .atom/
-.buildlog/
+.build/
+.swiftpm/
+Packages/
+*.xcodeproj
+xcuserdata/
+DerivedData/.buildlog/
 .history
 .svn/
 migrate_working_dir/

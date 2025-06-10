@@ -412,7 +412,12 @@ class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
                                   SizedBox(height: 16),
                                   ElevatedButton(
                                     onPressed: () {
-                                      _controller.retry();
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HomeScreen(),
+                                        ),
+                                      );
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Color(0xFF00d4ff),
@@ -421,7 +426,7 @@ class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    child: Text('Tekrar Dene'),
+                                    child: Text('Kapat'),
                                   ),
                                 ],
                               ),

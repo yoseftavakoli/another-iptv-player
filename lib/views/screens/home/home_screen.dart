@@ -365,13 +365,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   SnackBar(
                     content: Text('${playlist.name} silindi'),
                     backgroundColor: Colors.green,
-                    action: SnackBarAction(
-                      label: 'Geri Al',
-                      textColor: Colors.white,
-                      onPressed: () {
-                        // TODO: Geri alma özelliği
-                      },
-                    ),
                   ),
                 );
               }

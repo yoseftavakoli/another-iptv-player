@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:iptv_player/models/category.dart';
 import 'package:iptv_player/models/live_stream.dart';
+import 'package:iptv_player/models/vod_streams.dart';
 import 'package:iptv_player/models/server_info.dart';
 import 'package:iptv_player/models/user_info.dart';
 import 'package:path_provider/path_provider.dart';
@@ -85,14 +86,37 @@ class LiveStreams extends Table {
   Set<Column> get primaryKey => {streamId, playlistId};
 }
 
+@DataClassName('VodStreamsData')
+class VodStreams extends Table {
+  TextColumn get streamId => text()();
+  TextColumn get name => text()();
+  TextColumn get streamIcon => text()();
+  TextColumn get categoryId => text()();
+  TextColumn get rating => text()();
+  RealColumn get rating5based => real()();
+  TextColumn get containerExtension => text()();
+  TextColumn get playlistId => text()(); // Ekstra property
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {streamId, playlistId}; // Composite primary key
+}
+
 @DriftDatabase(
-  tables: [Playlists, Categories, UserInfos, ServerInfos, LiveStreams],
+  tables: [
+    Playlists,
+    Categories,
+    UserInfos,
+    ServerInfos,
+    LiveStreams,
+    VodStreams,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 4; // LiveStreams tablosu eklendiği için versiyon artırıldı
+  int get schemaVersion => 5; // VodStreams tablosu eklendiği için versiyon artırıldı
 
   // === PLAYLIST İŞLEMLERİ ===
 
@@ -600,6 +624,92 @@ class AppDatabase extends _$AppDatabase {
     )..where((ls) => ls.playlistId.equals(playlistId))).go();
   }
 
+  // Vod Streams
+  Future<void> insertVodStreams(List<VodStream> vodStreams) async {
+    final vodStreamsCompanions = vodStreams
+        .map((vodStream) => vodStream.toDriftCompanion())
+        .toList();
+
+    await batch((batch) {
+      batch.insertAllOnConflictUpdate(this.vodStreams, vodStreamsCompanions);
+    });
+  }
+
+  Future<List<VodStream>> getVodStreamsByPlaylistId(String playlistId) async {
+    final rows = await (select(
+      vodStreams,
+    )..where((vs) => vs.playlistId.equals(playlistId))).get();
+
+    return rows.map((row) => VodStream.fromDriftVodStream(row)).toList();
+  }
+
+  Future<List<VodStream>> getVodStreamsByCategoryAndPlaylistId({
+    required String categoryId,
+    required String playlistId,
+  }) async {
+    final rows =
+        await (select(vodStreams)..where(
+              (vs) =>
+                  vs.categoryId.equals(categoryId) &
+                  vs.playlistId.equals(playlistId),
+            ))
+            .get();
+
+    return rows.map((row) => VodStream.fromDriftVodStream(row)).toList();
+  }
+
+  Future<List<VodStream>> getVodStreamsByCategory(String categoryId) async {
+    final rows = await (select(
+      vodStreams,
+    )..where((vs) => vs.categoryId.equals(categoryId))).get();
+
+    return rows.map((row) => VodStream.fromDriftVodStream(row)).toList();
+  }
+
+  Future<List<VodStream>> getVodStreamsFiltered({
+    String? categoryId,
+    String? playlistId,
+    String? searchQuery,
+  }) async {
+    final query = select(vodStreams);
+
+    if (categoryId != null && playlistId != null) {
+      query.where(
+        (vs) =>
+            vs.categoryId.equals(categoryId) & vs.playlistId.equals(playlistId),
+      );
+    } else if (categoryId != null) {
+      query.where((vs) => vs.categoryId.equals(categoryId));
+    } else if (playlistId != null) {
+      query.where((vs) => vs.playlistId.equals(playlistId));
+    }
+
+    if (searchQuery != null && searchQuery.isNotEmpty) {
+      query.where((vs) => vs.name.like('%$searchQuery%'));
+    }
+
+    final rows = await query.get();
+    return rows.map((row) => VodStream.fromDriftVodStream(row)).toList();
+  }
+
+  Future<void> deleteVodStreamsByPlaylistId(String playlistId) async {
+    await (delete(
+      vodStreams,
+    )..where((vs) => vs.playlistId.equals(playlistId))).go();
+  }
+
+  Future<void> deleteVodStreamsByCategoryAndPlaylistId({
+    required String categoryId,
+    required String playlistId,
+  }) async {
+    await (delete(vodStreams)..where(
+          (vs) =>
+              vs.categoryId.equals(categoryId) &
+              vs.playlistId.equals(playlistId),
+        ))
+        .go();
+  }
+
   // Database migration
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -619,6 +729,9 @@ class AppDatabase extends _$AppDatabase {
       if (from < 4) {
         // LiveStreams tablosunu oluştur
         await m.createTable(liveStreams);
+      }
+      if (from < 5) {
+        await m.createTable(vodStreams);
       }
     },
   );

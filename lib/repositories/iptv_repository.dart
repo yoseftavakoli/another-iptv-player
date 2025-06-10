@@ -5,7 +5,7 @@ import 'package:iptv_player/models/api_configuration_model.dart';
 import 'package:iptv_player/models/api_response.dart';
 import 'package:iptv_player/models/category.dart';
 import 'package:iptv_player/models/live_stream.dart';
-import 'package:iptv_player/models/movie.dart';
+import 'package:iptv_player/models/vod_streams.dart';
 import 'package:iptv_player/models/series.dart';
 
 class IptvRepository {
@@ -114,8 +114,19 @@ class IptvRepository {
   }
 
   @override
-  Future<List<Movie>?> getMovies({String? categoryId}) async {
+  Future<List<VodStream>?> getMovies({
+    String? categoryId,
+    bool forceRefresh = false,
+  }) async {
     try {
+      if (!forceRefresh) {
+        var vodStreams = await _database.getVodStreamsByPlaylistId(_playlistId);
+
+        if (vodStreams.isNotEmpty) {
+          return vodStreams;
+        }
+      }
+
       final additionalParams = <String, String>{'action': 'get_vod_streams'};
 
       if (categoryId != null) {
@@ -129,7 +140,14 @@ class IptvRepository {
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-        return jsonData.map((json) => Movie.fromJson(json)).toList();
+        var vodStreams = jsonData
+            .map((json) => VodStream.fromJson(json, _playlistId))
+            .toList();
+
+        await _database.deleteVodStreamsByPlaylistId(_playlistId);
+        await _database.insertVodStreams(vodStreams);
+
+        return vodStreams;
       } else {
         throw Exception(
           'HTTP ${response.statusCode}: ${response.reasonPhrase}',

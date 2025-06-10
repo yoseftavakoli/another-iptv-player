@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart' hide Category;
 import 'package:iptv_player/models/api_response.dart';
 import 'package:iptv_player/models/category.dart';
 import 'package:iptv_player/models/live_stream.dart';
-import 'package:iptv_player/models/movie.dart';
+import 'package:iptv_player/models/vod_streams.dart';
 import 'package:iptv_player/models/progress_step.dart';
 import 'package:iptv_player/models/series.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
@@ -18,7 +18,7 @@ class IptvController extends ChangeNotifier {
   List<Category>? _vodCategories;
   List<Category>? _seriesCategories;
   List<LiveStream>? _liveChannels;
-  List<Movie>? _movies;
+  List<VodStream>? _movies;
   List<Series>? _series;
 
   bool _isLoading = false;
@@ -32,7 +32,7 @@ class IptvController extends ChangeNotifier {
   List<Category>? get vodCategories => _vodCategories;
   List<Category>? get seriesCategories => _seriesCategories;
   List<LiveStream>? get liveChannels => _liveChannels;
-  List<Movie>? get movies => _movies;
+  List<VodStream>? get movies => _movies;
   List<Series>? get series => _series;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;

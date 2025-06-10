@@ -2764,6 +2764,583 @@ class LiveStreamsCompanion extends UpdateCompanion<LiveStreamsData> {
   }
 }
 
+class $VodStreamsTable extends VodStreams
+    with TableInfo<$VodStreamsTable, VodStreamsData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $VodStreamsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _streamIdMeta = const VerificationMeta(
+    'streamId',
+  );
+  @override
+  late final GeneratedColumn<String> streamId = GeneratedColumn<String>(
+    'stream_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _streamIconMeta = const VerificationMeta(
+    'streamIcon',
+  );
+  @override
+  late final GeneratedColumn<String> streamIcon = GeneratedColumn<String>(
+    'stream_icon',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _categoryIdMeta = const VerificationMeta(
+    'categoryId',
+  );
+  @override
+  late final GeneratedColumn<String> categoryId = GeneratedColumn<String>(
+    'category_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ratingMeta = const VerificationMeta('rating');
+  @override
+  late final GeneratedColumn<String> rating = GeneratedColumn<String>(
+    'rating',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _rating5basedMeta = const VerificationMeta(
+    'rating5based',
+  );
+  @override
+  late final GeneratedColumn<double> rating5based = GeneratedColumn<double>(
+    'rating5based',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _containerExtensionMeta =
+      const VerificationMeta('containerExtension');
+  @override
+  late final GeneratedColumn<String> containerExtension =
+      GeneratedColumn<String>(
+        'container_extension',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _playlistIdMeta = const VerificationMeta(
+    'playlistId',
+  );
+  @override
+  late final GeneratedColumn<String> playlistId = GeneratedColumn<String>(
+    'playlist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    streamId,
+    name,
+    streamIcon,
+    categoryId,
+    rating,
+    rating5based,
+    containerExtension,
+    playlistId,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'vod_streams';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<VodStreamsData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('stream_id')) {
+      context.handle(
+        _streamIdMeta,
+        streamId.isAcceptableOrUnknown(data['stream_id']!, _streamIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_streamIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('stream_icon')) {
+      context.handle(
+        _streamIconMeta,
+        streamIcon.isAcceptableOrUnknown(data['stream_icon']!, _streamIconMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_streamIconMeta);
+    }
+    if (data.containsKey('category_id')) {
+      context.handle(
+        _categoryIdMeta,
+        categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryIdMeta);
+    }
+    if (data.containsKey('rating')) {
+      context.handle(
+        _ratingMeta,
+        rating.isAcceptableOrUnknown(data['rating']!, _ratingMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ratingMeta);
+    }
+    if (data.containsKey('rating5based')) {
+      context.handle(
+        _rating5basedMeta,
+        rating5based.isAcceptableOrUnknown(
+          data['rating5based']!,
+          _rating5basedMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_rating5basedMeta);
+    }
+    if (data.containsKey('container_extension')) {
+      context.handle(
+        _containerExtensionMeta,
+        containerExtension.isAcceptableOrUnknown(
+          data['container_extension']!,
+          _containerExtensionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_containerExtensionMeta);
+    }
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+        _playlistIdMeta,
+        playlistId.isAcceptableOrUnknown(data['playlist_id']!, _playlistIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {streamId, playlistId};
+  @override
+  VodStreamsData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return VodStreamsData(
+      streamId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}stream_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      streamIcon: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}stream_icon'],
+      )!,
+      categoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category_id'],
+      )!,
+      rating: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}rating'],
+      )!,
+      rating5based: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}rating5based'],
+      )!,
+      containerExtension: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}container_extension'],
+      )!,
+      playlistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}playlist_id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $VodStreamsTable createAlias(String alias) {
+    return $VodStreamsTable(attachedDatabase, alias);
+  }
+}
+
+class VodStreamsData extends DataClass implements Insertable<VodStreamsData> {
+  final String streamId;
+  final String name;
+  final String streamIcon;
+  final String categoryId;
+  final String rating;
+  final double rating5based;
+  final String containerExtension;
+  final String playlistId;
+  final DateTime createdAt;
+  const VodStreamsData({
+    required this.streamId,
+    required this.name,
+    required this.streamIcon,
+    required this.categoryId,
+    required this.rating,
+    required this.rating5based,
+    required this.containerExtension,
+    required this.playlistId,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['stream_id'] = Variable<String>(streamId);
+    map['name'] = Variable<String>(name);
+    map['stream_icon'] = Variable<String>(streamIcon);
+    map['category_id'] = Variable<String>(categoryId);
+    map['rating'] = Variable<String>(rating);
+    map['rating5based'] = Variable<double>(rating5based);
+    map['container_extension'] = Variable<String>(containerExtension);
+    map['playlist_id'] = Variable<String>(playlistId);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  VodStreamsCompanion toCompanion(bool nullToAbsent) {
+    return VodStreamsCompanion(
+      streamId: Value(streamId),
+      name: Value(name),
+      streamIcon: Value(streamIcon),
+      categoryId: Value(categoryId),
+      rating: Value(rating),
+      rating5based: Value(rating5based),
+      containerExtension: Value(containerExtension),
+      playlistId: Value(playlistId),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory VodStreamsData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return VodStreamsData(
+      streamId: serializer.fromJson<String>(json['streamId']),
+      name: serializer.fromJson<String>(json['name']),
+      streamIcon: serializer.fromJson<String>(json['streamIcon']),
+      categoryId: serializer.fromJson<String>(json['categoryId']),
+      rating: serializer.fromJson<String>(json['rating']),
+      rating5based: serializer.fromJson<double>(json['rating5based']),
+      containerExtension: serializer.fromJson<String>(
+        json['containerExtension'],
+      ),
+      playlistId: serializer.fromJson<String>(json['playlistId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'streamId': serializer.toJson<String>(streamId),
+      'name': serializer.toJson<String>(name),
+      'streamIcon': serializer.toJson<String>(streamIcon),
+      'categoryId': serializer.toJson<String>(categoryId),
+      'rating': serializer.toJson<String>(rating),
+      'rating5based': serializer.toJson<double>(rating5based),
+      'containerExtension': serializer.toJson<String>(containerExtension),
+      'playlistId': serializer.toJson<String>(playlistId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  VodStreamsData copyWith({
+    String? streamId,
+    String? name,
+    String? streamIcon,
+    String? categoryId,
+    String? rating,
+    double? rating5based,
+    String? containerExtension,
+    String? playlistId,
+    DateTime? createdAt,
+  }) => VodStreamsData(
+    streamId: streamId ?? this.streamId,
+    name: name ?? this.name,
+    streamIcon: streamIcon ?? this.streamIcon,
+    categoryId: categoryId ?? this.categoryId,
+    rating: rating ?? this.rating,
+    rating5based: rating5based ?? this.rating5based,
+    containerExtension: containerExtension ?? this.containerExtension,
+    playlistId: playlistId ?? this.playlistId,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  VodStreamsData copyWithCompanion(VodStreamsCompanion data) {
+    return VodStreamsData(
+      streamId: data.streamId.present ? data.streamId.value : this.streamId,
+      name: data.name.present ? data.name.value : this.name,
+      streamIcon: data.streamIcon.present
+          ? data.streamIcon.value
+          : this.streamIcon,
+      categoryId: data.categoryId.present
+          ? data.categoryId.value
+          : this.categoryId,
+      rating: data.rating.present ? data.rating.value : this.rating,
+      rating5based: data.rating5based.present
+          ? data.rating5based.value
+          : this.rating5based,
+      containerExtension: data.containerExtension.present
+          ? data.containerExtension.value
+          : this.containerExtension,
+      playlistId: data.playlistId.present
+          ? data.playlistId.value
+          : this.playlistId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VodStreamsData(')
+          ..write('streamId: $streamId, ')
+          ..write('name: $name, ')
+          ..write('streamIcon: $streamIcon, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('rating: $rating, ')
+          ..write('rating5based: $rating5based, ')
+          ..write('containerExtension: $containerExtension, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    streamId,
+    name,
+    streamIcon,
+    categoryId,
+    rating,
+    rating5based,
+    containerExtension,
+    playlistId,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VodStreamsData &&
+          other.streamId == this.streamId &&
+          other.name == this.name &&
+          other.streamIcon == this.streamIcon &&
+          other.categoryId == this.categoryId &&
+          other.rating == this.rating &&
+          other.rating5based == this.rating5based &&
+          other.containerExtension == this.containerExtension &&
+          other.playlistId == this.playlistId &&
+          other.createdAt == this.createdAt);
+}
+
+class VodStreamsCompanion extends UpdateCompanion<VodStreamsData> {
+  final Value<String> streamId;
+  final Value<String> name;
+  final Value<String> streamIcon;
+  final Value<String> categoryId;
+  final Value<String> rating;
+  final Value<double> rating5based;
+  final Value<String> containerExtension;
+  final Value<String> playlistId;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const VodStreamsCompanion({
+    this.streamId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.streamIcon = const Value.absent(),
+    this.categoryId = const Value.absent(),
+    this.rating = const Value.absent(),
+    this.rating5based = const Value.absent(),
+    this.containerExtension = const Value.absent(),
+    this.playlistId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  VodStreamsCompanion.insert({
+    required String streamId,
+    required String name,
+    required String streamIcon,
+    required String categoryId,
+    required String rating,
+    required double rating5based,
+    required String containerExtension,
+    required String playlistId,
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : streamId = Value(streamId),
+       name = Value(name),
+       streamIcon = Value(streamIcon),
+       categoryId = Value(categoryId),
+       rating = Value(rating),
+       rating5based = Value(rating5based),
+       containerExtension = Value(containerExtension),
+       playlistId = Value(playlistId);
+  static Insertable<VodStreamsData> custom({
+    Expression<String>? streamId,
+    Expression<String>? name,
+    Expression<String>? streamIcon,
+    Expression<String>? categoryId,
+    Expression<String>? rating,
+    Expression<double>? rating5based,
+    Expression<String>? containerExtension,
+    Expression<String>? playlistId,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (streamId != null) 'stream_id': streamId,
+      if (name != null) 'name': name,
+      if (streamIcon != null) 'stream_icon': streamIcon,
+      if (categoryId != null) 'category_id': categoryId,
+      if (rating != null) 'rating': rating,
+      if (rating5based != null) 'rating5based': rating5based,
+      if (containerExtension != null) 'container_extension': containerExtension,
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  VodStreamsCompanion copyWith({
+    Value<String>? streamId,
+    Value<String>? name,
+    Value<String>? streamIcon,
+    Value<String>? categoryId,
+    Value<String>? rating,
+    Value<double>? rating5based,
+    Value<String>? containerExtension,
+    Value<String>? playlistId,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return VodStreamsCompanion(
+      streamId: streamId ?? this.streamId,
+      name: name ?? this.name,
+      streamIcon: streamIcon ?? this.streamIcon,
+      categoryId: categoryId ?? this.categoryId,
+      rating: rating ?? this.rating,
+      rating5based: rating5based ?? this.rating5based,
+      containerExtension: containerExtension ?? this.containerExtension,
+      playlistId: playlistId ?? this.playlistId,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (streamId.present) {
+      map['stream_id'] = Variable<String>(streamId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (streamIcon.present) {
+      map['stream_icon'] = Variable<String>(streamIcon.value);
+    }
+    if (categoryId.present) {
+      map['category_id'] = Variable<String>(categoryId.value);
+    }
+    if (rating.present) {
+      map['rating'] = Variable<String>(rating.value);
+    }
+    if (rating5based.present) {
+      map['rating5based'] = Variable<double>(rating5based.value);
+    }
+    if (containerExtension.present) {
+      map['container_extension'] = Variable<String>(containerExtension.value);
+    }
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VodStreamsCompanion(')
+          ..write('streamId: $streamId, ')
+          ..write('name: $name, ')
+          ..write('streamIcon: $streamIcon, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('rating: $rating, ')
+          ..write('rating5based: $rating5based, ')
+          ..write('containerExtension: $containerExtension, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2772,6 +3349,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $UserInfosTable userInfos = $UserInfosTable(this);
   late final $ServerInfosTable serverInfos = $ServerInfosTable(this);
   late final $LiveStreamsTable liveStreams = $LiveStreamsTable(this);
+  late final $VodStreamsTable vodStreams = $VodStreamsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2782,6 +3360,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     userInfos,
     serverInfos,
     liveStreams,
+    vodStreams,
   ];
 }
 
@@ -4162,6 +4741,292 @@ typedef $$LiveStreamsTableProcessedTableManager =
       LiveStreamsData,
       PrefetchHooks Function()
     >;
+typedef $$VodStreamsTableCreateCompanionBuilder =
+    VodStreamsCompanion Function({
+      required String streamId,
+      required String name,
+      required String streamIcon,
+      required String categoryId,
+      required String rating,
+      required double rating5based,
+      required String containerExtension,
+      required String playlistId,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $$VodStreamsTableUpdateCompanionBuilder =
+    VodStreamsCompanion Function({
+      Value<String> streamId,
+      Value<String> name,
+      Value<String> streamIcon,
+      Value<String> categoryId,
+      Value<String> rating,
+      Value<double> rating5based,
+      Value<String> containerExtension,
+      Value<String> playlistId,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$VodStreamsTableFilterComposer
+    extends Composer<_$AppDatabase, $VodStreamsTable> {
+  $$VodStreamsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get streamId => $composableBuilder(
+    column: $table.streamId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get streamIcon => $composableBuilder(
+    column: $table.streamIcon,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get rating5based => $composableBuilder(
+    column: $table.rating5based,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get containerExtension => $composableBuilder(
+    column: $table.containerExtension,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$VodStreamsTableOrderingComposer
+    extends Composer<_$AppDatabase, $VodStreamsTable> {
+  $$VodStreamsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get streamId => $composableBuilder(
+    column: $table.streamId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get streamIcon => $composableBuilder(
+    column: $table.streamIcon,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get rating5based => $composableBuilder(
+    column: $table.rating5based,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get containerExtension => $composableBuilder(
+    column: $table.containerExtension,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$VodStreamsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VodStreamsTable> {
+  $$VodStreamsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get streamId =>
+      $composableBuilder(column: $table.streamId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get streamIcon => $composableBuilder(
+    column: $table.streamIcon,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get rating =>
+      $composableBuilder(column: $table.rating, builder: (column) => column);
+
+  GeneratedColumn<double> get rating5based => $composableBuilder(
+    column: $table.rating5based,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get containerExtension => $composableBuilder(
+    column: $table.containerExtension,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$VodStreamsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $VodStreamsTable,
+          VodStreamsData,
+          $$VodStreamsTableFilterComposer,
+          $$VodStreamsTableOrderingComposer,
+          $$VodStreamsTableAnnotationComposer,
+          $$VodStreamsTableCreateCompanionBuilder,
+          $$VodStreamsTableUpdateCompanionBuilder,
+          (
+            VodStreamsData,
+            BaseReferences<_$AppDatabase, $VodStreamsTable, VodStreamsData>,
+          ),
+          VodStreamsData,
+          PrefetchHooks Function()
+        > {
+  $$VodStreamsTableTableManager(_$AppDatabase db, $VodStreamsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$VodStreamsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VodStreamsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VodStreamsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> streamId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> streamIcon = const Value.absent(),
+                Value<String> categoryId = const Value.absent(),
+                Value<String> rating = const Value.absent(),
+                Value<double> rating5based = const Value.absent(),
+                Value<String> containerExtension = const Value.absent(),
+                Value<String> playlistId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => VodStreamsCompanion(
+                streamId: streamId,
+                name: name,
+                streamIcon: streamIcon,
+                categoryId: categoryId,
+                rating: rating,
+                rating5based: rating5based,
+                containerExtension: containerExtension,
+                playlistId: playlistId,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String streamId,
+                required String name,
+                required String streamIcon,
+                required String categoryId,
+                required String rating,
+                required double rating5based,
+                required String containerExtension,
+                required String playlistId,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => VodStreamsCompanion.insert(
+                streamId: streamId,
+                name: name,
+                streamIcon: streamIcon,
+                categoryId: categoryId,
+                rating: rating,
+                rating5based: rating5based,
+                containerExtension: containerExtension,
+                playlistId: playlistId,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$VodStreamsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $VodStreamsTable,
+      VodStreamsData,
+      $$VodStreamsTableFilterComposer,
+      $$VodStreamsTableOrderingComposer,
+      $$VodStreamsTableAnnotationComposer,
+      $$VodStreamsTableCreateCompanionBuilder,
+      $$VodStreamsTableUpdateCompanionBuilder,
+      (
+        VodStreamsData,
+        BaseReferences<_$AppDatabase, $VodStreamsTable, VodStreamsData>,
+      ),
+      VodStreamsData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4176,4 +5041,6 @@ class $AppDatabaseManager {
       $$ServerInfosTableTableManager(_db, _db.serverInfos);
   $$LiveStreamsTableTableManager get liveStreams =>
       $$LiveStreamsTableTableManager(_db, _db.liveStreams);
+  $$VodStreamsTableTableManager get vodStreams =>
+      $$VodStreamsTableTableManager(_db, _db.vodStreams);
 }

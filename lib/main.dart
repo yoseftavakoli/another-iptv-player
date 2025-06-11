@@ -1,10 +1,14 @@
 // main.dart
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'controllers/playlist_controller.dart';
 import 'views/screens/home/home_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final session = await AudioSession.instance;
+  await session.configure(AudioSessionConfiguration.music());
   runApp(MyApp());
 }
 

@@ -6,6 +6,7 @@ import 'package:iptv_player/models/category.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/models/playlist_model.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
+import 'package:iptv_player/views/screens/screen/player_screen.dart';
 import 'package:provider/provider.dart';
 
 class PlaylistContentScreen extends StatefulWidget {
@@ -352,6 +353,14 @@ class _PlaylistContentScreenState extends State<PlaylistContentScreen> {
         borderRadius: BorderRadius.circular(16),
         onTap: () {
           controller.onContentTap(item);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  PlayerScreen(contentItem: item, playlist: widget.playlist),
+            ),
+          );
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Row(

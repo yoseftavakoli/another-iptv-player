@@ -92,23 +92,45 @@ class PlaylistContentController extends ChangeNotifier {
           var liveStreams = await _repository.getLiveChannelsByCategoryId(
             categoryId: category.categoryId,
           );
-          liveStreams!.forEach(
-            (x) => {_currentContent.add(ContentItem(x.name, x.streamIcon))},
-          );
+          liveStreams!.forEach((x) {
+            _currentContent.add(
+              ContentItem(
+                x.streamId,
+                x.name,
+                x.streamIcon,
+                ContentType.liveStream,
+              ),
+            );
+          });
         case 1:
           var movies = await _repository.getMovies(
             categoryId: category.categoryId,
           );
-          movies!.forEach(
-            (x) => {_currentContent.add(ContentItem(x.name, x.streamIcon))},
-          );
+          movies!.forEach((x) {
+            _currentContent.add(
+              ContentItem(
+                x.streamId,
+                x.name,
+                x.streamIcon,
+                ContentType.vod,
+                containerExtension: x.containerExtension,
+              ),
+            );
+          });
         case 2:
           var series = await _repository.getSeries(
             categoryId: category.categoryId,
           );
-          series!.forEach(
-            (x) => {_currentContent.add(ContentItem(x.name, x.cover))},
-          );
+          series!.forEach((x) {
+            _currentContent.add(
+              ContentItem(
+                x.seriesId,
+                x.name,
+                x.cover,
+                ContentType.series,
+              ),
+            );
+          });
       }
 
       _setViewState(ViewState.success);

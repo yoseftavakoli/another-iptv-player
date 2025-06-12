@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:iptv_player/controllers/playlist_content_controller.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/api_configuration_model.dart';
@@ -20,11 +21,27 @@ class PlaylistContentScreen extends StatefulWidget {
 
 class _PlaylistContentScreenState extends State<PlaylistContentScreen> {
   late PlaylistContentController _controller;
+  late PageController _pageController;
+  int _currentIndex = 0;
+
+  final List<String> liveCategories = ['Haber', 'Spor', 'Eğlence', 'Müzik'];
+  final List<String> movieCategories = ['Aksiyon', 'Komedi', 'Drama', 'Korku'];
+  final List<String> seriesCategories = [
+    'Dizi',
+    'Belgesel',
+    'Çizgi Film',
+    'Reality',
+  ];
+
+  String selectedLiveCategory = 'Haber';
+  String selectedMovieCategory = 'Aksiyon';
+  String selectedSeriesCategory = 'Dizi';
 
   @override
   void initState() {
     super.initState();
-    // Repository'yi oluştur
+    _pageController = PageController();
+
     final repository = IptvRepository(
       ApiConfig(
         baseUrl: widget.playlist.url!,
@@ -40,13 +57,85 @@ class _PlaylistContentScreenState extends State<PlaylistContentScreen> {
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onNavigationTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+    _pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  // Responsive sütun sayısı hesaplama
+  int _getCrossAxisCount(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    if (screenWidth >= 1200) {
+      return 6; // Çok büyük ekran (Desktop)
+    } else if (screenWidth >= 900) {
+      return 5; // Büyük tablet/küçük desktop
+    } else if (screenWidth >= 600) {
+      return 4; // Tablet
+    } else if (screenWidth >= 400) {
+      return 3; // Büyük telefon
+    } else {
+      return 2; // Küçük telefon
+    }
+  }
+
+  // Responsive padding hesaplama
+  double _getGridPadding(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    if (screenWidth >= 1200) {
+      return 24; // Desktop için daha geniş padding
+    } else if (screenWidth >= 600) {
+      return 16; // Tablet için orta padding
+    } else {
+      return 12; // Mobile için dar padding
+    }
+  }
+
+  // Responsive spacing hesaplama
+  double _getGridSpacing(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    if (screenWidth >= 1200) {
+      return 16; // Desktop için daha geniş spacing
+    } else if (screenWidth >= 600) {
+      return 12; // Tablet için orta spacing
+    } else {
+      return 8; // Mobile için dar spacing
+    }
+  }
+
+  // Responsive aspect ratio hesaplama
+  double _getChildAspectRatio(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    if (screenWidth >= 1200) {
+      return 0.7; // Desktop için biraz daha yüksek kartlar
+    } else if (screenWidth >= 600) {
+      return 0.68; // Tablet için orta
+    } else {
+      return 0.65; // Mobile için kompakt
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: _controller,
       child: Consumer<PlaylistContentController>(
         builder: (context, controller, child) {
           return Scaffold(
-            appBar: _buildAppBar(context, controller),
             body: _buildBody(context, controller),
             bottomNavigationBar: _buildBottomNavigation(context, controller),
           );
@@ -94,12 +183,83 @@ class _PlaylistContentScreenState extends State<PlaylistContentScreen> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        bool isDesktop = constraints.maxWidth > 768;
-        return isDesktop
-            ? _buildDesktopLayout(context, controller)
-            : _buildMobileLayout(context, controller);
+        // bool isDesktop = constraints.maxWidth > 768;
+        return PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          children: [
+            _buildContentPage(liveCategories, selectedLiveCategory, 'live'),
+            _buildContentPage(movieCategories, selectedMovieCategory, 'movie'),
+            _buildContentPage(
+              seriesCategories,
+              selectedSeriesCategory,
+              'series',
+            ),
+          ],
+        );
       },
     );
+  }
+
+  Widget _buildContentPage(
+    List<String> categories,
+    String selectedCategory,
+    String type,
+  ) {
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return [
+          // AppBar - scroll ile gizlenir
+          SliverAppBar(
+            title: Text(
+              _getPageTitle(),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            floating: true,
+            snap: true,
+            elevation: 0,
+          ),
+          // Kategori listesi
+          SliverPersistentHeader(
+            pinned: false,
+            floating: true,
+            delegate: _CategoryHeaderDelegate(
+              categories: categories,
+              selectedCategory: selectedCategory,
+              type: type,
+              onCategorySelected: (category) {
+                setState(() {
+                  if (type == 'live')
+                    selectedLiveCategory = category;
+                  else if (type == 'movie')
+                    selectedMovieCategory = category;
+                  else
+                    selectedSeriesCategory = category;
+                });
+              },
+            ),
+          ),
+        ];
+      },
+      body: Text("DATA"),
+    );
+  }
+
+  String _getPageTitle() {
+    switch (_currentIndex) {
+      case 0:
+        return 'Canlı Yayınlar';
+      case 1:
+        return 'Filmler';
+      case 2:
+        return 'Diziler';
+      default:
+        return 'IP TV Player';
+    }
   }
 
   Widget _buildMobileLayout(
@@ -331,15 +491,6 @@ class _PlaylistContentScreenState extends State<PlaylistContentScreen> {
     );
   }
 
-  int _getCrossAxisCount(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    if (width > 1400) return 6;
-    if (width > 1100) return 5;
-    if (width > 800) return 4;
-    if (width > 600) return 3;
-    return 2;
-  }
-
   Widget _buildContentItem(
     BuildContext context,
     PlaylistContentController controller,
@@ -566,28 +717,97 @@ class _PlaylistContentScreenState extends State<PlaylistContentScreen> {
     BuildContext context,
     PlaylistContentController controller,
   ) {
-    return NavigationBar(
-      selectedIndex: controller.selectedNavIndex,
-      onDestinationSelected: controller.selectNavigationTab,
-      backgroundColor: Colors.white,
-      surfaceTintColor: controller.getColorForCurrentTab(),
-      destinations: [
-        NavigationDestination(
-          icon: Icon(Icons.live_tv_outlined),
-          selectedIcon: Icon(Icons.live_tv),
-          label: 'Canlı Yayın',
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      onTap: _onNavigationTap,
+      type: BottomNavigationBarType.fixed,
+      showUnselectedLabels: false,
+      items: [
+        BottomNavigationBarItem(icon: Icon(Icons.live_tv), label: 'Canlı'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.movie_creation_outlined),
+          label: 'Film',
         ),
-        NavigationDestination(
-          icon: Icon(Icons.movie_outlined),
-          selectedIcon: Icon(Icons.movie),
-          label: 'Filmler',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.tv_outlined),
-          selectedIcon: Icon(Icons.tv),
-          label: 'Diziler',
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Dizi'),
       ],
     );
   }
+}
+
+class _CategoryHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final List<String> categories;
+  final String selectedCategory;
+  final String type;
+  final Function(String) onCategorySelected;
+
+  _CategoryHeaderDelegate({
+    required this.categories,
+    required this.selectedCategory,
+    required this.type,
+    required this.onCategorySelected,
+  });
+
+  @override
+  double get minExtent => 0;
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    final double opacity = (1.0 - shrinkOffset / maxExtent).clamp(0.0, 1.0);
+
+    // Responsive padding for categories
+    double horizontalPadding = MediaQuery.of(context).size.width >= 600
+        ? 16
+        : 12;
+
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 100),
+      height: maxExtent * opacity,
+      child: Opacity(
+        opacity: opacity,
+        child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          padding: EdgeInsets.symmetric(vertical: 6),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              final category = categories[index];
+              final isSelected = category == selectedCategory;
+
+              return Padding(
+                padding: EdgeInsets.only(right: 6),
+                child: FilterChip(
+                  label: Text(category, style: TextStyle(fontSize: 12)),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    onCategorySelected(category);
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+
+  @override
+  FloatingHeaderSnapConfiguration get snapConfiguration =>
+      FloatingHeaderSnapConfiguration(
+        curve: Curves.easeOut,
+        duration: Duration(milliseconds: 200),
+      );
 }

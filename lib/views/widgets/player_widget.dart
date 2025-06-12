@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:audio_session/audio_session.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:media_kit/media_kit.dart' hide Playlist;
@@ -53,7 +56,15 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       });
 
       // Player'ları oluştur
-      final newPlayer = Player();
+      final newPlayer = Player(
+        configuration: PlayerConfiguration(
+          // Supply your options:
+          title: 'My awesome package:media_kit application',
+          ready: () {
+            print('The initialization is complete.');
+          },
+        ),
+      );
       final newController = VideoController(newPlayer);
 
       // Widget hala mount edilmiş mi kontrol et
@@ -231,6 +242,16 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           controls: widget.showControls
               ? AdaptiveVideoControls
               : NoVideoControls,
+          onEnterFullscreen: () {
+            controller!.player.play();
+
+            return defaultEnterNativeFullscreen();
+          },
+          onExitFullscreen: () {
+            controller!.player.play();
+
+            return defaultExitNativeFullscreen();
+          },
         ),
 
         // Custom fullscreen button

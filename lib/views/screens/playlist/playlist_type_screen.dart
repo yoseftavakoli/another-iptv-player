@@ -5,30 +5,22 @@ import 'xstream_playlist_screen.dart';
 class PlaylistTypeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Playlist Oluştur'),
-        backgroundColor: Colors.blue,
+        title: Text(
+          'Playlist Oluştur',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         elevation: 0,
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.blue.withOpacity(0.1),
-              Colors.white,
-            ],
-          ),
-        ),
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: Padding(
                     padding: EdgeInsets.all(24),
@@ -41,7 +33,6 @@ class PlaylistTypeScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey[800],
                           ),
                         ),
                         SizedBox(height: 8),
@@ -49,15 +40,16 @@ class PlaylistTypeScreen extends StatelessWidget {
                           'Oluşturmak istediğiniz playlist türünü seçin',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.grey[600],
                           ),
                         ),
                         SizedBox(height: 40),
                         _buildPlaylistTypeCard(
                           context,
                           title: 'XStream Code',
-                          subtitle: 'API URL, kullanıcı adı ve şifre ile bağlanın',
-                          description: 'IPTV sağlayıcınızdan aldığınız bilgilerle kolayca bağlanın',
+                          subtitle:
+                              'API URL, kullanıcı adı ve şifre ile bağlanın',
+                          description:
+                              'IPTV sağlayıcınızdan aldığınız bilgilerle kolayca bağlanın',
                           icon: Icons.stream,
                           color: Colors.blue,
                           onTap: () {
@@ -74,7 +66,8 @@ class PlaylistTypeScreen extends StatelessWidget {
                           context,
                           title: 'M3U Playlist',
                           subtitle: 'M3U dosyası veya URL ile playlist ekleyin',
-                          description: 'Geleneksel M3U format dosyalarını destekler',
+                          description:
+                              'Geleneksel M3U format dosyalarını destekler',
                           icon: Icons.playlist_play,
                           color: Colors.green,
                           onTap: () {
@@ -139,9 +132,7 @@ class PlaylistTypeScreen extends StatelessWidget {
   }) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
@@ -156,11 +147,7 @@ class PlaylistTypeScreen extends StatelessWidget {
                   color: color,
                   borderRadius: BorderRadius.circular(30),
                 ),
-                child: Icon(
-                  icon,
-                  size: 30,
-                  color: Colors.white,
-                ),
+                child: Icon(icon, size: 30, color: Colors.white),
               ),
               SizedBox(width: 20),
               Expanded(
@@ -172,7 +159,6 @@ class PlaylistTypeScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
                       ),
                     ),
                     SizedBox(height: 4),
@@ -189,18 +175,13 @@ class PlaylistTypeScreen extends StatelessWidget {
                       description,
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.grey[600],
                         height: 1.3,
                       ),
                     ),
                   ],
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.grey[400],
-                size: 20,
-              ),
+              Icon(Icons.arrow_forward_ios, color: Colors.grey[400], size: 20),
             ],
           ),
         ),

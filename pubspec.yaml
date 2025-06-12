@@ -25,6 +25,7 @@ dependencies:
   http: ^1.4.0
   audio_session: ^0.2.2
   screen_brightness: ^2.1.4
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

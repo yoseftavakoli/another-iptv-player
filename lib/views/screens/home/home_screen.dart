@@ -1,7 +1,8 @@
 // views/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:iptv_player/services/app_state.dart';
+import 'package:iptv_player/views/screens/home/iptv_home_screen.dart';
 import 'package:iptv_player/views/screens/playlist/playlist_content_screen.dart';
-import 'package:iptv_player/views/screens/progress/progress_loading_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../controllers/playlist_controller.dart';
 import '../../../models/playlist_model.dart';
@@ -25,9 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Playlistlerim'),
-        backgroundColor: Colors.blue,
-        elevation: 0,
+        title: Text(
+          'Playlistlerim',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Consumer<PlaylistController>(
         builder: (context, controller, child) {
@@ -102,7 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToCreatePlaylist,
         child: Icon(Icons.add, color: Colors.white),
-        backgroundColor: Colors.blue,
         tooltip: 'Yeni Playlist Oluştur',
       ),
     );
@@ -305,25 +306,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openPlaylist(Playlist playlist) {
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     content: Text('${playlist.name} açılıyor...'),
-    //     duration: Duration(seconds: 1),
-    //   ),
-    // );
-
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => ProgressLoadingScreen(playlist: playlist),
-    //   ),
-    // );
-
-    Navigator.push(
+    AppState.currentPlaylist = playlist;
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            PlaylistContentScreen(playlist: playlist),
+        builder: (context) => IPTVHomeScreen(playlist: playlist),
+        // builder: (context) => PlaylistContentScreen(playlist: playlist),
       ),
     );
   }

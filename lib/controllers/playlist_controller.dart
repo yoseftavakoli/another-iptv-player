@@ -1,4 +1,3 @@
-// controllers/playlist_controller.dart
 import 'package:flutter/material.dart';
 import '../models/playlist_model.dart';
 import '../services/playlist_service.dart';

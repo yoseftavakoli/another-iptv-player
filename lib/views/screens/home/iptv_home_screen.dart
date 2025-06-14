@@ -137,13 +137,6 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
             );
           },
           onContentTap: (content) {
-            // PictureInPicture.startPiP(
-            //   pipWidget: PiPCapableWidget(
-            //     whileNotInPip: ContentDetailScreen(content: content),
-            //     whileInPip: ContentDetailScreen(content: content), //Optional
-            //   ),
-            // );
-
             Navigator.push(
               context,
               MaterialPageRoute(

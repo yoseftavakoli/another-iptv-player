@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:iptv_player/controllers/playlist_content_controller.dart';
 import 'package:iptv_player/models/category_view_model.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
+import 'package:iptv_player/models/view_state.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
 
 class HomeController extends ChangeNotifier {

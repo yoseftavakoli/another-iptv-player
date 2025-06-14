@@ -106,6 +106,7 @@ class HomeController extends ChangeNotifier {
                   x.name,
                   x.streamIcon,
                   ContentType.liveStream,
+                  liveStream: x,
                 ),
               )
               .toList(),
@@ -129,6 +130,7 @@ class HomeController extends ChangeNotifier {
                   x.streamIcon,
                   ContentType.vod,
                   containerExtension: x.containerExtension,
+                  vodStream: x,
                 ),
               )
               .toList(),
@@ -139,9 +141,23 @@ class HomeController extends ChangeNotifier {
 
       var seriesCategories = await _repository.getSeriesCategories();
       for (var seriesCategory in seriesCategories!) {
+        var series = await _repository.getSeries(
+          categoryId: seriesCategory.categoryId,
+        );
+
         var categoryViewModel = CategoryViewModel(
           category: seriesCategory,
-          contentItems: [],
+          contentItems: series!
+              .map(
+                (x) => ContentItem(
+                  x.seriesId,
+                  x.name,
+                  x.cover,
+                  ContentType.series,
+                  seriesStream: x,
+                ),
+              )
+              .toList(),
         );
         _seriesCategories!.add(categoryViewModel);
       }

@@ -40,7 +40,6 @@ class CategorySection extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
-                    // overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 TextButton(
@@ -63,7 +62,8 @@ class CategorySection extends StatelessWidget {
                   child: ContentCard(
                     content: category.contentItems[index],
                     width: cardWidth,
-                    onTap: () => onContentTap?.call(category.contentItems[index]),
+                    onTap: () =>
+                        onContentTap?.call(category.contentItems[index]),
                   ),
                 );
               },

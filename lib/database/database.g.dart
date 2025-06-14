@@ -3501,6 +3501,28 @@ class $SeriesStreamsTable extends SeriesStreams
     requiredDuringInsert: false,
     defaultValue: currentDateAndTime,
   );
+  static const VerificationMeta _lastModifiedMeta = const VerificationMeta(
+    'lastModified',
+  );
+  @override
+  late final GeneratedColumn<String> lastModified = GeneratedColumn<String>(
+    'last_modified',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _backdropPathMeta = const VerificationMeta(
+    'backdropPath',
+  );
+  @override
+  late final GeneratedColumn<String> backdropPath = GeneratedColumn<String>(
+    'backdrop_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     seriesId,
@@ -3518,6 +3540,8 @@ class $SeriesStreamsTable extends SeriesStreams
     categoryId,
     playlistId,
     createdAt,
+    lastModified,
+    backdropPath,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3661,6 +3685,28 @@ class $SeriesStreamsTable extends SeriesStreams
         createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
       );
     }
+    if (data.containsKey('last_modified')) {
+      context.handle(
+        _lastModifiedMeta,
+        lastModified.isAcceptableOrUnknown(
+          data['last_modified']!,
+          _lastModifiedMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_lastModifiedMeta);
+    }
+    if (data.containsKey('backdrop_path')) {
+      context.handle(
+        _backdropPathMeta,
+        backdropPath.isAcceptableOrUnknown(
+          data['backdrop_path']!,
+          _backdropPathMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_backdropPathMeta);
+    }
     return context;
   }
 
@@ -3730,6 +3776,14 @@ class $SeriesStreamsTable extends SeriesStreams
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      lastModified: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_modified'],
+      )!,
+      backdropPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}backdrop_path'],
+      )!,
     );
   }
 
@@ -3756,6 +3810,8 @@ class SeriesStreamsData extends DataClass
   final String categoryId;
   final String playlistId;
   final DateTime createdAt;
+  final String lastModified;
+  final String backdropPath;
   const SeriesStreamsData({
     required this.seriesId,
     required this.name,
@@ -3772,6 +3828,8 @@ class SeriesStreamsData extends DataClass
     required this.categoryId,
     required this.playlistId,
     required this.createdAt,
+    required this.lastModified,
+    required this.backdropPath,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3791,6 +3849,8 @@ class SeriesStreamsData extends DataClass
     map['category_id'] = Variable<String>(categoryId);
     map['playlist_id'] = Variable<String>(playlistId);
     map['created_at'] = Variable<DateTime>(createdAt);
+    map['last_modified'] = Variable<String>(lastModified);
+    map['backdrop_path'] = Variable<String>(backdropPath);
     return map;
   }
 
@@ -3811,6 +3871,8 @@ class SeriesStreamsData extends DataClass
       categoryId: Value(categoryId),
       playlistId: Value(playlistId),
       createdAt: Value(createdAt),
+      lastModified: Value(lastModified),
+      backdropPath: Value(backdropPath),
     );
   }
 
@@ -3835,6 +3897,8 @@ class SeriesStreamsData extends DataClass
       categoryId: serializer.fromJson<String>(json['categoryId']),
       playlistId: serializer.fromJson<String>(json['playlistId']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      lastModified: serializer.fromJson<String>(json['lastModified']),
+      backdropPath: serializer.fromJson<String>(json['backdropPath']),
     );
   }
   @override
@@ -3856,6 +3920,8 @@ class SeriesStreamsData extends DataClass
       'categoryId': serializer.toJson<String>(categoryId),
       'playlistId': serializer.toJson<String>(playlistId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'lastModified': serializer.toJson<String>(lastModified),
+      'backdropPath': serializer.toJson<String>(backdropPath),
     };
   }
 
@@ -3875,6 +3941,8 @@ class SeriesStreamsData extends DataClass
     String? categoryId,
     String? playlistId,
     DateTime? createdAt,
+    String? lastModified,
+    String? backdropPath,
   }) => SeriesStreamsData(
     seriesId: seriesId ?? this.seriesId,
     name: name ?? this.name,
@@ -3891,6 +3959,8 @@ class SeriesStreamsData extends DataClass
     categoryId: categoryId ?? this.categoryId,
     playlistId: playlistId ?? this.playlistId,
     createdAt: createdAt ?? this.createdAt,
+    lastModified: lastModified ?? this.lastModified,
+    backdropPath: backdropPath ?? this.backdropPath,
   );
   SeriesStreamsData copyWithCompanion(SeriesStreamsCompanion data) {
     return SeriesStreamsData(
@@ -3921,6 +3991,12 @@ class SeriesStreamsData extends DataClass
           ? data.playlistId.value
           : this.playlistId,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      lastModified: data.lastModified.present
+          ? data.lastModified.value
+          : this.lastModified,
+      backdropPath: data.backdropPath.present
+          ? data.backdropPath.value
+          : this.backdropPath,
     );
   }
 
@@ -3941,7 +4017,9 @@ class SeriesStreamsData extends DataClass
           ..write('episodeRunTime: $episodeRunTime, ')
           ..write('categoryId: $categoryId, ')
           ..write('playlistId: $playlistId, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastModified: $lastModified, ')
+          ..write('backdropPath: $backdropPath')
           ..write(')'))
         .toString();
   }
@@ -3963,6 +4041,8 @@ class SeriesStreamsData extends DataClass
     categoryId,
     playlistId,
     createdAt,
+    lastModified,
+    backdropPath,
   );
   @override
   bool operator ==(Object other) =>
@@ -3982,7 +4062,9 @@ class SeriesStreamsData extends DataClass
           other.episodeRunTime == this.episodeRunTime &&
           other.categoryId == this.categoryId &&
           other.playlistId == this.playlistId &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.lastModified == this.lastModified &&
+          other.backdropPath == this.backdropPath);
 }
 
 class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
@@ -4001,6 +4083,8 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
   final Value<String> categoryId;
   final Value<String> playlistId;
   final Value<DateTime> createdAt;
+  final Value<String> lastModified;
+  final Value<String> backdropPath;
   final Value<int> rowid;
   const SeriesStreamsCompanion({
     this.seriesId = const Value.absent(),
@@ -4018,6 +4102,8 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
     this.categoryId = const Value.absent(),
     this.playlistId = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.lastModified = const Value.absent(),
+    this.backdropPath = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SeriesStreamsCompanion.insert({
@@ -4036,6 +4122,8 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
     required String categoryId,
     required String playlistId,
     this.createdAt = const Value.absent(),
+    required String lastModified,
+    required String backdropPath,
     this.rowid = const Value.absent(),
   }) : seriesId = Value(seriesId),
        name = Value(name),
@@ -4050,7 +4138,9 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
        youtubeTrailer = Value(youtubeTrailer),
        episodeRunTime = Value(episodeRunTime),
        categoryId = Value(categoryId),
-       playlistId = Value(playlistId);
+       playlistId = Value(playlistId),
+       lastModified = Value(lastModified),
+       backdropPath = Value(backdropPath);
   static Insertable<SeriesStreamsData> custom({
     Expression<String>? seriesId,
     Expression<String>? name,
@@ -4067,6 +4157,8 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
     Expression<String>? categoryId,
     Expression<String>? playlistId,
     Expression<DateTime>? createdAt,
+    Expression<String>? lastModified,
+    Expression<String>? backdropPath,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -4085,6 +4177,8 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
       if (categoryId != null) 'category_id': categoryId,
       if (playlistId != null) 'playlist_id': playlistId,
       if (createdAt != null) 'created_at': createdAt,
+      if (lastModified != null) 'last_modified': lastModified,
+      if (backdropPath != null) 'backdrop_path': backdropPath,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4105,6 +4199,8 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
     Value<String>? categoryId,
     Value<String>? playlistId,
     Value<DateTime>? createdAt,
+    Value<String>? lastModified,
+    Value<String>? backdropPath,
     Value<int>? rowid,
   }) {
     return SeriesStreamsCompanion(
@@ -4123,6 +4219,8 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
       categoryId: categoryId ?? this.categoryId,
       playlistId: playlistId ?? this.playlistId,
       createdAt: createdAt ?? this.createdAt,
+      lastModified: lastModified ?? this.lastModified,
+      backdropPath: backdropPath ?? this.backdropPath,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4175,6 +4273,12 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (lastModified.present) {
+      map['last_modified'] = Variable<String>(lastModified.value);
+    }
+    if (backdropPath.present) {
+      map['backdrop_path'] = Variable<String>(backdropPath.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -4199,6 +4303,8 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
           ..write('categoryId: $categoryId, ')
           ..write('playlistId: $playlistId, ')
           ..write('createdAt: $createdAt, ')
+          ..write('lastModified: $lastModified, ')
+          ..write('backdropPath: $backdropPath, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -5910,6 +6016,8 @@ typedef $$SeriesStreamsTableCreateCompanionBuilder =
       required String categoryId,
       required String playlistId,
       Value<DateTime> createdAt,
+      required String lastModified,
+      required String backdropPath,
       Value<int> rowid,
     });
 typedef $$SeriesStreamsTableUpdateCompanionBuilder =
@@ -5929,6 +6037,8 @@ typedef $$SeriesStreamsTableUpdateCompanionBuilder =
       Value<String> categoryId,
       Value<String> playlistId,
       Value<DateTime> createdAt,
+      Value<String> lastModified,
+      Value<String> backdropPath,
       Value<int> rowid,
     });
 
@@ -6013,6 +6123,16 @@ class $$SeriesStreamsTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get backdropPath => $composableBuilder(
+    column: $table.backdropPath,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -6100,6 +6220,16 @@ class $$SeriesStreamsTableOrderingComposer
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get backdropPath => $composableBuilder(
+    column: $table.backdropPath,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SeriesStreamsTableAnnotationComposer
@@ -6167,6 +6297,16 @@ class $$SeriesStreamsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get backdropPath => $composableBuilder(
+    column: $table.backdropPath,
+    builder: (column) => column,
+  );
 }
 
 class $$SeriesStreamsTableTableManager
@@ -6219,6 +6359,8 @@ class $$SeriesStreamsTableTableManager
                 Value<String> categoryId = const Value.absent(),
                 Value<String> playlistId = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<String> lastModified = const Value.absent(),
+                Value<String> backdropPath = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SeriesStreamsCompanion(
                 seriesId: seriesId,
@@ -6236,6 +6378,8 @@ class $$SeriesStreamsTableTableManager
                 categoryId: categoryId,
                 playlistId: playlistId,
                 createdAt: createdAt,
+                lastModified: lastModified,
+                backdropPath: backdropPath,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -6255,6 +6399,8 @@ class $$SeriesStreamsTableTableManager
                 required String categoryId,
                 required String playlistId,
                 Value<DateTime> createdAt = const Value.absent(),
+                required String lastModified,
+                required String backdropPath,
                 Value<int> rowid = const Value.absent(),
               }) => SeriesStreamsCompanion.insert(
                 seriesId: seriesId,
@@ -6272,6 +6418,8 @@ class $$SeriesStreamsTableTableManager
                 categoryId: categoryId,
                 playlistId: playlistId,
                 createdAt: createdAt,
+                lastModified: lastModified,
+                backdropPath: backdropPath,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

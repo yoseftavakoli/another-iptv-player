@@ -119,6 +119,8 @@ class SeriesStreams extends Table {
   TextColumn get categoryId => text()();
   TextColumn get playlistId => text()(); // Ekstra property
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  TextColumn get lastModified => text()();
+  TextColumn get backdropPath => text()(); // JSON string olarak saklanacak
 
   @override
   Set<Column> get primaryKey => {seriesId, playlistId};
@@ -139,7 +141,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6; // SeriesStreams tablosu eklendiği için versiyon artırıldı
+  int get schemaVersion => 7; // SeriesStreams tablosu eklendiği için versiyon artırıldı
   // === PLAYLIST İŞLEMLERİ ===
 
   // Playlist oluştur
@@ -207,13 +209,11 @@ class AppDatabase extends _$AppDatabase {
     CategoryType type,
   ) async {
     final categoriesData =
-        await (select(categories)
-              ..where(
-                (tbl) =>
-                    tbl.playlistId.equals(playlistId) &
-                    tbl.type.equals(type.value),
-              )
-            )
+        await (select(categories)..where(
+              (tbl) =>
+                  tbl.playlistId.equals(playlistId) &
+                  tbl.type.equals(type.value),
+            ))
             .get();
 
     return categoriesData.map((cat) => Category.fromDrift(cat)).toList();
@@ -851,8 +851,32 @@ class AppDatabase extends _$AppDatabase {
       if (from < 6) {
         await m.createTable(seriesStreams);
       }
+      if (from <= 6) {
+        // Yeni kolonları varsayılan değerlerle ekle
+        await m.addColumn(seriesStreams, seriesStreams.lastModified);
+        await m.addColumn(seriesStreams, seriesStreams.backdropPath);
+
+        // Varolan kayıtlar için varsayılan değerler set etmek isterseniz:
+        await customStatement('''
+        UPDATE series_streams 
+        SET last_modified = '0', backdrop_path = '[]' 
+        WHERE last_modified IS NULL OR backdrop_path IS NULL
+      ''');
+      }
     },
   );
+
+  // database.dart dosyanızda
+  Future<void> deleteDatabase() async {
+    await close(); // Önce bağlantıyı kapat
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'playlists.db'));
+
+    if (await file.exists()) {
+      await file.delete();
+      print('Database silindi');
+    }
+  }
 }
 
 LazyDatabase _openConnection() {

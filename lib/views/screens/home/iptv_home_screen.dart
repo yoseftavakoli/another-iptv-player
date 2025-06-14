@@ -5,9 +5,9 @@ import 'package:iptv_player/models/api_configuration_model.dart';
 import 'package:iptv_player/models/category_view_model.dart';
 import 'package:iptv_player/models/playlist_model.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
+import 'package:iptv_player/utils/navigate_by_content_type.dart';
 import 'package:iptv_player/utils/responsive_helper.dart';
 import 'package:iptv_player/views/screens/home/category_detail_screen.dart';
-import 'package:iptv_player/views/screens/home/content_detail_screen.dart';
 import 'package:iptv_player/views/widgets/category_section.dart';
 import 'package:provider/provider.dart';
 
@@ -137,12 +137,7 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
             );
           },
           onContentTap: (content) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ContentDetailScreen(content: content),
-              ),
-            );
+            navigateByContentType(context, content);
           },
         );
       },

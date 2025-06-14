@@ -20,7 +20,7 @@ class ContentCard extends StatelessWidget {
       tag: content.id,
       child: Card(
         clipBehavior: Clip.antiAlias,
-        margin: EdgeInsets.zero,
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 1),
         child: InkWell(
           onTap: onTap,
           child: Column(

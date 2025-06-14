@@ -1,3 +1,7 @@
+import 'package:iptv_player/models/live_stream.dart';
+import 'package:iptv_player/models/series.dart';
+import 'package:iptv_player/models/vod_streams.dart';
+
 enum ContentType { liveStream, vod, series }
 
 class ContentItem {
@@ -9,6 +13,9 @@ class ContentItem {
   final String? coverPath;
   final String? containerExtension;
   final ContentType contentType;
+  final LiveStream? liveStream;
+  final VodStream? vodStream;
+  final SeriesStream? seriesStream;
 
   ContentItem(
     this.id,
@@ -18,7 +25,10 @@ class ContentItem {
     this.description,
     this.duration,
     this.coverPath,
-    this.containerExtension
+    this.containerExtension,
+    this.liveStream,
+    this.vodStream,
+    this.seriesStream,
   });
 }
 

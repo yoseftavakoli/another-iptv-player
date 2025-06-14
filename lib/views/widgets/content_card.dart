@@ -32,7 +32,7 @@ class ContentCard extends StatelessWidget {
                 child: content.imagePath != null
                     ? CachedNetworkImage(
                         imageUrl: content.imagePath,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         placeholder: (context, url) => Container(
                           color: Theme.of(context).colorScheme.surfaceVariant,
                           child: Center(

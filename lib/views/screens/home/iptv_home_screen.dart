@@ -47,48 +47,53 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _controller,
-      child: Consumer<HomeController>(
-        builder: (context, controller, child) {
-          if (controller.isLoading) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return PopScope(
+      child: ChangeNotifierProvider.value(
+        value: _controller,
+        child: Consumer<HomeController>(
+          builder: (context, controller, child) {
+            if (controller.isLoading) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('Playlistler yükleniyor...'),
+                  ],
+                ),
+              );
+            }
+
+            return Scaffold(
+              body: PageView(
+                controller: controller.pageController,
+                onPageChanged: controller.onPageChanged,
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Playlistler yükleniyor...'),
+                  _buildContentPage(controller.liveCategories!, 'live'),
+                  _buildContentPage(controller.movieCategories!, 'movie'),
+                  _buildContentPage(controller.seriesCategories!, 'series'),
+                ],
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                currentIndex: controller.currentIndex,
+                onTap: controller.onNavigationTap,
+                type: BottomNavigationBarType.fixed,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.live_tv),
+                    label: 'Canlı',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.movie),
+                    label: 'Film',
+                  ),
+                  BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Dizi'),
                 ],
               ),
             );
-          }
-
-          return Scaffold(
-            body: PageView(
-              controller: controller.pageController,
-              onPageChanged: controller.onPageChanged,
-              children: [
-                _buildContentPage(controller.liveCategories!, 'live'),
-                _buildContentPage(controller.movieCategories!, 'movie'),
-                _buildContentPage(controller.seriesCategories!, 'series'),
-              ],
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: controller.currentIndex,
-              onTap: controller.onNavigationTap,
-              type: BottomNavigationBarType.fixed,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.live_tv),
-                  label: 'Canlı',
-                ),
-                BottomNavigationBarItem(icon: Icon(Icons.movie), label: 'Film'),
-                BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Dizi'),
-              ],
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -98,7 +103,7 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
           SliverAppBar(
-            title: Text(
+            title: SelectableText(
               _controller.getPageTitle(),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -126,13 +131,19 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CategoryDetailScreen(
-                  category: categories[index],
-                ),
+                builder: (context) =>
+                    CategoryDetailScreen(category: categories[index]),
               ),
             );
           },
           onContentTap: (content) {
+            // PictureInPicture.startPiP(
+            //   pipWidget: PiPCapableWidget(
+            //     whileNotInPip: ContentDetailScreen(content: content),
+            //     whileInPip: ContentDetailScreen(content: content), //Optional
+            //   ),
+            // );
+
             Navigator.push(
               context,
               MaterialPageRoute(

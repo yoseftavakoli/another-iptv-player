@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/views/screens/home/iptv_home_screen.dart';
-import 'package:iptv_player/views/screens/playlist/playlist_content_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../controllers/playlist_controller.dart';
 import '../../../models/playlist_model.dart';
@@ -307,6 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _openPlaylist(Playlist playlist) {
     AppState.currentPlaylist = playlist;
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

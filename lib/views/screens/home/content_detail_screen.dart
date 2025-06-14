@@ -25,35 +25,6 @@ class ContentDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    content.name,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  SizedBox(height: 16),
-                  // Chip(label: Text('Kategori: ${content.}')),
-                  SizedBox(height: 20),
-                  FilledButton.icon(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${content.name} oynatılıyor...'),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.play_arrow),
-                    label: Text('Oynat'),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart' hide Category;
+import 'package:iptv_player/drift_flutter.dart';
 import 'package:iptv_player/models/category.dart';
 import 'package:iptv_player/models/live_stream.dart';
 import 'package:iptv_player/models/series.dart';
@@ -203,8 +204,28 @@ class Episodes extends Table {
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
-
+  AppDatabase([QueryExecutor? e])
+    : super(
+        e ??
+            driftDatabase(
+              name: 'todo-app',
+              native: const DriftNativeOptions(
+                databaseDirectory: getApplicationSupportDirectory,
+              ),
+              web: DriftWebOptions(
+                sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+                driftWorker: Uri.parse('drift_worker.js'),
+                onResult: (result) {
+                  if (result.missingFeatures.isNotEmpty) {
+                    debugPrint(
+                      'Using ${result.chosenImplementation} due to unsupported '
+                      'browser features: ${result.missingFeatures}',
+                    );
+                  }
+                },
+              ),
+            ),
+      );
   @override
   int get schemaVersion => 8;
   // === PLAYLIST İŞLEMLERİ ===
@@ -1028,12 +1049,4 @@ class AppDatabase extends _$AppDatabase {
       print('Database silindi');
     }
   }
-}
-
-LazyDatabase _openConnection() {
-  return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'playlists.db'));
-    return NativeDatabase(file);
-  });
 }

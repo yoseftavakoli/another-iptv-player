@@ -126,6 +126,68 @@ class SeriesStreams extends Table {
   Set<Column> get primaryKey => {seriesId, playlistId};
 }
 
+@DataClassName('SeriesInfosData')
+class SeriesInfos extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get seriesId => text()();
+  TextColumn get name => text()();
+  TextColumn get cover => text().nullable()();
+  TextColumn get plot => text().nullable()();
+  TextColumn get cast => text().nullable()();
+  TextColumn get director => text().nullable()();
+  TextColumn get genre => text().nullable()();
+  TextColumn get releaseDate => text().nullable()();
+  TextColumn get lastModified => text().nullable()();
+  TextColumn get rating => text().nullable()();
+  IntColumn get rating5based => integer().nullable()();
+  TextColumn get backdropPath => text().nullable()();
+  TextColumn get youtubeTrailer => text().nullable()();
+  TextColumn get episodeRunTime => text().nullable()();
+  TextColumn get categoryId => text().nullable()();
+  TextColumn get playlistId => text()();
+}
+
+@DataClassName('SeasonsData')
+class Seasons extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get seriesId => text()();
+  TextColumn get airDate => text().nullable()();
+  IntColumn get episodeCount => integer().nullable()();
+  IntColumn get seasonId => integer()();
+  TextColumn get name => text()();
+  TextColumn get overview => text().nullable()();
+  IntColumn get seasonNumber => integer()();
+  IntColumn get voteAverage => integer().nullable()();
+  TextColumn get cover => text().nullable()();
+  TextColumn get coverBig => text().nullable()();
+  TextColumn get playlistId => text()();
+}
+
+@DataClassName('EpisodesData')
+class Episodes extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get seriesId => text()();
+  TextColumn get episodeId => text()();
+  IntColumn get episodeNum => integer()();
+  TextColumn get title => text()();
+  TextColumn get containerExtension => text().nullable()();
+  IntColumn get season => integer()();
+  TextColumn get customSid => text().nullable()();
+  TextColumn get added => text().nullable()();
+  TextColumn get directSource => text().nullable()();
+  TextColumn get playlistId => text()();
+
+  // Episode Info
+  IntColumn get tmdbId => integer().nullable()();
+  TextColumn get releasedate => text().nullable()();
+  TextColumn get plot => text().nullable()();
+  IntColumn get durationSecs => integer().nullable()();
+  TextColumn get duration => text().nullable()();
+  TextColumn get movieImage => text().nullable()();
+  IntColumn get bitrate => integer().nullable()();
+  RealColumn get rating => real().nullable()();
+}
+
 @DriftDatabase(
   tables: [
     Playlists,
@@ -135,13 +197,16 @@ class SeriesStreams extends Table {
     LiveStreams,
     VodStreams,
     SeriesStreams,
+    SeriesInfos,
+    Seasons,
+    Episodes,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 7; // SeriesStreams tablosu eklendiği için versiyon artırıldı
+  int get schemaVersion => 8;
   // === PLAYLIST İŞLEMLERİ ===
 
   // Playlist oluştur
@@ -825,6 +890,84 @@ class AppDatabase extends _$AppDatabase {
         .go();
   }
 
+  // Series Info CRUD Operations
+  Future<int> insertSeriesInfo(SeriesInfosCompanion seriesInfo) {
+    return into(this.seriesInfos).insert(seriesInfo);
+  }
+
+  Future<SeriesInfosData?> getSeriesInfo(String seriesId, String playlistId) {
+    return (select(seriesInfos)..where(
+          (tbl) =>
+              tbl.seriesId.equals(seriesId) & tbl.playlistId.equals(playlistId),
+        ))
+        .getSingleOrNull();
+  }
+
+  // Seasons CRUD Operations
+  Future<int> insertSeason(SeasonsCompanion season) {
+    return into(seasons).insert(season);
+  }
+
+  Future<List<SeasonsData>> getSeasonsBySeriesId(
+    String seriesId,
+    String playlistId,
+  ) {
+    return (select(seasons)..where(
+          (tbl) =>
+              tbl.seriesId.equals(seriesId) & tbl.playlistId.equals(playlistId),
+        ))
+        .get();
+  }
+
+  // Episodes CRUD Operations
+  Future<int> insertEpisode(EpisodesCompanion episode) {
+    return into(episodes).insert(episode);
+  }
+
+  Future<List<EpisodesData>> getEpisodesBySeriesId(
+    String seriesId,
+    String playlistId,
+  ) {
+    return (select(episodes)..where(
+          (tbl) =>
+              tbl.seriesId.equals(seriesId) & tbl.seriesId.equals(seriesId),
+        ))
+        .get();
+  }
+
+  Future<List<EpisodesData>> getEpisodesBySeason(
+    String seriesId,
+    int seasonNumber,
+    String playlistId,
+  ) {
+    return (select(episodes)..where(
+          (tbl) =>
+              tbl.seriesId.equals(seriesId) &
+              tbl.season.equals(seasonNumber) &
+              tbl.seriesId.equals(seriesId),
+        ))
+        .get();
+  }
+
+  // Clear operations
+  Future<int> clearSeriesData(String seriesId, String playlistId) async {
+    await (delete(episodes)..where(
+          (tbl) =>
+              tbl.seriesId.equals(seriesId) & tbl.seriesId.equals(seriesId),
+        ))
+        .go();
+    await (delete(seasons)..where(
+          (tbl) =>
+              tbl.seriesId.equals(seriesId) & tbl.seriesId.equals(seriesId),
+        ))
+        .go();
+    return await (delete(seriesInfos)..where(
+          (tbl) =>
+              tbl.seriesId.equals(seriesId) & tbl.seriesId.equals(seriesId),
+        ))
+        .go();
+  }
+
   // Database migration
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -862,6 +1005,14 @@ class AppDatabase extends _$AppDatabase {
         SET last_modified = '0', backdrop_path = '[]' 
         WHERE last_modified IS NULL OR backdrop_path IS NULL
       ''');
+      }
+      if (from <= 7) {
+        // SeriesInfo tablosu oluştur
+        await m.createTable(seriesInfos);
+        // Seasons tablosu oluştur
+        await m.createTable(seasons);
+        // Episodes tablosu oluştur
+        await m.createTable(episodes);
       }
     },
   );

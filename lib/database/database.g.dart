@@ -4311,6 +4311,2745 @@ class SeriesStreamsCompanion extends UpdateCompanion<SeriesStreamsData> {
   }
 }
 
+class $SeriesInfosTable extends SeriesInfos
+    with TableInfo<$SeriesInfosTable, SeriesInfosData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SeriesInfosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _seriesIdMeta = const VerificationMeta(
+    'seriesId',
+  );
+  @override
+  late final GeneratedColumn<String> seriesId = GeneratedColumn<String>(
+    'series_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _coverMeta = const VerificationMeta('cover');
+  @override
+  late final GeneratedColumn<String> cover = GeneratedColumn<String>(
+    'cover',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _plotMeta = const VerificationMeta('plot');
+  @override
+  late final GeneratedColumn<String> plot = GeneratedColumn<String>(
+    'plot',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _castMeta = const VerificationMeta('cast');
+  @override
+  late final GeneratedColumn<String> cast = GeneratedColumn<String>(
+    'cast',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _directorMeta = const VerificationMeta(
+    'director',
+  );
+  @override
+  late final GeneratedColumn<String> director = GeneratedColumn<String>(
+    'director',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _genreMeta = const VerificationMeta('genre');
+  @override
+  late final GeneratedColumn<String> genre = GeneratedColumn<String>(
+    'genre',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _releaseDateMeta = const VerificationMeta(
+    'releaseDate',
+  );
+  @override
+  late final GeneratedColumn<String> releaseDate = GeneratedColumn<String>(
+    'release_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastModifiedMeta = const VerificationMeta(
+    'lastModified',
+  );
+  @override
+  late final GeneratedColumn<String> lastModified = GeneratedColumn<String>(
+    'last_modified',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _ratingMeta = const VerificationMeta('rating');
+  @override
+  late final GeneratedColumn<String> rating = GeneratedColumn<String>(
+    'rating',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _rating5basedMeta = const VerificationMeta(
+    'rating5based',
+  );
+  @override
+  late final GeneratedColumn<int> rating5based = GeneratedColumn<int>(
+    'rating5based',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _backdropPathMeta = const VerificationMeta(
+    'backdropPath',
+  );
+  @override
+  late final GeneratedColumn<String> backdropPath = GeneratedColumn<String>(
+    'backdrop_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _youtubeTrailerMeta = const VerificationMeta(
+    'youtubeTrailer',
+  );
+  @override
+  late final GeneratedColumn<String> youtubeTrailer = GeneratedColumn<String>(
+    'youtube_trailer',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _episodeRunTimeMeta = const VerificationMeta(
+    'episodeRunTime',
+  );
+  @override
+  late final GeneratedColumn<String> episodeRunTime = GeneratedColumn<String>(
+    'episode_run_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _categoryIdMeta = const VerificationMeta(
+    'categoryId',
+  );
+  @override
+  late final GeneratedColumn<String> categoryId = GeneratedColumn<String>(
+    'category_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _playlistIdMeta = const VerificationMeta(
+    'playlistId',
+  );
+  @override
+  late final GeneratedColumn<String> playlistId = GeneratedColumn<String>(
+    'playlist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    seriesId,
+    name,
+    cover,
+    plot,
+    cast,
+    director,
+    genre,
+    releaseDate,
+    lastModified,
+    rating,
+    rating5based,
+    backdropPath,
+    youtubeTrailer,
+    episodeRunTime,
+    categoryId,
+    playlistId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'series_infos';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SeriesInfosData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('series_id')) {
+      context.handle(
+        _seriesIdMeta,
+        seriesId.isAcceptableOrUnknown(data['series_id']!, _seriesIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_seriesIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('cover')) {
+      context.handle(
+        _coverMeta,
+        cover.isAcceptableOrUnknown(data['cover']!, _coverMeta),
+      );
+    }
+    if (data.containsKey('plot')) {
+      context.handle(
+        _plotMeta,
+        plot.isAcceptableOrUnknown(data['plot']!, _plotMeta),
+      );
+    }
+    if (data.containsKey('cast')) {
+      context.handle(
+        _castMeta,
+        cast.isAcceptableOrUnknown(data['cast']!, _castMeta),
+      );
+    }
+    if (data.containsKey('director')) {
+      context.handle(
+        _directorMeta,
+        director.isAcceptableOrUnknown(data['director']!, _directorMeta),
+      );
+    }
+    if (data.containsKey('genre')) {
+      context.handle(
+        _genreMeta,
+        genre.isAcceptableOrUnknown(data['genre']!, _genreMeta),
+      );
+    }
+    if (data.containsKey('release_date')) {
+      context.handle(
+        _releaseDateMeta,
+        releaseDate.isAcceptableOrUnknown(
+          data['release_date']!,
+          _releaseDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_modified')) {
+      context.handle(
+        _lastModifiedMeta,
+        lastModified.isAcceptableOrUnknown(
+          data['last_modified']!,
+          _lastModifiedMeta,
+        ),
+      );
+    }
+    if (data.containsKey('rating')) {
+      context.handle(
+        _ratingMeta,
+        rating.isAcceptableOrUnknown(data['rating']!, _ratingMeta),
+      );
+    }
+    if (data.containsKey('rating5based')) {
+      context.handle(
+        _rating5basedMeta,
+        rating5based.isAcceptableOrUnknown(
+          data['rating5based']!,
+          _rating5basedMeta,
+        ),
+      );
+    }
+    if (data.containsKey('backdrop_path')) {
+      context.handle(
+        _backdropPathMeta,
+        backdropPath.isAcceptableOrUnknown(
+          data['backdrop_path']!,
+          _backdropPathMeta,
+        ),
+      );
+    }
+    if (data.containsKey('youtube_trailer')) {
+      context.handle(
+        _youtubeTrailerMeta,
+        youtubeTrailer.isAcceptableOrUnknown(
+          data['youtube_trailer']!,
+          _youtubeTrailerMeta,
+        ),
+      );
+    }
+    if (data.containsKey('episode_run_time')) {
+      context.handle(
+        _episodeRunTimeMeta,
+        episodeRunTime.isAcceptableOrUnknown(
+          data['episode_run_time']!,
+          _episodeRunTimeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('category_id')) {
+      context.handle(
+        _categoryIdMeta,
+        categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
+      );
+    }
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+        _playlistIdMeta,
+        playlistId.isAcceptableOrUnknown(data['playlist_id']!, _playlistIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SeriesInfosData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SeriesInfosData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      seriesId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}series_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      cover: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover'],
+      ),
+      plot: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}plot'],
+      ),
+      cast: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cast'],
+      ),
+      director: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}director'],
+      ),
+      genre: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}genre'],
+      ),
+      releaseDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}release_date'],
+      ),
+      lastModified: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}last_modified'],
+      ),
+      rating: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}rating'],
+      ),
+      rating5based: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rating5based'],
+      ),
+      backdropPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}backdrop_path'],
+      ),
+      youtubeTrailer: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}youtube_trailer'],
+      ),
+      episodeRunTime: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}episode_run_time'],
+      ),
+      categoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category_id'],
+      ),
+      playlistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}playlist_id'],
+      )!,
+    );
+  }
+
+  @override
+  $SeriesInfosTable createAlias(String alias) {
+    return $SeriesInfosTable(attachedDatabase, alias);
+  }
+}
+
+class SeriesInfosData extends DataClass implements Insertable<SeriesInfosData> {
+  final int id;
+  final String seriesId;
+  final String name;
+  final String? cover;
+  final String? plot;
+  final String? cast;
+  final String? director;
+  final String? genre;
+  final String? releaseDate;
+  final String? lastModified;
+  final String? rating;
+  final int? rating5based;
+  final String? backdropPath;
+  final String? youtubeTrailer;
+  final String? episodeRunTime;
+  final String? categoryId;
+  final String playlistId;
+  const SeriesInfosData({
+    required this.id,
+    required this.seriesId,
+    required this.name,
+    this.cover,
+    this.plot,
+    this.cast,
+    this.director,
+    this.genre,
+    this.releaseDate,
+    this.lastModified,
+    this.rating,
+    this.rating5based,
+    this.backdropPath,
+    this.youtubeTrailer,
+    this.episodeRunTime,
+    this.categoryId,
+    required this.playlistId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['series_id'] = Variable<String>(seriesId);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || cover != null) {
+      map['cover'] = Variable<String>(cover);
+    }
+    if (!nullToAbsent || plot != null) {
+      map['plot'] = Variable<String>(plot);
+    }
+    if (!nullToAbsent || cast != null) {
+      map['cast'] = Variable<String>(cast);
+    }
+    if (!nullToAbsent || director != null) {
+      map['director'] = Variable<String>(director);
+    }
+    if (!nullToAbsent || genre != null) {
+      map['genre'] = Variable<String>(genre);
+    }
+    if (!nullToAbsent || releaseDate != null) {
+      map['release_date'] = Variable<String>(releaseDate);
+    }
+    if (!nullToAbsent || lastModified != null) {
+      map['last_modified'] = Variable<String>(lastModified);
+    }
+    if (!nullToAbsent || rating != null) {
+      map['rating'] = Variable<String>(rating);
+    }
+    if (!nullToAbsent || rating5based != null) {
+      map['rating5based'] = Variable<int>(rating5based);
+    }
+    if (!nullToAbsent || backdropPath != null) {
+      map['backdrop_path'] = Variable<String>(backdropPath);
+    }
+    if (!nullToAbsent || youtubeTrailer != null) {
+      map['youtube_trailer'] = Variable<String>(youtubeTrailer);
+    }
+    if (!nullToAbsent || episodeRunTime != null) {
+      map['episode_run_time'] = Variable<String>(episodeRunTime);
+    }
+    if (!nullToAbsent || categoryId != null) {
+      map['category_id'] = Variable<String>(categoryId);
+    }
+    map['playlist_id'] = Variable<String>(playlistId);
+    return map;
+  }
+
+  SeriesInfosCompanion toCompanion(bool nullToAbsent) {
+    return SeriesInfosCompanion(
+      id: Value(id),
+      seriesId: Value(seriesId),
+      name: Value(name),
+      cover: cover == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cover),
+      plot: plot == null && nullToAbsent ? const Value.absent() : Value(plot),
+      cast: cast == null && nullToAbsent ? const Value.absent() : Value(cast),
+      director: director == null && nullToAbsent
+          ? const Value.absent()
+          : Value(director),
+      genre: genre == null && nullToAbsent
+          ? const Value.absent()
+          : Value(genre),
+      releaseDate: releaseDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(releaseDate),
+      lastModified: lastModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastModified),
+      rating: rating == null && nullToAbsent
+          ? const Value.absent()
+          : Value(rating),
+      rating5based: rating5based == null && nullToAbsent
+          ? const Value.absent()
+          : Value(rating5based),
+      backdropPath: backdropPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(backdropPath),
+      youtubeTrailer: youtubeTrailer == null && nullToAbsent
+          ? const Value.absent()
+          : Value(youtubeTrailer),
+      episodeRunTime: episodeRunTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(episodeRunTime),
+      categoryId: categoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryId),
+      playlistId: Value(playlistId),
+    );
+  }
+
+  factory SeriesInfosData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SeriesInfosData(
+      id: serializer.fromJson<int>(json['id']),
+      seriesId: serializer.fromJson<String>(json['seriesId']),
+      name: serializer.fromJson<String>(json['name']),
+      cover: serializer.fromJson<String?>(json['cover']),
+      plot: serializer.fromJson<String?>(json['plot']),
+      cast: serializer.fromJson<String?>(json['cast']),
+      director: serializer.fromJson<String?>(json['director']),
+      genre: serializer.fromJson<String?>(json['genre']),
+      releaseDate: serializer.fromJson<String?>(json['releaseDate']),
+      lastModified: serializer.fromJson<String?>(json['lastModified']),
+      rating: serializer.fromJson<String?>(json['rating']),
+      rating5based: serializer.fromJson<int?>(json['rating5based']),
+      backdropPath: serializer.fromJson<String?>(json['backdropPath']),
+      youtubeTrailer: serializer.fromJson<String?>(json['youtubeTrailer']),
+      episodeRunTime: serializer.fromJson<String?>(json['episodeRunTime']),
+      categoryId: serializer.fromJson<String?>(json['categoryId']),
+      playlistId: serializer.fromJson<String>(json['playlistId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'seriesId': serializer.toJson<String>(seriesId),
+      'name': serializer.toJson<String>(name),
+      'cover': serializer.toJson<String?>(cover),
+      'plot': serializer.toJson<String?>(plot),
+      'cast': serializer.toJson<String?>(cast),
+      'director': serializer.toJson<String?>(director),
+      'genre': serializer.toJson<String?>(genre),
+      'releaseDate': serializer.toJson<String?>(releaseDate),
+      'lastModified': serializer.toJson<String?>(lastModified),
+      'rating': serializer.toJson<String?>(rating),
+      'rating5based': serializer.toJson<int?>(rating5based),
+      'backdropPath': serializer.toJson<String?>(backdropPath),
+      'youtubeTrailer': serializer.toJson<String?>(youtubeTrailer),
+      'episodeRunTime': serializer.toJson<String?>(episodeRunTime),
+      'categoryId': serializer.toJson<String?>(categoryId),
+      'playlistId': serializer.toJson<String>(playlistId),
+    };
+  }
+
+  SeriesInfosData copyWith({
+    int? id,
+    String? seriesId,
+    String? name,
+    Value<String?> cover = const Value.absent(),
+    Value<String?> plot = const Value.absent(),
+    Value<String?> cast = const Value.absent(),
+    Value<String?> director = const Value.absent(),
+    Value<String?> genre = const Value.absent(),
+    Value<String?> releaseDate = const Value.absent(),
+    Value<String?> lastModified = const Value.absent(),
+    Value<String?> rating = const Value.absent(),
+    Value<int?> rating5based = const Value.absent(),
+    Value<String?> backdropPath = const Value.absent(),
+    Value<String?> youtubeTrailer = const Value.absent(),
+    Value<String?> episodeRunTime = const Value.absent(),
+    Value<String?> categoryId = const Value.absent(),
+    String? playlistId,
+  }) => SeriesInfosData(
+    id: id ?? this.id,
+    seriesId: seriesId ?? this.seriesId,
+    name: name ?? this.name,
+    cover: cover.present ? cover.value : this.cover,
+    plot: plot.present ? plot.value : this.plot,
+    cast: cast.present ? cast.value : this.cast,
+    director: director.present ? director.value : this.director,
+    genre: genre.present ? genre.value : this.genre,
+    releaseDate: releaseDate.present ? releaseDate.value : this.releaseDate,
+    lastModified: lastModified.present ? lastModified.value : this.lastModified,
+    rating: rating.present ? rating.value : this.rating,
+    rating5based: rating5based.present ? rating5based.value : this.rating5based,
+    backdropPath: backdropPath.present ? backdropPath.value : this.backdropPath,
+    youtubeTrailer: youtubeTrailer.present
+        ? youtubeTrailer.value
+        : this.youtubeTrailer,
+    episodeRunTime: episodeRunTime.present
+        ? episodeRunTime.value
+        : this.episodeRunTime,
+    categoryId: categoryId.present ? categoryId.value : this.categoryId,
+    playlistId: playlistId ?? this.playlistId,
+  );
+  SeriesInfosData copyWithCompanion(SeriesInfosCompanion data) {
+    return SeriesInfosData(
+      id: data.id.present ? data.id.value : this.id,
+      seriesId: data.seriesId.present ? data.seriesId.value : this.seriesId,
+      name: data.name.present ? data.name.value : this.name,
+      cover: data.cover.present ? data.cover.value : this.cover,
+      plot: data.plot.present ? data.plot.value : this.plot,
+      cast: data.cast.present ? data.cast.value : this.cast,
+      director: data.director.present ? data.director.value : this.director,
+      genre: data.genre.present ? data.genre.value : this.genre,
+      releaseDate: data.releaseDate.present
+          ? data.releaseDate.value
+          : this.releaseDate,
+      lastModified: data.lastModified.present
+          ? data.lastModified.value
+          : this.lastModified,
+      rating: data.rating.present ? data.rating.value : this.rating,
+      rating5based: data.rating5based.present
+          ? data.rating5based.value
+          : this.rating5based,
+      backdropPath: data.backdropPath.present
+          ? data.backdropPath.value
+          : this.backdropPath,
+      youtubeTrailer: data.youtubeTrailer.present
+          ? data.youtubeTrailer.value
+          : this.youtubeTrailer,
+      episodeRunTime: data.episodeRunTime.present
+          ? data.episodeRunTime.value
+          : this.episodeRunTime,
+      categoryId: data.categoryId.present
+          ? data.categoryId.value
+          : this.categoryId,
+      playlistId: data.playlistId.present
+          ? data.playlistId.value
+          : this.playlistId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SeriesInfosData(')
+          ..write('id: $id, ')
+          ..write('seriesId: $seriesId, ')
+          ..write('name: $name, ')
+          ..write('cover: $cover, ')
+          ..write('plot: $plot, ')
+          ..write('cast: $cast, ')
+          ..write('director: $director, ')
+          ..write('genre: $genre, ')
+          ..write('releaseDate: $releaseDate, ')
+          ..write('lastModified: $lastModified, ')
+          ..write('rating: $rating, ')
+          ..write('rating5based: $rating5based, ')
+          ..write('backdropPath: $backdropPath, ')
+          ..write('youtubeTrailer: $youtubeTrailer, ')
+          ..write('episodeRunTime: $episodeRunTime, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('playlistId: $playlistId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    seriesId,
+    name,
+    cover,
+    plot,
+    cast,
+    director,
+    genre,
+    releaseDate,
+    lastModified,
+    rating,
+    rating5based,
+    backdropPath,
+    youtubeTrailer,
+    episodeRunTime,
+    categoryId,
+    playlistId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SeriesInfosData &&
+          other.id == this.id &&
+          other.seriesId == this.seriesId &&
+          other.name == this.name &&
+          other.cover == this.cover &&
+          other.plot == this.plot &&
+          other.cast == this.cast &&
+          other.director == this.director &&
+          other.genre == this.genre &&
+          other.releaseDate == this.releaseDate &&
+          other.lastModified == this.lastModified &&
+          other.rating == this.rating &&
+          other.rating5based == this.rating5based &&
+          other.backdropPath == this.backdropPath &&
+          other.youtubeTrailer == this.youtubeTrailer &&
+          other.episodeRunTime == this.episodeRunTime &&
+          other.categoryId == this.categoryId &&
+          other.playlistId == this.playlistId);
+}
+
+class SeriesInfosCompanion extends UpdateCompanion<SeriesInfosData> {
+  final Value<int> id;
+  final Value<String> seriesId;
+  final Value<String> name;
+  final Value<String?> cover;
+  final Value<String?> plot;
+  final Value<String?> cast;
+  final Value<String?> director;
+  final Value<String?> genre;
+  final Value<String?> releaseDate;
+  final Value<String?> lastModified;
+  final Value<String?> rating;
+  final Value<int?> rating5based;
+  final Value<String?> backdropPath;
+  final Value<String?> youtubeTrailer;
+  final Value<String?> episodeRunTime;
+  final Value<String?> categoryId;
+  final Value<String> playlistId;
+  const SeriesInfosCompanion({
+    this.id = const Value.absent(),
+    this.seriesId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.cover = const Value.absent(),
+    this.plot = const Value.absent(),
+    this.cast = const Value.absent(),
+    this.director = const Value.absent(),
+    this.genre = const Value.absent(),
+    this.releaseDate = const Value.absent(),
+    this.lastModified = const Value.absent(),
+    this.rating = const Value.absent(),
+    this.rating5based = const Value.absent(),
+    this.backdropPath = const Value.absent(),
+    this.youtubeTrailer = const Value.absent(),
+    this.episodeRunTime = const Value.absent(),
+    this.categoryId = const Value.absent(),
+    this.playlistId = const Value.absent(),
+  });
+  SeriesInfosCompanion.insert({
+    this.id = const Value.absent(),
+    required String seriesId,
+    required String name,
+    this.cover = const Value.absent(),
+    this.plot = const Value.absent(),
+    this.cast = const Value.absent(),
+    this.director = const Value.absent(),
+    this.genre = const Value.absent(),
+    this.releaseDate = const Value.absent(),
+    this.lastModified = const Value.absent(),
+    this.rating = const Value.absent(),
+    this.rating5based = const Value.absent(),
+    this.backdropPath = const Value.absent(),
+    this.youtubeTrailer = const Value.absent(),
+    this.episodeRunTime = const Value.absent(),
+    this.categoryId = const Value.absent(),
+    required String playlistId,
+  }) : seriesId = Value(seriesId),
+       name = Value(name),
+       playlistId = Value(playlistId);
+  static Insertable<SeriesInfosData> custom({
+    Expression<int>? id,
+    Expression<String>? seriesId,
+    Expression<String>? name,
+    Expression<String>? cover,
+    Expression<String>? plot,
+    Expression<String>? cast,
+    Expression<String>? director,
+    Expression<String>? genre,
+    Expression<String>? releaseDate,
+    Expression<String>? lastModified,
+    Expression<String>? rating,
+    Expression<int>? rating5based,
+    Expression<String>? backdropPath,
+    Expression<String>? youtubeTrailer,
+    Expression<String>? episodeRunTime,
+    Expression<String>? categoryId,
+    Expression<String>? playlistId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (seriesId != null) 'series_id': seriesId,
+      if (name != null) 'name': name,
+      if (cover != null) 'cover': cover,
+      if (plot != null) 'plot': plot,
+      if (cast != null) 'cast': cast,
+      if (director != null) 'director': director,
+      if (genre != null) 'genre': genre,
+      if (releaseDate != null) 'release_date': releaseDate,
+      if (lastModified != null) 'last_modified': lastModified,
+      if (rating != null) 'rating': rating,
+      if (rating5based != null) 'rating5based': rating5based,
+      if (backdropPath != null) 'backdrop_path': backdropPath,
+      if (youtubeTrailer != null) 'youtube_trailer': youtubeTrailer,
+      if (episodeRunTime != null) 'episode_run_time': episodeRunTime,
+      if (categoryId != null) 'category_id': categoryId,
+      if (playlistId != null) 'playlist_id': playlistId,
+    });
+  }
+
+  SeriesInfosCompanion copyWith({
+    Value<int>? id,
+    Value<String>? seriesId,
+    Value<String>? name,
+    Value<String?>? cover,
+    Value<String?>? plot,
+    Value<String?>? cast,
+    Value<String?>? director,
+    Value<String?>? genre,
+    Value<String?>? releaseDate,
+    Value<String?>? lastModified,
+    Value<String?>? rating,
+    Value<int?>? rating5based,
+    Value<String?>? backdropPath,
+    Value<String?>? youtubeTrailer,
+    Value<String?>? episodeRunTime,
+    Value<String?>? categoryId,
+    Value<String>? playlistId,
+  }) {
+    return SeriesInfosCompanion(
+      id: id ?? this.id,
+      seriesId: seriesId ?? this.seriesId,
+      name: name ?? this.name,
+      cover: cover ?? this.cover,
+      plot: plot ?? this.plot,
+      cast: cast ?? this.cast,
+      director: director ?? this.director,
+      genre: genre ?? this.genre,
+      releaseDate: releaseDate ?? this.releaseDate,
+      lastModified: lastModified ?? this.lastModified,
+      rating: rating ?? this.rating,
+      rating5based: rating5based ?? this.rating5based,
+      backdropPath: backdropPath ?? this.backdropPath,
+      youtubeTrailer: youtubeTrailer ?? this.youtubeTrailer,
+      episodeRunTime: episodeRunTime ?? this.episodeRunTime,
+      categoryId: categoryId ?? this.categoryId,
+      playlistId: playlistId ?? this.playlistId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (seriesId.present) {
+      map['series_id'] = Variable<String>(seriesId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (cover.present) {
+      map['cover'] = Variable<String>(cover.value);
+    }
+    if (plot.present) {
+      map['plot'] = Variable<String>(plot.value);
+    }
+    if (cast.present) {
+      map['cast'] = Variable<String>(cast.value);
+    }
+    if (director.present) {
+      map['director'] = Variable<String>(director.value);
+    }
+    if (genre.present) {
+      map['genre'] = Variable<String>(genre.value);
+    }
+    if (releaseDate.present) {
+      map['release_date'] = Variable<String>(releaseDate.value);
+    }
+    if (lastModified.present) {
+      map['last_modified'] = Variable<String>(lastModified.value);
+    }
+    if (rating.present) {
+      map['rating'] = Variable<String>(rating.value);
+    }
+    if (rating5based.present) {
+      map['rating5based'] = Variable<int>(rating5based.value);
+    }
+    if (backdropPath.present) {
+      map['backdrop_path'] = Variable<String>(backdropPath.value);
+    }
+    if (youtubeTrailer.present) {
+      map['youtube_trailer'] = Variable<String>(youtubeTrailer.value);
+    }
+    if (episodeRunTime.present) {
+      map['episode_run_time'] = Variable<String>(episodeRunTime.value);
+    }
+    if (categoryId.present) {
+      map['category_id'] = Variable<String>(categoryId.value);
+    }
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SeriesInfosCompanion(')
+          ..write('id: $id, ')
+          ..write('seriesId: $seriesId, ')
+          ..write('name: $name, ')
+          ..write('cover: $cover, ')
+          ..write('plot: $plot, ')
+          ..write('cast: $cast, ')
+          ..write('director: $director, ')
+          ..write('genre: $genre, ')
+          ..write('releaseDate: $releaseDate, ')
+          ..write('lastModified: $lastModified, ')
+          ..write('rating: $rating, ')
+          ..write('rating5based: $rating5based, ')
+          ..write('backdropPath: $backdropPath, ')
+          ..write('youtubeTrailer: $youtubeTrailer, ')
+          ..write('episodeRunTime: $episodeRunTime, ')
+          ..write('categoryId: $categoryId, ')
+          ..write('playlistId: $playlistId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SeasonsTable extends Seasons with TableInfo<$SeasonsTable, SeasonsData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SeasonsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _seriesIdMeta = const VerificationMeta(
+    'seriesId',
+  );
+  @override
+  late final GeneratedColumn<String> seriesId = GeneratedColumn<String>(
+    'series_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _airDateMeta = const VerificationMeta(
+    'airDate',
+  );
+  @override
+  late final GeneratedColumn<String> airDate = GeneratedColumn<String>(
+    'air_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _episodeCountMeta = const VerificationMeta(
+    'episodeCount',
+  );
+  @override
+  late final GeneratedColumn<int> episodeCount = GeneratedColumn<int>(
+    'episode_count',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _seasonIdMeta = const VerificationMeta(
+    'seasonId',
+  );
+  @override
+  late final GeneratedColumn<int> seasonId = GeneratedColumn<int>(
+    'season_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _overviewMeta = const VerificationMeta(
+    'overview',
+  );
+  @override
+  late final GeneratedColumn<String> overview = GeneratedColumn<String>(
+    'overview',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _seasonNumberMeta = const VerificationMeta(
+    'seasonNumber',
+  );
+  @override
+  late final GeneratedColumn<int> seasonNumber = GeneratedColumn<int>(
+    'season_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _voteAverageMeta = const VerificationMeta(
+    'voteAverage',
+  );
+  @override
+  late final GeneratedColumn<int> voteAverage = GeneratedColumn<int>(
+    'vote_average',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _coverMeta = const VerificationMeta('cover');
+  @override
+  late final GeneratedColumn<String> cover = GeneratedColumn<String>(
+    'cover',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _coverBigMeta = const VerificationMeta(
+    'coverBig',
+  );
+  @override
+  late final GeneratedColumn<String> coverBig = GeneratedColumn<String>(
+    'cover_big',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _playlistIdMeta = const VerificationMeta(
+    'playlistId',
+  );
+  @override
+  late final GeneratedColumn<String> playlistId = GeneratedColumn<String>(
+    'playlist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    seriesId,
+    airDate,
+    episodeCount,
+    seasonId,
+    name,
+    overview,
+    seasonNumber,
+    voteAverage,
+    cover,
+    coverBig,
+    playlistId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'seasons';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SeasonsData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('series_id')) {
+      context.handle(
+        _seriesIdMeta,
+        seriesId.isAcceptableOrUnknown(data['series_id']!, _seriesIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_seriesIdMeta);
+    }
+    if (data.containsKey('air_date')) {
+      context.handle(
+        _airDateMeta,
+        airDate.isAcceptableOrUnknown(data['air_date']!, _airDateMeta),
+      );
+    }
+    if (data.containsKey('episode_count')) {
+      context.handle(
+        _episodeCountMeta,
+        episodeCount.isAcceptableOrUnknown(
+          data['episode_count']!,
+          _episodeCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('season_id')) {
+      context.handle(
+        _seasonIdMeta,
+        seasonId.isAcceptableOrUnknown(data['season_id']!, _seasonIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_seasonIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('overview')) {
+      context.handle(
+        _overviewMeta,
+        overview.isAcceptableOrUnknown(data['overview']!, _overviewMeta),
+      );
+    }
+    if (data.containsKey('season_number')) {
+      context.handle(
+        _seasonNumberMeta,
+        seasonNumber.isAcceptableOrUnknown(
+          data['season_number']!,
+          _seasonNumberMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_seasonNumberMeta);
+    }
+    if (data.containsKey('vote_average')) {
+      context.handle(
+        _voteAverageMeta,
+        voteAverage.isAcceptableOrUnknown(
+          data['vote_average']!,
+          _voteAverageMeta,
+        ),
+      );
+    }
+    if (data.containsKey('cover')) {
+      context.handle(
+        _coverMeta,
+        cover.isAcceptableOrUnknown(data['cover']!, _coverMeta),
+      );
+    }
+    if (data.containsKey('cover_big')) {
+      context.handle(
+        _coverBigMeta,
+        coverBig.isAcceptableOrUnknown(data['cover_big']!, _coverBigMeta),
+      );
+    }
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+        _playlistIdMeta,
+        playlistId.isAcceptableOrUnknown(data['playlist_id']!, _playlistIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SeasonsData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SeasonsData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      seriesId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}series_id'],
+      )!,
+      airDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}air_date'],
+      ),
+      episodeCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}episode_count'],
+      ),
+      seasonId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}season_id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      overview: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}overview'],
+      ),
+      seasonNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}season_number'],
+      )!,
+      voteAverage: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}vote_average'],
+      ),
+      cover: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover'],
+      ),
+      coverBig: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_big'],
+      ),
+      playlistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}playlist_id'],
+      )!,
+    );
+  }
+
+  @override
+  $SeasonsTable createAlias(String alias) {
+    return $SeasonsTable(attachedDatabase, alias);
+  }
+}
+
+class SeasonsData extends DataClass implements Insertable<SeasonsData> {
+  final int id;
+  final String seriesId;
+  final String? airDate;
+  final int? episodeCount;
+  final int seasonId;
+  final String name;
+  final String? overview;
+  final int seasonNumber;
+  final int? voteAverage;
+  final String? cover;
+  final String? coverBig;
+  final String playlistId;
+  const SeasonsData({
+    required this.id,
+    required this.seriesId,
+    this.airDate,
+    this.episodeCount,
+    required this.seasonId,
+    required this.name,
+    this.overview,
+    required this.seasonNumber,
+    this.voteAverage,
+    this.cover,
+    this.coverBig,
+    required this.playlistId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['series_id'] = Variable<String>(seriesId);
+    if (!nullToAbsent || airDate != null) {
+      map['air_date'] = Variable<String>(airDate);
+    }
+    if (!nullToAbsent || episodeCount != null) {
+      map['episode_count'] = Variable<int>(episodeCount);
+    }
+    map['season_id'] = Variable<int>(seasonId);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || overview != null) {
+      map['overview'] = Variable<String>(overview);
+    }
+    map['season_number'] = Variable<int>(seasonNumber);
+    if (!nullToAbsent || voteAverage != null) {
+      map['vote_average'] = Variable<int>(voteAverage);
+    }
+    if (!nullToAbsent || cover != null) {
+      map['cover'] = Variable<String>(cover);
+    }
+    if (!nullToAbsent || coverBig != null) {
+      map['cover_big'] = Variable<String>(coverBig);
+    }
+    map['playlist_id'] = Variable<String>(playlistId);
+    return map;
+  }
+
+  SeasonsCompanion toCompanion(bool nullToAbsent) {
+    return SeasonsCompanion(
+      id: Value(id),
+      seriesId: Value(seriesId),
+      airDate: airDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(airDate),
+      episodeCount: episodeCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(episodeCount),
+      seasonId: Value(seasonId),
+      name: Value(name),
+      overview: overview == null && nullToAbsent
+          ? const Value.absent()
+          : Value(overview),
+      seasonNumber: Value(seasonNumber),
+      voteAverage: voteAverage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(voteAverage),
+      cover: cover == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cover),
+      coverBig: coverBig == null && nullToAbsent
+          ? const Value.absent()
+          : Value(coverBig),
+      playlistId: Value(playlistId),
+    );
+  }
+
+  factory SeasonsData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SeasonsData(
+      id: serializer.fromJson<int>(json['id']),
+      seriesId: serializer.fromJson<String>(json['seriesId']),
+      airDate: serializer.fromJson<String?>(json['airDate']),
+      episodeCount: serializer.fromJson<int?>(json['episodeCount']),
+      seasonId: serializer.fromJson<int>(json['seasonId']),
+      name: serializer.fromJson<String>(json['name']),
+      overview: serializer.fromJson<String?>(json['overview']),
+      seasonNumber: serializer.fromJson<int>(json['seasonNumber']),
+      voteAverage: serializer.fromJson<int?>(json['voteAverage']),
+      cover: serializer.fromJson<String?>(json['cover']),
+      coverBig: serializer.fromJson<String?>(json['coverBig']),
+      playlistId: serializer.fromJson<String>(json['playlistId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'seriesId': serializer.toJson<String>(seriesId),
+      'airDate': serializer.toJson<String?>(airDate),
+      'episodeCount': serializer.toJson<int?>(episodeCount),
+      'seasonId': serializer.toJson<int>(seasonId),
+      'name': serializer.toJson<String>(name),
+      'overview': serializer.toJson<String?>(overview),
+      'seasonNumber': serializer.toJson<int>(seasonNumber),
+      'voteAverage': serializer.toJson<int?>(voteAverage),
+      'cover': serializer.toJson<String?>(cover),
+      'coverBig': serializer.toJson<String?>(coverBig),
+      'playlistId': serializer.toJson<String>(playlistId),
+    };
+  }
+
+  SeasonsData copyWith({
+    int? id,
+    String? seriesId,
+    Value<String?> airDate = const Value.absent(),
+    Value<int?> episodeCount = const Value.absent(),
+    int? seasonId,
+    String? name,
+    Value<String?> overview = const Value.absent(),
+    int? seasonNumber,
+    Value<int?> voteAverage = const Value.absent(),
+    Value<String?> cover = const Value.absent(),
+    Value<String?> coverBig = const Value.absent(),
+    String? playlistId,
+  }) => SeasonsData(
+    id: id ?? this.id,
+    seriesId: seriesId ?? this.seriesId,
+    airDate: airDate.present ? airDate.value : this.airDate,
+    episodeCount: episodeCount.present ? episodeCount.value : this.episodeCount,
+    seasonId: seasonId ?? this.seasonId,
+    name: name ?? this.name,
+    overview: overview.present ? overview.value : this.overview,
+    seasonNumber: seasonNumber ?? this.seasonNumber,
+    voteAverage: voteAverage.present ? voteAverage.value : this.voteAverage,
+    cover: cover.present ? cover.value : this.cover,
+    coverBig: coverBig.present ? coverBig.value : this.coverBig,
+    playlistId: playlistId ?? this.playlistId,
+  );
+  SeasonsData copyWithCompanion(SeasonsCompanion data) {
+    return SeasonsData(
+      id: data.id.present ? data.id.value : this.id,
+      seriesId: data.seriesId.present ? data.seriesId.value : this.seriesId,
+      airDate: data.airDate.present ? data.airDate.value : this.airDate,
+      episodeCount: data.episodeCount.present
+          ? data.episodeCount.value
+          : this.episodeCount,
+      seasonId: data.seasonId.present ? data.seasonId.value : this.seasonId,
+      name: data.name.present ? data.name.value : this.name,
+      overview: data.overview.present ? data.overview.value : this.overview,
+      seasonNumber: data.seasonNumber.present
+          ? data.seasonNumber.value
+          : this.seasonNumber,
+      voteAverage: data.voteAverage.present
+          ? data.voteAverage.value
+          : this.voteAverage,
+      cover: data.cover.present ? data.cover.value : this.cover,
+      coverBig: data.coverBig.present ? data.coverBig.value : this.coverBig,
+      playlistId: data.playlistId.present
+          ? data.playlistId.value
+          : this.playlistId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SeasonsData(')
+          ..write('id: $id, ')
+          ..write('seriesId: $seriesId, ')
+          ..write('airDate: $airDate, ')
+          ..write('episodeCount: $episodeCount, ')
+          ..write('seasonId: $seasonId, ')
+          ..write('name: $name, ')
+          ..write('overview: $overview, ')
+          ..write('seasonNumber: $seasonNumber, ')
+          ..write('voteAverage: $voteAverage, ')
+          ..write('cover: $cover, ')
+          ..write('coverBig: $coverBig, ')
+          ..write('playlistId: $playlistId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    seriesId,
+    airDate,
+    episodeCount,
+    seasonId,
+    name,
+    overview,
+    seasonNumber,
+    voteAverage,
+    cover,
+    coverBig,
+    playlistId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SeasonsData &&
+          other.id == this.id &&
+          other.seriesId == this.seriesId &&
+          other.airDate == this.airDate &&
+          other.episodeCount == this.episodeCount &&
+          other.seasonId == this.seasonId &&
+          other.name == this.name &&
+          other.overview == this.overview &&
+          other.seasonNumber == this.seasonNumber &&
+          other.voteAverage == this.voteAverage &&
+          other.cover == this.cover &&
+          other.coverBig == this.coverBig &&
+          other.playlistId == this.playlistId);
+}
+
+class SeasonsCompanion extends UpdateCompanion<SeasonsData> {
+  final Value<int> id;
+  final Value<String> seriesId;
+  final Value<String?> airDate;
+  final Value<int?> episodeCount;
+  final Value<int> seasonId;
+  final Value<String> name;
+  final Value<String?> overview;
+  final Value<int> seasonNumber;
+  final Value<int?> voteAverage;
+  final Value<String?> cover;
+  final Value<String?> coverBig;
+  final Value<String> playlistId;
+  const SeasonsCompanion({
+    this.id = const Value.absent(),
+    this.seriesId = const Value.absent(),
+    this.airDate = const Value.absent(),
+    this.episodeCount = const Value.absent(),
+    this.seasonId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.overview = const Value.absent(),
+    this.seasonNumber = const Value.absent(),
+    this.voteAverage = const Value.absent(),
+    this.cover = const Value.absent(),
+    this.coverBig = const Value.absent(),
+    this.playlistId = const Value.absent(),
+  });
+  SeasonsCompanion.insert({
+    this.id = const Value.absent(),
+    required String seriesId,
+    this.airDate = const Value.absent(),
+    this.episodeCount = const Value.absent(),
+    required int seasonId,
+    required String name,
+    this.overview = const Value.absent(),
+    required int seasonNumber,
+    this.voteAverage = const Value.absent(),
+    this.cover = const Value.absent(),
+    this.coverBig = const Value.absent(),
+    required String playlistId,
+  }) : seriesId = Value(seriesId),
+       seasonId = Value(seasonId),
+       name = Value(name),
+       seasonNumber = Value(seasonNumber),
+       playlistId = Value(playlistId);
+  static Insertable<SeasonsData> custom({
+    Expression<int>? id,
+    Expression<String>? seriesId,
+    Expression<String>? airDate,
+    Expression<int>? episodeCount,
+    Expression<int>? seasonId,
+    Expression<String>? name,
+    Expression<String>? overview,
+    Expression<int>? seasonNumber,
+    Expression<int>? voteAverage,
+    Expression<String>? cover,
+    Expression<String>? coverBig,
+    Expression<String>? playlistId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (seriesId != null) 'series_id': seriesId,
+      if (airDate != null) 'air_date': airDate,
+      if (episodeCount != null) 'episode_count': episodeCount,
+      if (seasonId != null) 'season_id': seasonId,
+      if (name != null) 'name': name,
+      if (overview != null) 'overview': overview,
+      if (seasonNumber != null) 'season_number': seasonNumber,
+      if (voteAverage != null) 'vote_average': voteAverage,
+      if (cover != null) 'cover': cover,
+      if (coverBig != null) 'cover_big': coverBig,
+      if (playlistId != null) 'playlist_id': playlistId,
+    });
+  }
+
+  SeasonsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? seriesId,
+    Value<String?>? airDate,
+    Value<int?>? episodeCount,
+    Value<int>? seasonId,
+    Value<String>? name,
+    Value<String?>? overview,
+    Value<int>? seasonNumber,
+    Value<int?>? voteAverage,
+    Value<String?>? cover,
+    Value<String?>? coverBig,
+    Value<String>? playlistId,
+  }) {
+    return SeasonsCompanion(
+      id: id ?? this.id,
+      seriesId: seriesId ?? this.seriesId,
+      airDate: airDate ?? this.airDate,
+      episodeCount: episodeCount ?? this.episodeCount,
+      seasonId: seasonId ?? this.seasonId,
+      name: name ?? this.name,
+      overview: overview ?? this.overview,
+      seasonNumber: seasonNumber ?? this.seasonNumber,
+      voteAverage: voteAverage ?? this.voteAverage,
+      cover: cover ?? this.cover,
+      coverBig: coverBig ?? this.coverBig,
+      playlistId: playlistId ?? this.playlistId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (seriesId.present) {
+      map['series_id'] = Variable<String>(seriesId.value);
+    }
+    if (airDate.present) {
+      map['air_date'] = Variable<String>(airDate.value);
+    }
+    if (episodeCount.present) {
+      map['episode_count'] = Variable<int>(episodeCount.value);
+    }
+    if (seasonId.present) {
+      map['season_id'] = Variable<int>(seasonId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (overview.present) {
+      map['overview'] = Variable<String>(overview.value);
+    }
+    if (seasonNumber.present) {
+      map['season_number'] = Variable<int>(seasonNumber.value);
+    }
+    if (voteAverage.present) {
+      map['vote_average'] = Variable<int>(voteAverage.value);
+    }
+    if (cover.present) {
+      map['cover'] = Variable<String>(cover.value);
+    }
+    if (coverBig.present) {
+      map['cover_big'] = Variable<String>(coverBig.value);
+    }
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SeasonsCompanion(')
+          ..write('id: $id, ')
+          ..write('seriesId: $seriesId, ')
+          ..write('airDate: $airDate, ')
+          ..write('episodeCount: $episodeCount, ')
+          ..write('seasonId: $seasonId, ')
+          ..write('name: $name, ')
+          ..write('overview: $overview, ')
+          ..write('seasonNumber: $seasonNumber, ')
+          ..write('voteAverage: $voteAverage, ')
+          ..write('cover: $cover, ')
+          ..write('coverBig: $coverBig, ')
+          ..write('playlistId: $playlistId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $EpisodesTable extends Episodes
+    with TableInfo<$EpisodesTable, EpisodesData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EpisodesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _seriesIdMeta = const VerificationMeta(
+    'seriesId',
+  );
+  @override
+  late final GeneratedColumn<String> seriesId = GeneratedColumn<String>(
+    'series_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _episodeIdMeta = const VerificationMeta(
+    'episodeId',
+  );
+  @override
+  late final GeneratedColumn<String> episodeId = GeneratedColumn<String>(
+    'episode_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _episodeNumMeta = const VerificationMeta(
+    'episodeNum',
+  );
+  @override
+  late final GeneratedColumn<int> episodeNum = GeneratedColumn<int>(
+    'episode_num',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _containerExtensionMeta =
+      const VerificationMeta('containerExtension');
+  @override
+  late final GeneratedColumn<String> containerExtension =
+      GeneratedColumn<String>(
+        'container_extension',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _seasonMeta = const VerificationMeta('season');
+  @override
+  late final GeneratedColumn<int> season = GeneratedColumn<int>(
+    'season',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _customSidMeta = const VerificationMeta(
+    'customSid',
+  );
+  @override
+  late final GeneratedColumn<String> customSid = GeneratedColumn<String>(
+    'custom_sid',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _addedMeta = const VerificationMeta('added');
+  @override
+  late final GeneratedColumn<String> added = GeneratedColumn<String>(
+    'added',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _directSourceMeta = const VerificationMeta(
+    'directSource',
+  );
+  @override
+  late final GeneratedColumn<String> directSource = GeneratedColumn<String>(
+    'direct_source',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _playlistIdMeta = const VerificationMeta(
+    'playlistId',
+  );
+  @override
+  late final GeneratedColumn<String> playlistId = GeneratedColumn<String>(
+    'playlist_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _tmdbIdMeta = const VerificationMeta('tmdbId');
+  @override
+  late final GeneratedColumn<int> tmdbId = GeneratedColumn<int>(
+    'tmdb_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _releasedateMeta = const VerificationMeta(
+    'releasedate',
+  );
+  @override
+  late final GeneratedColumn<String> releasedate = GeneratedColumn<String>(
+    'releasedate',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _plotMeta = const VerificationMeta('plot');
+  @override
+  late final GeneratedColumn<String> plot = GeneratedColumn<String>(
+    'plot',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationSecsMeta = const VerificationMeta(
+    'durationSecs',
+  );
+  @override
+  late final GeneratedColumn<int> durationSecs = GeneratedColumn<int>(
+    'duration_secs',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationMeta = const VerificationMeta(
+    'duration',
+  );
+  @override
+  late final GeneratedColumn<String> duration = GeneratedColumn<String>(
+    'duration',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _movieImageMeta = const VerificationMeta(
+    'movieImage',
+  );
+  @override
+  late final GeneratedColumn<String> movieImage = GeneratedColumn<String>(
+    'movie_image',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _bitrateMeta = const VerificationMeta(
+    'bitrate',
+  );
+  @override
+  late final GeneratedColumn<int> bitrate = GeneratedColumn<int>(
+    'bitrate',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _ratingMeta = const VerificationMeta('rating');
+  @override
+  late final GeneratedColumn<double> rating = GeneratedColumn<double>(
+    'rating',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    seriesId,
+    episodeId,
+    episodeNum,
+    title,
+    containerExtension,
+    season,
+    customSid,
+    added,
+    directSource,
+    playlistId,
+    tmdbId,
+    releasedate,
+    plot,
+    durationSecs,
+    duration,
+    movieImage,
+    bitrate,
+    rating,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'episodes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<EpisodesData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('series_id')) {
+      context.handle(
+        _seriesIdMeta,
+        seriesId.isAcceptableOrUnknown(data['series_id']!, _seriesIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_seriesIdMeta);
+    }
+    if (data.containsKey('episode_id')) {
+      context.handle(
+        _episodeIdMeta,
+        episodeId.isAcceptableOrUnknown(data['episode_id']!, _episodeIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_episodeIdMeta);
+    }
+    if (data.containsKey('episode_num')) {
+      context.handle(
+        _episodeNumMeta,
+        episodeNum.isAcceptableOrUnknown(data['episode_num']!, _episodeNumMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_episodeNumMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('container_extension')) {
+      context.handle(
+        _containerExtensionMeta,
+        containerExtension.isAcceptableOrUnknown(
+          data['container_extension']!,
+          _containerExtensionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('season')) {
+      context.handle(
+        _seasonMeta,
+        season.isAcceptableOrUnknown(data['season']!, _seasonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_seasonMeta);
+    }
+    if (data.containsKey('custom_sid')) {
+      context.handle(
+        _customSidMeta,
+        customSid.isAcceptableOrUnknown(data['custom_sid']!, _customSidMeta),
+      );
+    }
+    if (data.containsKey('added')) {
+      context.handle(
+        _addedMeta,
+        added.isAcceptableOrUnknown(data['added']!, _addedMeta),
+      );
+    }
+    if (data.containsKey('direct_source')) {
+      context.handle(
+        _directSourceMeta,
+        directSource.isAcceptableOrUnknown(
+          data['direct_source']!,
+          _directSourceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('playlist_id')) {
+      context.handle(
+        _playlistIdMeta,
+        playlistId.isAcceptableOrUnknown(data['playlist_id']!, _playlistIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_playlistIdMeta);
+    }
+    if (data.containsKey('tmdb_id')) {
+      context.handle(
+        _tmdbIdMeta,
+        tmdbId.isAcceptableOrUnknown(data['tmdb_id']!, _tmdbIdMeta),
+      );
+    }
+    if (data.containsKey('releasedate')) {
+      context.handle(
+        _releasedateMeta,
+        releasedate.isAcceptableOrUnknown(
+          data['releasedate']!,
+          _releasedateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('plot')) {
+      context.handle(
+        _plotMeta,
+        plot.isAcceptableOrUnknown(data['plot']!, _plotMeta),
+      );
+    }
+    if (data.containsKey('duration_secs')) {
+      context.handle(
+        _durationSecsMeta,
+        durationSecs.isAcceptableOrUnknown(
+          data['duration_secs']!,
+          _durationSecsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('duration')) {
+      context.handle(
+        _durationMeta,
+        duration.isAcceptableOrUnknown(data['duration']!, _durationMeta),
+      );
+    }
+    if (data.containsKey('movie_image')) {
+      context.handle(
+        _movieImageMeta,
+        movieImage.isAcceptableOrUnknown(data['movie_image']!, _movieImageMeta),
+      );
+    }
+    if (data.containsKey('bitrate')) {
+      context.handle(
+        _bitrateMeta,
+        bitrate.isAcceptableOrUnknown(data['bitrate']!, _bitrateMeta),
+      );
+    }
+    if (data.containsKey('rating')) {
+      context.handle(
+        _ratingMeta,
+        rating.isAcceptableOrUnknown(data['rating']!, _ratingMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  EpisodesData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EpisodesData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      seriesId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}series_id'],
+      )!,
+      episodeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}episode_id'],
+      )!,
+      episodeNum: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}episode_num'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      containerExtension: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}container_extension'],
+      ),
+      season: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}season'],
+      )!,
+      customSid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}custom_sid'],
+      ),
+      added: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}added'],
+      ),
+      directSource: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}direct_source'],
+      ),
+      playlistId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}playlist_id'],
+      )!,
+      tmdbId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}tmdb_id'],
+      ),
+      releasedate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}releasedate'],
+      ),
+      plot: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}plot'],
+      ),
+      durationSecs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_secs'],
+      ),
+      duration: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}duration'],
+      ),
+      movieImage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}movie_image'],
+      ),
+      bitrate: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}bitrate'],
+      ),
+      rating: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}rating'],
+      ),
+    );
+  }
+
+  @override
+  $EpisodesTable createAlias(String alias) {
+    return $EpisodesTable(attachedDatabase, alias);
+  }
+}
+
+class EpisodesData extends DataClass implements Insertable<EpisodesData> {
+  final int id;
+  final String seriesId;
+  final String episodeId;
+  final int episodeNum;
+  final String title;
+  final String? containerExtension;
+  final int season;
+  final String? customSid;
+  final String? added;
+  final String? directSource;
+  final String playlistId;
+  final int? tmdbId;
+  final String? releasedate;
+  final String? plot;
+  final int? durationSecs;
+  final String? duration;
+  final String? movieImage;
+  final int? bitrate;
+  final double? rating;
+  const EpisodesData({
+    required this.id,
+    required this.seriesId,
+    required this.episodeId,
+    required this.episodeNum,
+    required this.title,
+    this.containerExtension,
+    required this.season,
+    this.customSid,
+    this.added,
+    this.directSource,
+    required this.playlistId,
+    this.tmdbId,
+    this.releasedate,
+    this.plot,
+    this.durationSecs,
+    this.duration,
+    this.movieImage,
+    this.bitrate,
+    this.rating,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['series_id'] = Variable<String>(seriesId);
+    map['episode_id'] = Variable<String>(episodeId);
+    map['episode_num'] = Variable<int>(episodeNum);
+    map['title'] = Variable<String>(title);
+    if (!nullToAbsent || containerExtension != null) {
+      map['container_extension'] = Variable<String>(containerExtension);
+    }
+    map['season'] = Variable<int>(season);
+    if (!nullToAbsent || customSid != null) {
+      map['custom_sid'] = Variable<String>(customSid);
+    }
+    if (!nullToAbsent || added != null) {
+      map['added'] = Variable<String>(added);
+    }
+    if (!nullToAbsent || directSource != null) {
+      map['direct_source'] = Variable<String>(directSource);
+    }
+    map['playlist_id'] = Variable<String>(playlistId);
+    if (!nullToAbsent || tmdbId != null) {
+      map['tmdb_id'] = Variable<int>(tmdbId);
+    }
+    if (!nullToAbsent || releasedate != null) {
+      map['releasedate'] = Variable<String>(releasedate);
+    }
+    if (!nullToAbsent || plot != null) {
+      map['plot'] = Variable<String>(plot);
+    }
+    if (!nullToAbsent || durationSecs != null) {
+      map['duration_secs'] = Variable<int>(durationSecs);
+    }
+    if (!nullToAbsent || duration != null) {
+      map['duration'] = Variable<String>(duration);
+    }
+    if (!nullToAbsent || movieImage != null) {
+      map['movie_image'] = Variable<String>(movieImage);
+    }
+    if (!nullToAbsent || bitrate != null) {
+      map['bitrate'] = Variable<int>(bitrate);
+    }
+    if (!nullToAbsent || rating != null) {
+      map['rating'] = Variable<double>(rating);
+    }
+    return map;
+  }
+
+  EpisodesCompanion toCompanion(bool nullToAbsent) {
+    return EpisodesCompanion(
+      id: Value(id),
+      seriesId: Value(seriesId),
+      episodeId: Value(episodeId),
+      episodeNum: Value(episodeNum),
+      title: Value(title),
+      containerExtension: containerExtension == null && nullToAbsent
+          ? const Value.absent()
+          : Value(containerExtension),
+      season: Value(season),
+      customSid: customSid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customSid),
+      added: added == null && nullToAbsent
+          ? const Value.absent()
+          : Value(added),
+      directSource: directSource == null && nullToAbsent
+          ? const Value.absent()
+          : Value(directSource),
+      playlistId: Value(playlistId),
+      tmdbId: tmdbId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tmdbId),
+      releasedate: releasedate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(releasedate),
+      plot: plot == null && nullToAbsent ? const Value.absent() : Value(plot),
+      durationSecs: durationSecs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(durationSecs),
+      duration: duration == null && nullToAbsent
+          ? const Value.absent()
+          : Value(duration),
+      movieImage: movieImage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(movieImage),
+      bitrate: bitrate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(bitrate),
+      rating: rating == null && nullToAbsent
+          ? const Value.absent()
+          : Value(rating),
+    );
+  }
+
+  factory EpisodesData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EpisodesData(
+      id: serializer.fromJson<int>(json['id']),
+      seriesId: serializer.fromJson<String>(json['seriesId']),
+      episodeId: serializer.fromJson<String>(json['episodeId']),
+      episodeNum: serializer.fromJson<int>(json['episodeNum']),
+      title: serializer.fromJson<String>(json['title']),
+      containerExtension: serializer.fromJson<String?>(
+        json['containerExtension'],
+      ),
+      season: serializer.fromJson<int>(json['season']),
+      customSid: serializer.fromJson<String?>(json['customSid']),
+      added: serializer.fromJson<String?>(json['added']),
+      directSource: serializer.fromJson<String?>(json['directSource']),
+      playlistId: serializer.fromJson<String>(json['playlistId']),
+      tmdbId: serializer.fromJson<int?>(json['tmdbId']),
+      releasedate: serializer.fromJson<String?>(json['releasedate']),
+      plot: serializer.fromJson<String?>(json['plot']),
+      durationSecs: serializer.fromJson<int?>(json['durationSecs']),
+      duration: serializer.fromJson<String?>(json['duration']),
+      movieImage: serializer.fromJson<String?>(json['movieImage']),
+      bitrate: serializer.fromJson<int?>(json['bitrate']),
+      rating: serializer.fromJson<double?>(json['rating']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'seriesId': serializer.toJson<String>(seriesId),
+      'episodeId': serializer.toJson<String>(episodeId),
+      'episodeNum': serializer.toJson<int>(episodeNum),
+      'title': serializer.toJson<String>(title),
+      'containerExtension': serializer.toJson<String?>(containerExtension),
+      'season': serializer.toJson<int>(season),
+      'customSid': serializer.toJson<String?>(customSid),
+      'added': serializer.toJson<String?>(added),
+      'directSource': serializer.toJson<String?>(directSource),
+      'playlistId': serializer.toJson<String>(playlistId),
+      'tmdbId': serializer.toJson<int?>(tmdbId),
+      'releasedate': serializer.toJson<String?>(releasedate),
+      'plot': serializer.toJson<String?>(plot),
+      'durationSecs': serializer.toJson<int?>(durationSecs),
+      'duration': serializer.toJson<String?>(duration),
+      'movieImage': serializer.toJson<String?>(movieImage),
+      'bitrate': serializer.toJson<int?>(bitrate),
+      'rating': serializer.toJson<double?>(rating),
+    };
+  }
+
+  EpisodesData copyWith({
+    int? id,
+    String? seriesId,
+    String? episodeId,
+    int? episodeNum,
+    String? title,
+    Value<String?> containerExtension = const Value.absent(),
+    int? season,
+    Value<String?> customSid = const Value.absent(),
+    Value<String?> added = const Value.absent(),
+    Value<String?> directSource = const Value.absent(),
+    String? playlistId,
+    Value<int?> tmdbId = const Value.absent(),
+    Value<String?> releasedate = const Value.absent(),
+    Value<String?> plot = const Value.absent(),
+    Value<int?> durationSecs = const Value.absent(),
+    Value<String?> duration = const Value.absent(),
+    Value<String?> movieImage = const Value.absent(),
+    Value<int?> bitrate = const Value.absent(),
+    Value<double?> rating = const Value.absent(),
+  }) => EpisodesData(
+    id: id ?? this.id,
+    seriesId: seriesId ?? this.seriesId,
+    episodeId: episodeId ?? this.episodeId,
+    episodeNum: episodeNum ?? this.episodeNum,
+    title: title ?? this.title,
+    containerExtension: containerExtension.present
+        ? containerExtension.value
+        : this.containerExtension,
+    season: season ?? this.season,
+    customSid: customSid.present ? customSid.value : this.customSid,
+    added: added.present ? added.value : this.added,
+    directSource: directSource.present ? directSource.value : this.directSource,
+    playlistId: playlistId ?? this.playlistId,
+    tmdbId: tmdbId.present ? tmdbId.value : this.tmdbId,
+    releasedate: releasedate.present ? releasedate.value : this.releasedate,
+    plot: plot.present ? plot.value : this.plot,
+    durationSecs: durationSecs.present ? durationSecs.value : this.durationSecs,
+    duration: duration.present ? duration.value : this.duration,
+    movieImage: movieImage.present ? movieImage.value : this.movieImage,
+    bitrate: bitrate.present ? bitrate.value : this.bitrate,
+    rating: rating.present ? rating.value : this.rating,
+  );
+  EpisodesData copyWithCompanion(EpisodesCompanion data) {
+    return EpisodesData(
+      id: data.id.present ? data.id.value : this.id,
+      seriesId: data.seriesId.present ? data.seriesId.value : this.seriesId,
+      episodeId: data.episodeId.present ? data.episodeId.value : this.episodeId,
+      episodeNum: data.episodeNum.present
+          ? data.episodeNum.value
+          : this.episodeNum,
+      title: data.title.present ? data.title.value : this.title,
+      containerExtension: data.containerExtension.present
+          ? data.containerExtension.value
+          : this.containerExtension,
+      season: data.season.present ? data.season.value : this.season,
+      customSid: data.customSid.present ? data.customSid.value : this.customSid,
+      added: data.added.present ? data.added.value : this.added,
+      directSource: data.directSource.present
+          ? data.directSource.value
+          : this.directSource,
+      playlistId: data.playlistId.present
+          ? data.playlistId.value
+          : this.playlistId,
+      tmdbId: data.tmdbId.present ? data.tmdbId.value : this.tmdbId,
+      releasedate: data.releasedate.present
+          ? data.releasedate.value
+          : this.releasedate,
+      plot: data.plot.present ? data.plot.value : this.plot,
+      durationSecs: data.durationSecs.present
+          ? data.durationSecs.value
+          : this.durationSecs,
+      duration: data.duration.present ? data.duration.value : this.duration,
+      movieImage: data.movieImage.present
+          ? data.movieImage.value
+          : this.movieImage,
+      bitrate: data.bitrate.present ? data.bitrate.value : this.bitrate,
+      rating: data.rating.present ? data.rating.value : this.rating,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EpisodesData(')
+          ..write('id: $id, ')
+          ..write('seriesId: $seriesId, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('episodeNum: $episodeNum, ')
+          ..write('title: $title, ')
+          ..write('containerExtension: $containerExtension, ')
+          ..write('season: $season, ')
+          ..write('customSid: $customSid, ')
+          ..write('added: $added, ')
+          ..write('directSource: $directSource, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('tmdbId: $tmdbId, ')
+          ..write('releasedate: $releasedate, ')
+          ..write('plot: $plot, ')
+          ..write('durationSecs: $durationSecs, ')
+          ..write('duration: $duration, ')
+          ..write('movieImage: $movieImage, ')
+          ..write('bitrate: $bitrate, ')
+          ..write('rating: $rating')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    seriesId,
+    episodeId,
+    episodeNum,
+    title,
+    containerExtension,
+    season,
+    customSid,
+    added,
+    directSource,
+    playlistId,
+    tmdbId,
+    releasedate,
+    plot,
+    durationSecs,
+    duration,
+    movieImage,
+    bitrate,
+    rating,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EpisodesData &&
+          other.id == this.id &&
+          other.seriesId == this.seriesId &&
+          other.episodeId == this.episodeId &&
+          other.episodeNum == this.episodeNum &&
+          other.title == this.title &&
+          other.containerExtension == this.containerExtension &&
+          other.season == this.season &&
+          other.customSid == this.customSid &&
+          other.added == this.added &&
+          other.directSource == this.directSource &&
+          other.playlistId == this.playlistId &&
+          other.tmdbId == this.tmdbId &&
+          other.releasedate == this.releasedate &&
+          other.plot == this.plot &&
+          other.durationSecs == this.durationSecs &&
+          other.duration == this.duration &&
+          other.movieImage == this.movieImage &&
+          other.bitrate == this.bitrate &&
+          other.rating == this.rating);
+}
+
+class EpisodesCompanion extends UpdateCompanion<EpisodesData> {
+  final Value<int> id;
+  final Value<String> seriesId;
+  final Value<String> episodeId;
+  final Value<int> episodeNum;
+  final Value<String> title;
+  final Value<String?> containerExtension;
+  final Value<int> season;
+  final Value<String?> customSid;
+  final Value<String?> added;
+  final Value<String?> directSource;
+  final Value<String> playlistId;
+  final Value<int?> tmdbId;
+  final Value<String?> releasedate;
+  final Value<String?> plot;
+  final Value<int?> durationSecs;
+  final Value<String?> duration;
+  final Value<String?> movieImage;
+  final Value<int?> bitrate;
+  final Value<double?> rating;
+  const EpisodesCompanion({
+    this.id = const Value.absent(),
+    this.seriesId = const Value.absent(),
+    this.episodeId = const Value.absent(),
+    this.episodeNum = const Value.absent(),
+    this.title = const Value.absent(),
+    this.containerExtension = const Value.absent(),
+    this.season = const Value.absent(),
+    this.customSid = const Value.absent(),
+    this.added = const Value.absent(),
+    this.directSource = const Value.absent(),
+    this.playlistId = const Value.absent(),
+    this.tmdbId = const Value.absent(),
+    this.releasedate = const Value.absent(),
+    this.plot = const Value.absent(),
+    this.durationSecs = const Value.absent(),
+    this.duration = const Value.absent(),
+    this.movieImage = const Value.absent(),
+    this.bitrate = const Value.absent(),
+    this.rating = const Value.absent(),
+  });
+  EpisodesCompanion.insert({
+    this.id = const Value.absent(),
+    required String seriesId,
+    required String episodeId,
+    required int episodeNum,
+    required String title,
+    this.containerExtension = const Value.absent(),
+    required int season,
+    this.customSid = const Value.absent(),
+    this.added = const Value.absent(),
+    this.directSource = const Value.absent(),
+    required String playlistId,
+    this.tmdbId = const Value.absent(),
+    this.releasedate = const Value.absent(),
+    this.plot = const Value.absent(),
+    this.durationSecs = const Value.absent(),
+    this.duration = const Value.absent(),
+    this.movieImage = const Value.absent(),
+    this.bitrate = const Value.absent(),
+    this.rating = const Value.absent(),
+  }) : seriesId = Value(seriesId),
+       episodeId = Value(episodeId),
+       episodeNum = Value(episodeNum),
+       title = Value(title),
+       season = Value(season),
+       playlistId = Value(playlistId);
+  static Insertable<EpisodesData> custom({
+    Expression<int>? id,
+    Expression<String>? seriesId,
+    Expression<String>? episodeId,
+    Expression<int>? episodeNum,
+    Expression<String>? title,
+    Expression<String>? containerExtension,
+    Expression<int>? season,
+    Expression<String>? customSid,
+    Expression<String>? added,
+    Expression<String>? directSource,
+    Expression<String>? playlistId,
+    Expression<int>? tmdbId,
+    Expression<String>? releasedate,
+    Expression<String>? plot,
+    Expression<int>? durationSecs,
+    Expression<String>? duration,
+    Expression<String>? movieImage,
+    Expression<int>? bitrate,
+    Expression<double>? rating,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (seriesId != null) 'series_id': seriesId,
+      if (episodeId != null) 'episode_id': episodeId,
+      if (episodeNum != null) 'episode_num': episodeNum,
+      if (title != null) 'title': title,
+      if (containerExtension != null) 'container_extension': containerExtension,
+      if (season != null) 'season': season,
+      if (customSid != null) 'custom_sid': customSid,
+      if (added != null) 'added': added,
+      if (directSource != null) 'direct_source': directSource,
+      if (playlistId != null) 'playlist_id': playlistId,
+      if (tmdbId != null) 'tmdb_id': tmdbId,
+      if (releasedate != null) 'releasedate': releasedate,
+      if (plot != null) 'plot': plot,
+      if (durationSecs != null) 'duration_secs': durationSecs,
+      if (duration != null) 'duration': duration,
+      if (movieImage != null) 'movie_image': movieImage,
+      if (bitrate != null) 'bitrate': bitrate,
+      if (rating != null) 'rating': rating,
+    });
+  }
+
+  EpisodesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? seriesId,
+    Value<String>? episodeId,
+    Value<int>? episodeNum,
+    Value<String>? title,
+    Value<String?>? containerExtension,
+    Value<int>? season,
+    Value<String?>? customSid,
+    Value<String?>? added,
+    Value<String?>? directSource,
+    Value<String>? playlistId,
+    Value<int?>? tmdbId,
+    Value<String?>? releasedate,
+    Value<String?>? plot,
+    Value<int?>? durationSecs,
+    Value<String?>? duration,
+    Value<String?>? movieImage,
+    Value<int?>? bitrate,
+    Value<double?>? rating,
+  }) {
+    return EpisodesCompanion(
+      id: id ?? this.id,
+      seriesId: seriesId ?? this.seriesId,
+      episodeId: episodeId ?? this.episodeId,
+      episodeNum: episodeNum ?? this.episodeNum,
+      title: title ?? this.title,
+      containerExtension: containerExtension ?? this.containerExtension,
+      season: season ?? this.season,
+      customSid: customSid ?? this.customSid,
+      added: added ?? this.added,
+      directSource: directSource ?? this.directSource,
+      playlistId: playlistId ?? this.playlistId,
+      tmdbId: tmdbId ?? this.tmdbId,
+      releasedate: releasedate ?? this.releasedate,
+      plot: plot ?? this.plot,
+      durationSecs: durationSecs ?? this.durationSecs,
+      duration: duration ?? this.duration,
+      movieImage: movieImage ?? this.movieImage,
+      bitrate: bitrate ?? this.bitrate,
+      rating: rating ?? this.rating,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (seriesId.present) {
+      map['series_id'] = Variable<String>(seriesId.value);
+    }
+    if (episodeId.present) {
+      map['episode_id'] = Variable<String>(episodeId.value);
+    }
+    if (episodeNum.present) {
+      map['episode_num'] = Variable<int>(episodeNum.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (containerExtension.present) {
+      map['container_extension'] = Variable<String>(containerExtension.value);
+    }
+    if (season.present) {
+      map['season'] = Variable<int>(season.value);
+    }
+    if (customSid.present) {
+      map['custom_sid'] = Variable<String>(customSid.value);
+    }
+    if (added.present) {
+      map['added'] = Variable<String>(added.value);
+    }
+    if (directSource.present) {
+      map['direct_source'] = Variable<String>(directSource.value);
+    }
+    if (playlistId.present) {
+      map['playlist_id'] = Variable<String>(playlistId.value);
+    }
+    if (tmdbId.present) {
+      map['tmdb_id'] = Variable<int>(tmdbId.value);
+    }
+    if (releasedate.present) {
+      map['releasedate'] = Variable<String>(releasedate.value);
+    }
+    if (plot.present) {
+      map['plot'] = Variable<String>(plot.value);
+    }
+    if (durationSecs.present) {
+      map['duration_secs'] = Variable<int>(durationSecs.value);
+    }
+    if (duration.present) {
+      map['duration'] = Variable<String>(duration.value);
+    }
+    if (movieImage.present) {
+      map['movie_image'] = Variable<String>(movieImage.value);
+    }
+    if (bitrate.present) {
+      map['bitrate'] = Variable<int>(bitrate.value);
+    }
+    if (rating.present) {
+      map['rating'] = Variable<double>(rating.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EpisodesCompanion(')
+          ..write('id: $id, ')
+          ..write('seriesId: $seriesId, ')
+          ..write('episodeId: $episodeId, ')
+          ..write('episodeNum: $episodeNum, ')
+          ..write('title: $title, ')
+          ..write('containerExtension: $containerExtension, ')
+          ..write('season: $season, ')
+          ..write('customSid: $customSid, ')
+          ..write('added: $added, ')
+          ..write('directSource: $directSource, ')
+          ..write('playlistId: $playlistId, ')
+          ..write('tmdbId: $tmdbId, ')
+          ..write('releasedate: $releasedate, ')
+          ..write('plot: $plot, ')
+          ..write('durationSecs: $durationSecs, ')
+          ..write('duration: $duration, ')
+          ..write('movieImage: $movieImage, ')
+          ..write('bitrate: $bitrate, ')
+          ..write('rating: $rating')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4321,6 +7060,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $LiveStreamsTable liveStreams = $LiveStreamsTable(this);
   late final $VodStreamsTable vodStreams = $VodStreamsTable(this);
   late final $SeriesStreamsTable seriesStreams = $SeriesStreamsTable(this);
+  late final $SeriesInfosTable seriesInfos = $SeriesInfosTable(this);
+  late final $SeasonsTable seasons = $SeasonsTable(this);
+  late final $EpisodesTable episodes = $EpisodesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4333,6 +7075,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     liveStreams,
     vodStreams,
     seriesStreams,
+    seriesInfos,
+    seasons,
+    episodes,
   ];
 }
 
@@ -6447,6 +9192,1250 @@ typedef $$SeriesStreamsTableProcessedTableManager =
       SeriesStreamsData,
       PrefetchHooks Function()
     >;
+typedef $$SeriesInfosTableCreateCompanionBuilder =
+    SeriesInfosCompanion Function({
+      Value<int> id,
+      required String seriesId,
+      required String name,
+      Value<String?> cover,
+      Value<String?> plot,
+      Value<String?> cast,
+      Value<String?> director,
+      Value<String?> genre,
+      Value<String?> releaseDate,
+      Value<String?> lastModified,
+      Value<String?> rating,
+      Value<int?> rating5based,
+      Value<String?> backdropPath,
+      Value<String?> youtubeTrailer,
+      Value<String?> episodeRunTime,
+      Value<String?> categoryId,
+      required String playlistId,
+    });
+typedef $$SeriesInfosTableUpdateCompanionBuilder =
+    SeriesInfosCompanion Function({
+      Value<int> id,
+      Value<String> seriesId,
+      Value<String> name,
+      Value<String?> cover,
+      Value<String?> plot,
+      Value<String?> cast,
+      Value<String?> director,
+      Value<String?> genre,
+      Value<String?> releaseDate,
+      Value<String?> lastModified,
+      Value<String?> rating,
+      Value<int?> rating5based,
+      Value<String?> backdropPath,
+      Value<String?> youtubeTrailer,
+      Value<String?> episodeRunTime,
+      Value<String?> categoryId,
+      Value<String> playlistId,
+    });
+
+class $$SeriesInfosTableFilterComposer
+    extends Composer<_$AppDatabase, $SeriesInfosTable> {
+  $$SeriesInfosTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get seriesId => $composableBuilder(
+    column: $table.seriesId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get cover => $composableBuilder(
+    column: $table.cover,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get plot => $composableBuilder(
+    column: $table.plot,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get cast => $composableBuilder(
+    column: $table.cast,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get director => $composableBuilder(
+    column: $table.director,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get genre => $composableBuilder(
+    column: $table.genre,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get releaseDate => $composableBuilder(
+    column: $table.releaseDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get rating5based => $composableBuilder(
+    column: $table.rating5based,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get backdropPath => $composableBuilder(
+    column: $table.backdropPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get youtubeTrailer => $composableBuilder(
+    column: $table.youtubeTrailer,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get episodeRunTime => $composableBuilder(
+    column: $table.episodeRunTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SeriesInfosTableOrderingComposer
+    extends Composer<_$AppDatabase, $SeriesInfosTable> {
+  $$SeriesInfosTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get seriesId => $composableBuilder(
+    column: $table.seriesId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get cover => $composableBuilder(
+    column: $table.cover,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get plot => $composableBuilder(
+    column: $table.plot,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get cast => $composableBuilder(
+    column: $table.cast,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get director => $composableBuilder(
+    column: $table.director,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get genre => $composableBuilder(
+    column: $table.genre,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get releaseDate => $composableBuilder(
+    column: $table.releaseDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get rating5based => $composableBuilder(
+    column: $table.rating5based,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get backdropPath => $composableBuilder(
+    column: $table.backdropPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get youtubeTrailer => $composableBuilder(
+    column: $table.youtubeTrailer,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get episodeRunTime => $composableBuilder(
+    column: $table.episodeRunTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SeriesInfosTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SeriesInfosTable> {
+  $$SeriesInfosTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get seriesId =>
+      $composableBuilder(column: $table.seriesId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get cover =>
+      $composableBuilder(column: $table.cover, builder: (column) => column);
+
+  GeneratedColumn<String> get plot =>
+      $composableBuilder(column: $table.plot, builder: (column) => column);
+
+  GeneratedColumn<String> get cast =>
+      $composableBuilder(column: $table.cast, builder: (column) => column);
+
+  GeneratedColumn<String> get director =>
+      $composableBuilder(column: $table.director, builder: (column) => column);
+
+  GeneratedColumn<String> get genre =>
+      $composableBuilder(column: $table.genre, builder: (column) => column);
+
+  GeneratedColumn<String> get releaseDate => $composableBuilder(
+    column: $table.releaseDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get rating =>
+      $composableBuilder(column: $table.rating, builder: (column) => column);
+
+  GeneratedColumn<int> get rating5based => $composableBuilder(
+    column: $table.rating5based,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get backdropPath => $composableBuilder(
+    column: $table.backdropPath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get youtubeTrailer => $composableBuilder(
+    column: $table.youtubeTrailer,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get episodeRunTime => $composableBuilder(
+    column: $table.episodeRunTime,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get categoryId => $composableBuilder(
+    column: $table.categoryId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => column,
+  );
+}
+
+class $$SeriesInfosTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SeriesInfosTable,
+          SeriesInfosData,
+          $$SeriesInfosTableFilterComposer,
+          $$SeriesInfosTableOrderingComposer,
+          $$SeriesInfosTableAnnotationComposer,
+          $$SeriesInfosTableCreateCompanionBuilder,
+          $$SeriesInfosTableUpdateCompanionBuilder,
+          (
+            SeriesInfosData,
+            BaseReferences<_$AppDatabase, $SeriesInfosTable, SeriesInfosData>,
+          ),
+          SeriesInfosData,
+          PrefetchHooks Function()
+        > {
+  $$SeriesInfosTableTableManager(_$AppDatabase db, $SeriesInfosTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SeriesInfosTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SeriesInfosTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SeriesInfosTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> seriesId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> cover = const Value.absent(),
+                Value<String?> plot = const Value.absent(),
+                Value<String?> cast = const Value.absent(),
+                Value<String?> director = const Value.absent(),
+                Value<String?> genre = const Value.absent(),
+                Value<String?> releaseDate = const Value.absent(),
+                Value<String?> lastModified = const Value.absent(),
+                Value<String?> rating = const Value.absent(),
+                Value<int?> rating5based = const Value.absent(),
+                Value<String?> backdropPath = const Value.absent(),
+                Value<String?> youtubeTrailer = const Value.absent(),
+                Value<String?> episodeRunTime = const Value.absent(),
+                Value<String?> categoryId = const Value.absent(),
+                Value<String> playlistId = const Value.absent(),
+              }) => SeriesInfosCompanion(
+                id: id,
+                seriesId: seriesId,
+                name: name,
+                cover: cover,
+                plot: plot,
+                cast: cast,
+                director: director,
+                genre: genre,
+                releaseDate: releaseDate,
+                lastModified: lastModified,
+                rating: rating,
+                rating5based: rating5based,
+                backdropPath: backdropPath,
+                youtubeTrailer: youtubeTrailer,
+                episodeRunTime: episodeRunTime,
+                categoryId: categoryId,
+                playlistId: playlistId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String seriesId,
+                required String name,
+                Value<String?> cover = const Value.absent(),
+                Value<String?> plot = const Value.absent(),
+                Value<String?> cast = const Value.absent(),
+                Value<String?> director = const Value.absent(),
+                Value<String?> genre = const Value.absent(),
+                Value<String?> releaseDate = const Value.absent(),
+                Value<String?> lastModified = const Value.absent(),
+                Value<String?> rating = const Value.absent(),
+                Value<int?> rating5based = const Value.absent(),
+                Value<String?> backdropPath = const Value.absent(),
+                Value<String?> youtubeTrailer = const Value.absent(),
+                Value<String?> episodeRunTime = const Value.absent(),
+                Value<String?> categoryId = const Value.absent(),
+                required String playlistId,
+              }) => SeriesInfosCompanion.insert(
+                id: id,
+                seriesId: seriesId,
+                name: name,
+                cover: cover,
+                plot: plot,
+                cast: cast,
+                director: director,
+                genre: genre,
+                releaseDate: releaseDate,
+                lastModified: lastModified,
+                rating: rating,
+                rating5based: rating5based,
+                backdropPath: backdropPath,
+                youtubeTrailer: youtubeTrailer,
+                episodeRunTime: episodeRunTime,
+                categoryId: categoryId,
+                playlistId: playlistId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SeriesInfosTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SeriesInfosTable,
+      SeriesInfosData,
+      $$SeriesInfosTableFilterComposer,
+      $$SeriesInfosTableOrderingComposer,
+      $$SeriesInfosTableAnnotationComposer,
+      $$SeriesInfosTableCreateCompanionBuilder,
+      $$SeriesInfosTableUpdateCompanionBuilder,
+      (
+        SeriesInfosData,
+        BaseReferences<_$AppDatabase, $SeriesInfosTable, SeriesInfosData>,
+      ),
+      SeriesInfosData,
+      PrefetchHooks Function()
+    >;
+typedef $$SeasonsTableCreateCompanionBuilder =
+    SeasonsCompanion Function({
+      Value<int> id,
+      required String seriesId,
+      Value<String?> airDate,
+      Value<int?> episodeCount,
+      required int seasonId,
+      required String name,
+      Value<String?> overview,
+      required int seasonNumber,
+      Value<int?> voteAverage,
+      Value<String?> cover,
+      Value<String?> coverBig,
+      required String playlistId,
+    });
+typedef $$SeasonsTableUpdateCompanionBuilder =
+    SeasonsCompanion Function({
+      Value<int> id,
+      Value<String> seriesId,
+      Value<String?> airDate,
+      Value<int?> episodeCount,
+      Value<int> seasonId,
+      Value<String> name,
+      Value<String?> overview,
+      Value<int> seasonNumber,
+      Value<int?> voteAverage,
+      Value<String?> cover,
+      Value<String?> coverBig,
+      Value<String> playlistId,
+    });
+
+class $$SeasonsTableFilterComposer
+    extends Composer<_$AppDatabase, $SeasonsTable> {
+  $$SeasonsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get seriesId => $composableBuilder(
+    column: $table.seriesId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get airDate => $composableBuilder(
+    column: $table.airDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get episodeCount => $composableBuilder(
+    column: $table.episodeCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get seasonId => $composableBuilder(
+    column: $table.seasonId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get overview => $composableBuilder(
+    column: $table.overview,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get seasonNumber => $composableBuilder(
+    column: $table.seasonNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get voteAverage => $composableBuilder(
+    column: $table.voteAverage,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get cover => $composableBuilder(
+    column: $table.cover,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get coverBig => $composableBuilder(
+    column: $table.coverBig,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SeasonsTableOrderingComposer
+    extends Composer<_$AppDatabase, $SeasonsTable> {
+  $$SeasonsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get seriesId => $composableBuilder(
+    column: $table.seriesId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get airDate => $composableBuilder(
+    column: $table.airDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get episodeCount => $composableBuilder(
+    column: $table.episodeCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get seasonId => $composableBuilder(
+    column: $table.seasonId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get overview => $composableBuilder(
+    column: $table.overview,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get seasonNumber => $composableBuilder(
+    column: $table.seasonNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get voteAverage => $composableBuilder(
+    column: $table.voteAverage,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get cover => $composableBuilder(
+    column: $table.cover,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get coverBig => $composableBuilder(
+    column: $table.coverBig,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SeasonsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SeasonsTable> {
+  $$SeasonsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get seriesId =>
+      $composableBuilder(column: $table.seriesId, builder: (column) => column);
+
+  GeneratedColumn<String> get airDate =>
+      $composableBuilder(column: $table.airDate, builder: (column) => column);
+
+  GeneratedColumn<int> get episodeCount => $composableBuilder(
+    column: $table.episodeCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get seasonId =>
+      $composableBuilder(column: $table.seasonId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get overview =>
+      $composableBuilder(column: $table.overview, builder: (column) => column);
+
+  GeneratedColumn<int> get seasonNumber => $composableBuilder(
+    column: $table.seasonNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get voteAverage => $composableBuilder(
+    column: $table.voteAverage,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get cover =>
+      $composableBuilder(column: $table.cover, builder: (column) => column);
+
+  GeneratedColumn<String> get coverBig =>
+      $composableBuilder(column: $table.coverBig, builder: (column) => column);
+
+  GeneratedColumn<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => column,
+  );
+}
+
+class $$SeasonsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SeasonsTable,
+          SeasonsData,
+          $$SeasonsTableFilterComposer,
+          $$SeasonsTableOrderingComposer,
+          $$SeasonsTableAnnotationComposer,
+          $$SeasonsTableCreateCompanionBuilder,
+          $$SeasonsTableUpdateCompanionBuilder,
+          (
+            SeasonsData,
+            BaseReferences<_$AppDatabase, $SeasonsTable, SeasonsData>,
+          ),
+          SeasonsData,
+          PrefetchHooks Function()
+        > {
+  $$SeasonsTableTableManager(_$AppDatabase db, $SeasonsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SeasonsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SeasonsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SeasonsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> seriesId = const Value.absent(),
+                Value<String?> airDate = const Value.absent(),
+                Value<int?> episodeCount = const Value.absent(),
+                Value<int> seasonId = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> overview = const Value.absent(),
+                Value<int> seasonNumber = const Value.absent(),
+                Value<int?> voteAverage = const Value.absent(),
+                Value<String?> cover = const Value.absent(),
+                Value<String?> coverBig = const Value.absent(),
+                Value<String> playlistId = const Value.absent(),
+              }) => SeasonsCompanion(
+                id: id,
+                seriesId: seriesId,
+                airDate: airDate,
+                episodeCount: episodeCount,
+                seasonId: seasonId,
+                name: name,
+                overview: overview,
+                seasonNumber: seasonNumber,
+                voteAverage: voteAverage,
+                cover: cover,
+                coverBig: coverBig,
+                playlistId: playlistId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String seriesId,
+                Value<String?> airDate = const Value.absent(),
+                Value<int?> episodeCount = const Value.absent(),
+                required int seasonId,
+                required String name,
+                Value<String?> overview = const Value.absent(),
+                required int seasonNumber,
+                Value<int?> voteAverage = const Value.absent(),
+                Value<String?> cover = const Value.absent(),
+                Value<String?> coverBig = const Value.absent(),
+                required String playlistId,
+              }) => SeasonsCompanion.insert(
+                id: id,
+                seriesId: seriesId,
+                airDate: airDate,
+                episodeCount: episodeCount,
+                seasonId: seasonId,
+                name: name,
+                overview: overview,
+                seasonNumber: seasonNumber,
+                voteAverage: voteAverage,
+                cover: cover,
+                coverBig: coverBig,
+                playlistId: playlistId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SeasonsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SeasonsTable,
+      SeasonsData,
+      $$SeasonsTableFilterComposer,
+      $$SeasonsTableOrderingComposer,
+      $$SeasonsTableAnnotationComposer,
+      $$SeasonsTableCreateCompanionBuilder,
+      $$SeasonsTableUpdateCompanionBuilder,
+      (SeasonsData, BaseReferences<_$AppDatabase, $SeasonsTable, SeasonsData>),
+      SeasonsData,
+      PrefetchHooks Function()
+    >;
+typedef $$EpisodesTableCreateCompanionBuilder =
+    EpisodesCompanion Function({
+      Value<int> id,
+      required String seriesId,
+      required String episodeId,
+      required int episodeNum,
+      required String title,
+      Value<String?> containerExtension,
+      required int season,
+      Value<String?> customSid,
+      Value<String?> added,
+      Value<String?> directSource,
+      required String playlistId,
+      Value<int?> tmdbId,
+      Value<String?> releasedate,
+      Value<String?> plot,
+      Value<int?> durationSecs,
+      Value<String?> duration,
+      Value<String?> movieImage,
+      Value<int?> bitrate,
+      Value<double?> rating,
+    });
+typedef $$EpisodesTableUpdateCompanionBuilder =
+    EpisodesCompanion Function({
+      Value<int> id,
+      Value<String> seriesId,
+      Value<String> episodeId,
+      Value<int> episodeNum,
+      Value<String> title,
+      Value<String?> containerExtension,
+      Value<int> season,
+      Value<String?> customSid,
+      Value<String?> added,
+      Value<String?> directSource,
+      Value<String> playlistId,
+      Value<int?> tmdbId,
+      Value<String?> releasedate,
+      Value<String?> plot,
+      Value<int?> durationSecs,
+      Value<String?> duration,
+      Value<String?> movieImage,
+      Value<int?> bitrate,
+      Value<double?> rating,
+    });
+
+class $$EpisodesTableFilterComposer
+    extends Composer<_$AppDatabase, $EpisodesTable> {
+  $$EpisodesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get seriesId => $composableBuilder(
+    column: $table.seriesId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get episodeNum => $composableBuilder(
+    column: $table.episodeNum,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get containerExtension => $composableBuilder(
+    column: $table.containerExtension,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get season => $composableBuilder(
+    column: $table.season,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get customSid => $composableBuilder(
+    column: $table.customSid,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get added => $composableBuilder(
+    column: $table.added,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get directSource => $composableBuilder(
+    column: $table.directSource,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get tmdbId => $composableBuilder(
+    column: $table.tmdbId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get releasedate => $composableBuilder(
+    column: $table.releasedate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get plot => $composableBuilder(
+    column: $table.plot,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationSecs => $composableBuilder(
+    column: $table.durationSecs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get duration => $composableBuilder(
+    column: $table.duration,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get movieImage => $composableBuilder(
+    column: $table.movieImage,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get bitrate => $composableBuilder(
+    column: $table.bitrate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$EpisodesTableOrderingComposer
+    extends Composer<_$AppDatabase, $EpisodesTable> {
+  $$EpisodesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get seriesId => $composableBuilder(
+    column: $table.seriesId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get episodeId => $composableBuilder(
+    column: $table.episodeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get episodeNum => $composableBuilder(
+    column: $table.episodeNum,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get containerExtension => $composableBuilder(
+    column: $table.containerExtension,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get season => $composableBuilder(
+    column: $table.season,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get customSid => $composableBuilder(
+    column: $table.customSid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get added => $composableBuilder(
+    column: $table.added,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get directSource => $composableBuilder(
+    column: $table.directSource,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get tmdbId => $composableBuilder(
+    column: $table.tmdbId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get releasedate => $composableBuilder(
+    column: $table.releasedate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get plot => $composableBuilder(
+    column: $table.plot,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationSecs => $composableBuilder(
+    column: $table.durationSecs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get duration => $composableBuilder(
+    column: $table.duration,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get movieImage => $composableBuilder(
+    column: $table.movieImage,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get bitrate => $composableBuilder(
+    column: $table.bitrate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$EpisodesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EpisodesTable> {
+  $$EpisodesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get seriesId =>
+      $composableBuilder(column: $table.seriesId, builder: (column) => column);
+
+  GeneratedColumn<String> get episodeId =>
+      $composableBuilder(column: $table.episodeId, builder: (column) => column);
+
+  GeneratedColumn<int> get episodeNum => $composableBuilder(
+    column: $table.episodeNum,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get containerExtension => $composableBuilder(
+    column: $table.containerExtension,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get season =>
+      $composableBuilder(column: $table.season, builder: (column) => column);
+
+  GeneratedColumn<String> get customSid =>
+      $composableBuilder(column: $table.customSid, builder: (column) => column);
+
+  GeneratedColumn<String> get added =>
+      $composableBuilder(column: $table.added, builder: (column) => column);
+
+  GeneratedColumn<String> get directSource => $composableBuilder(
+    column: $table.directSource,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get playlistId => $composableBuilder(
+    column: $table.playlistId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get tmdbId =>
+      $composableBuilder(column: $table.tmdbId, builder: (column) => column);
+
+  GeneratedColumn<String> get releasedate => $composableBuilder(
+    column: $table.releasedate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get plot =>
+      $composableBuilder(column: $table.plot, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSecs => $composableBuilder(
+    column: $table.durationSecs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get duration =>
+      $composableBuilder(column: $table.duration, builder: (column) => column);
+
+  GeneratedColumn<String> get movieImage => $composableBuilder(
+    column: $table.movieImage,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get bitrate =>
+      $composableBuilder(column: $table.bitrate, builder: (column) => column);
+
+  GeneratedColumn<double> get rating =>
+      $composableBuilder(column: $table.rating, builder: (column) => column);
+}
+
+class $$EpisodesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $EpisodesTable,
+          EpisodesData,
+          $$EpisodesTableFilterComposer,
+          $$EpisodesTableOrderingComposer,
+          $$EpisodesTableAnnotationComposer,
+          $$EpisodesTableCreateCompanionBuilder,
+          $$EpisodesTableUpdateCompanionBuilder,
+          (
+            EpisodesData,
+            BaseReferences<_$AppDatabase, $EpisodesTable, EpisodesData>,
+          ),
+          EpisodesData,
+          PrefetchHooks Function()
+        > {
+  $$EpisodesTableTableManager(_$AppDatabase db, $EpisodesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EpisodesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EpisodesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EpisodesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> seriesId = const Value.absent(),
+                Value<String> episodeId = const Value.absent(),
+                Value<int> episodeNum = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String?> containerExtension = const Value.absent(),
+                Value<int> season = const Value.absent(),
+                Value<String?> customSid = const Value.absent(),
+                Value<String?> added = const Value.absent(),
+                Value<String?> directSource = const Value.absent(),
+                Value<String> playlistId = const Value.absent(),
+                Value<int?> tmdbId = const Value.absent(),
+                Value<String?> releasedate = const Value.absent(),
+                Value<String?> plot = const Value.absent(),
+                Value<int?> durationSecs = const Value.absent(),
+                Value<String?> duration = const Value.absent(),
+                Value<String?> movieImage = const Value.absent(),
+                Value<int?> bitrate = const Value.absent(),
+                Value<double?> rating = const Value.absent(),
+              }) => EpisodesCompanion(
+                id: id,
+                seriesId: seriesId,
+                episodeId: episodeId,
+                episodeNum: episodeNum,
+                title: title,
+                containerExtension: containerExtension,
+                season: season,
+                customSid: customSid,
+                added: added,
+                directSource: directSource,
+                playlistId: playlistId,
+                tmdbId: tmdbId,
+                releasedate: releasedate,
+                plot: plot,
+                durationSecs: durationSecs,
+                duration: duration,
+                movieImage: movieImage,
+                bitrate: bitrate,
+                rating: rating,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String seriesId,
+                required String episodeId,
+                required int episodeNum,
+                required String title,
+                Value<String?> containerExtension = const Value.absent(),
+                required int season,
+                Value<String?> customSid = const Value.absent(),
+                Value<String?> added = const Value.absent(),
+                Value<String?> directSource = const Value.absent(),
+                required String playlistId,
+                Value<int?> tmdbId = const Value.absent(),
+                Value<String?> releasedate = const Value.absent(),
+                Value<String?> plot = const Value.absent(),
+                Value<int?> durationSecs = const Value.absent(),
+                Value<String?> duration = const Value.absent(),
+                Value<String?> movieImage = const Value.absent(),
+                Value<int?> bitrate = const Value.absent(),
+                Value<double?> rating = const Value.absent(),
+              }) => EpisodesCompanion.insert(
+                id: id,
+                seriesId: seriesId,
+                episodeId: episodeId,
+                episodeNum: episodeNum,
+                title: title,
+                containerExtension: containerExtension,
+                season: season,
+                customSid: customSid,
+                added: added,
+                directSource: directSource,
+                playlistId: playlistId,
+                tmdbId: tmdbId,
+                releasedate: releasedate,
+                plot: plot,
+                durationSecs: durationSecs,
+                duration: duration,
+                movieImage: movieImage,
+                bitrate: bitrate,
+                rating: rating,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$EpisodesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $EpisodesTable,
+      EpisodesData,
+      $$EpisodesTableFilterComposer,
+      $$EpisodesTableOrderingComposer,
+      $$EpisodesTableAnnotationComposer,
+      $$EpisodesTableCreateCompanionBuilder,
+      $$EpisodesTableUpdateCompanionBuilder,
+      (
+        EpisodesData,
+        BaseReferences<_$AppDatabase, $EpisodesTable, EpisodesData>,
+      ),
+      EpisodesData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -6465,4 +10454,10 @@ class $AppDatabaseManager {
       $$VodStreamsTableTableManager(_db, _db.vodStreams);
   $$SeriesStreamsTableTableManager get seriesStreams =>
       $$SeriesStreamsTableTableManager(_db, _db.seriesStreams);
+  $$SeriesInfosTableTableManager get seriesInfos =>
+      $$SeriesInfosTableTableManager(_db, _db.seriesInfos);
+  $$SeasonsTableTableManager get seasons =>
+      $$SeasonsTableTableManager(_db, _db.seasons);
+  $$EpisodesTableTableManager get episodes =>
+      $$EpisodesTableTableManager(_db, _db.episodes);
 }

@@ -1,11 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:iptv_player/database/database.dart';
+import 'package:iptv_player/models/api_configuration_model.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/services/app_state.dart';
+import 'package:iptv_player/repositories/iptv_repository.dart';
 
-class SeriesScreen extends StatelessWidget {
+class SeriesScreen extends StatefulWidget {
   final ContentItem contentItem;
 
   const SeriesScreen({super.key, required this.contentItem});
+
+  @override
+  State<SeriesScreen> createState() => _SeriesScreenState();
+}
+
+class _SeriesScreenState extends State<SeriesScreen> {
+  late IptvRepository _repository;
+  SeriesInfosData? seriesInfo;
+  List<SeasonsData> seasons = [];
+  List<EpisodesData> episodes = [];
+  bool isLoading = true;
+  String? error;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeRepository();
+    _loadSeriesDetails();
+  }
+
+  void _initializeRepository() {
+    _repository = IptvRepository(
+      ApiConfig(
+        baseUrl: AppState.currentPlaylist!.url!,
+        username: AppState.currentPlaylist!.username!,
+        password: AppState.currentPlaylist!.password!,
+      ),
+      AppDatabase(),
+      AppState.currentPlaylist!.id,
+    );
+  }
+
+  Future<void> _loadSeriesDetails() async {
+    setState(() {
+      isLoading = true;
+      error = null;
+    });
+
+    try {
+      final seriesId = widget.contentItem.id;
+
+      final seriesResponse = await _repository.getSeriesInfo(seriesId);
+
+      if (seriesResponse != null) {
+        setState(() {
+          seriesInfo = seriesResponse.seriesInfo;
+          seasons = seriesResponse.seasons;
+          episodes = seriesResponse.episodes;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          error = 'Dizi detayları yüklenemedi';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        error = 'Bir hata oluştu: $e';
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +89,14 @@ class SeriesScreen extends StatelessWidget {
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   children: [
-                    // Hero sadece görsel için
                     Hero(
-                      tag: contentItem.id,
+                      tag: widget.contentItem.id,
                       child: Container(
                         width: double.infinity,
                         height: double.infinity,
                         child: _buildCoverImage(),
                       ),
                     ),
-                    // Gradient overlay - Hero dışında
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -47,7 +111,6 @@ class SeriesScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Text'ler Hero dışında ve Material ile sarılmış
                     Positioned(
                       bottom: 20,
                       left: 20,
@@ -58,7 +121,7 @@ class SeriesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              contentItem.name,
+                              seriesInfo?.name ?? widget.contentItem.name,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,
@@ -73,10 +136,14 @@ class SeriesScreen extends StatelessWidget {
                                 decoration: TextDecoration.none,
                               ),
                             ),
-                            if (contentItem.seriesStream?.genre != null) ...[
+                            if (seriesInfo?.genre != null ||
+                                widget.contentItem.seriesStream?.genre !=
+                                    null) ...[
                               const SizedBox(height: 8),
                               Text(
-                                contentItem.seriesStream!.genre!,
+                                seriesInfo?.genre ??
+                                    widget.contentItem.seriesStream?.genre ??
+                                    '',
                                 style: TextStyle(
                                   color: Colors.white.withOpacity(0.9),
                                   fontSize: 14,
@@ -112,210 +179,213 @@ class SeriesScreen extends StatelessWidget {
               ],
             ),
           ),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
+          child: _buildBody(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    if (isLoading) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Dizi detayları yükleniyor...'),
+          ],
+        ),
+      );
+    }
+
+    if (error != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: Colors.red.shade400),
+            const SizedBox(height: 16),
+            Text(
+              error!,
+              style: TextStyle(fontSize: 16, color: Colors.red.shade600),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadSeriesDetails,
+              child: const Text('Tekrar Dene'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Rating Bölümü
+          _buildRatingSection(),
+          const SizedBox(height: 20),
+
+          // Sezonlar Bölümü
+          _buildSeasonsSection(),
+          const SizedBox(height: 24),
+
+          // Dizi Bilgileri
+          _buildSeriesDetails(),
+
+          const SizedBox(height: 40),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRatingSection() {
+    final rating = seriesInfo?.rating5based ?? 0;
+    final ratingText =
+        widget.contentItem.seriesStream?.rating5based?.toStringAsFixed(1) ??
+        '0.0';
+
+    return Row(
+      children: [
+        ...List.generate(5, (index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: Icon(
+              index < rating.round()
+                  ? Icons.star_rounded
+                  : Icons.star_outline_rounded,
+              color: Colors.amber,
+              size: 24,
+            ),
+          );
+        }),
+        const SizedBox(width: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.amber.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            '$ratingText/5',
+            style: TextStyle(
+              color: Colors.amber.shade700,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSeasonsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Sezonlar',
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        if (seasons.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.withOpacity(0.2), width: 1),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, color: Colors.grey.shade600),
+                const SizedBox(width: 12),
+                const Text('Henüz sezon bilgisi bulunmuyor'),
+              ],
+            ),
+          )
+        else
+          SizedBox(
+            height: 130, // 120'den 130'a çıkardık
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: seasons.length,
+              itemBuilder: (context, index) {
+                final season = seasons[index];
+                return _buildSeasonCard(season, index);
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildSeasonCard(SeasonsData season, int index) {
+    return Container(
+      width: 200,
+      margin: const EdgeInsets.only(right: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withOpacity(0.2), width: 1),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            _showSeasonEpisodes(season);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Rating Bölümü
                 Row(
                   children: [
-                    ...List.generate(5, (index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: Icon(
-                          index <
-                                  (contentItem.seriesStream?.rating5based
-                                          ?.round() ??
-                                      0)
-                              ? Icons.star_rounded
-                              : Icons.star_outline_rounded,
-                          color: Colors.amber,
-                          size: 24,
-                        ),
-                      );
-                    }),
-                    const SizedBox(width: 12),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
-                      ),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.amber.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
+                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
                       ),
+                      child: Icon(
+                        Icons.play_circle_outline,
+                        size: 20,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
                       child: Text(
-                        '${contentItem.seriesStream?.rating5based?.toStringAsFixed(1) ?? '0.0'}/5',
-                        style: TextStyle(
-                          color: Colors.amber.shade700,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                        season.name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 20),
-
-                // Sezonlar Bölümü
+                const SizedBox(height: 8),
                 Text(
-                  'Sezonlar',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  '${season.episodeCount ?? 0} Bölüm',
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 ),
-                const SizedBox(height: 12),
-
-                // Sezonlar Listesi
-                SizedBox(
-                  height: 120,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3, // Geçici olarak 3 sezon
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: 200,
-                        margin: const EdgeInsets.only(right: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.grey.withOpacity(0.2),
-                            width: 1,
-                          ),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () {
-                              // Sezon detay sayfasına geçiş
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .primaryColor
-                                              .withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Icon(
-                                          Icons.play_circle_outline,
-                                          size: 20,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          'Sezon ${index + 1}',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    '${(index + 1) * 8} Bölüm', // Geçici
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 16,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                if (season.airDate != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    season.airDate!,
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                   ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Dizi Bilgileri
-                if (contentItem.seriesStream?.plot != null) ...[
-                  _buildDetailCard(
-                    icon: Icons.description,
-                    title: 'Açıklama',
-                    value: contentItem.seriesStream!.plot!,
-                  ),
-                  const SizedBox(height: 12),
                 ],
-
-                _buildDetailCard(
-                  icon: Icons.calendar_today,
-                  title: 'Çıkış Tarihi',
-                  value: contentItem.seriesStream?.releaseDate ?? 'Bilinmiyor',
-                ),
-                const SizedBox(height: 12),
-
-                if (contentItem.seriesStream?.genre != null) ...[
-                  _buildDetailCard(
-                    icon: Icons.movie,
-                    title: 'Tür',
-                    value: contentItem.seriesStream!.genre!,
-                  ),
-                  const SizedBox(height: 12),
-                ],
-
-                if (contentItem.seriesStream?.cast != null) ...[
-                  _buildDetailCard(
-                    icon: Icons.people,
-                    title: 'Oyuncular',
-                    value: contentItem.seriesStream!.cast!,
-                  ),
-                  const SizedBox(height: 12),
-                ],
-
-                if (contentItem.seriesStream?.episodeRunTime != null) ...[
-                  _buildDetailCard(
-                    icon: Icons.access_time,
-                    title: 'Bölüm Süresi',
-                    value: '${contentItem.seriesStream!.episodeRunTime} dakika',
-                  ),
-                  const SizedBox(height: 12),
-                ],
-
-                _buildDetailCard(
-                  icon: Icons.category,
-                  title: 'Kategori ID',
-                  value: contentItem.seriesStream?.categoryId ?? 'Belirtilmemiş',
-                ),
-                const SizedBox(height: 12),
-
-                _buildDetailCard(
-                  icon: Icons.tag,
-                  title: 'Dizi ID',
-                  value: contentItem.seriesStream?.seriesId?.toString() ??
-                      contentItem.id.toString(),
-                ),
-                
-                // En alta padding ekle
-                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -324,55 +394,401 @@ class SeriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCoverImage() {
-    final hasBackdrop = contentItem.seriesStream?.backdropPath?.isNotEmpty == true;
-    final hasCover = contentItem.seriesStream?.cover?.isNotEmpty == true;
-    
-    if (hasBackdrop || hasCover) {
-      final imageUrl = hasBackdrop 
-          ? contentItem.seriesStream!.backdropPath![0]
-          : contentItem.seriesStream!.cover!;
-      
-      return Image.network(
-        imageUrl,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          
-          return Container(
-            color: Colors.grey.withOpacity(0.2),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                    color: Colors.grey.shade400,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Görsel yükleniyor...',
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+  Widget _buildSeriesDetails() {
+    final details = <Map<String, dynamic>>[];
+
+    // Açıklama
+    final plot = seriesInfo?.plot ?? widget.contentItem.seriesStream?.plot;
+    if (plot != null && plot.isNotEmpty) {
+      details.add({
+        'icon': Icons.description,
+        'title': 'Açıklama',
+        'value': plot,
+      });
+    }
+
+    // Çıkış Tarihi
+    final releaseDate =
+        seriesInfo?.releaseDate ?? widget.contentItem.seriesStream?.releaseDate;
+    details.add({
+      'icon': Icons.calendar_today,
+      'title': 'Çıkış Tarihi',
+      'value': releaseDate ?? 'Bilinmiyor',
+    });
+
+    // Tür
+    final genre = seriesInfo?.genre ?? widget.contentItem.seriesStream?.genre;
+    if (genre != null && genre.isNotEmpty) {
+      details.add({'icon': Icons.movie, 'title': 'Tür', 'value': genre});
+    }
+
+    // Oyuncular
+    final cast = seriesInfo?.cast ?? widget.contentItem.seriesStream?.cast;
+    if (cast != null && cast.isNotEmpty) {
+      details.add({'icon': Icons.people, 'title': 'Oyuncular', 'value': cast});
+    }
+
+    // Bölüm Süresi
+    final episodeRunTime =
+        seriesInfo?.episodeRunTime ??
+        widget.contentItem.seriesStream?.episodeRunTime;
+    if (episodeRunTime != null && episodeRunTime.isNotEmpty) {
+      details.add({
+        'icon': Icons.access_time,
+        'title': 'Bölüm Süresi',
+        'value': '$episodeRunTime dakika',
+      });
+    }
+
+    // Kategori ID
+    final categoryId =
+        seriesInfo?.categoryId ?? widget.contentItem.seriesStream?.categoryId;
+    details.add({
+      'icon': Icons.category,
+      'title': 'Kategori ID',
+      'value': categoryId ?? 'Belirtilmemiş',
+    });
+
+    // Dizi ID
+    final seriesIdValue =
+        seriesInfo?.seriesId ??
+        widget.contentItem.seriesStream?.seriesId?.toString() ??
+        widget.contentItem.id.toString();
+    details.add({
+      'icon': Icons.tag,
+      'title': 'Dizi ID',
+      'value': seriesIdValue,
+    });
+
+    return Column(
+      children: details
+          .map(
+            (detail) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildDetailCard(
+                icon: detail['icon'],
+                title: detail['title'],
+                value: detail['value'],
               ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  void _showSeasonEpisodes(SeasonsData season) async {
+    // Sezon bölümlerini göster
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        maxChildSize: 0.9,
+        minChildSize: 0.5,
+        builder: (context, scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  height: 4,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          season.name,
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(
+                        '${season.episodeCount ?? 0} Bölüm',
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: FutureBuilder<List<EpisodesData>>(
+                    future: _repository.getSeriesEpisodesBySeason(
+                      seriesInfo?.seriesId ?? widget.contentItem.id.toString(),
+                      season.seasonNumber,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      final episodes = snapshot.data ?? [];
+                      if (episodes.isEmpty) {
+                        return const Center(
+                          child: Text('Bu sezona ait bölüm bulunamadı'),
+                        );
+                      }
+
+                      return ListView.builder(
+                        controller: scrollController,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: episodes.length,
+                        itemBuilder: (context, index) {
+                          final episode = episodes[index];
+                          return _buildEpisodeCard(episode);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           );
         },
-        errorBuilder: (context, error, stackTrace) {
-          return _buildPlaceholder();
+      ),
+    );
+  }
+
+  Widget _buildEpisodeCard(EpisodesData episode) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withOpacity(0.2), width: 1),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${episode.title} oynatılıyor...')),
+          );
         },
-      );
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start, // Bu önemli
+            children: [
+              // Episode numarası/resmi
+              Container(
+                width: 60,
+                height: 60, // Sabit yükseklik
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child:
+                    episode.movieImage != null && episode.movieImage!.isNotEmpty
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          episode.movieImage!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Text(
+                                '${episode.episodeNum}',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : Center(
+                        child: Text(
+                          '${episode.episodeNum}',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+              ),
+              const SizedBox(width: 12),
+
+              // Episode bilgileri
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min, // Bu önemli
+                  children: [
+                    // Başlık
+                    Text(
+                      episode.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+
+                    // Süre bilgisi
+                    if (episode.duration != null &&
+                        episode.duration!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        'Süre: ${episode.duration}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+
+                    // Plot
+                    if (episode.plot != null && episode.plot!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        episode.plot!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+
+              // Rating ve play icon
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (episode.rating != null && episode.rating! > 0) ...[
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.star, color: Colors.amber, size: 12),
+                          const SizedBox(width: 2),
+                          Text(
+                            '${episode.rating!.toStringAsFixed(1)}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.amber.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  Icon(
+                    Icons.play_circle_outline,
+                    color: Theme.of(context).primaryColor,
+                    size: 24,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCoverImage() {
+    // API'den gelen cover öncelikli
+    final apiCover = seriesInfo?.cover;
+    final apiBackdrop = seriesInfo?.backdropPath;
+
+    // Fallback olarak contentItem'dan al
+    final hasBackdrop =
+        (apiBackdrop?.isNotEmpty == true) ||
+        (widget.contentItem.seriesStream?.backdropPath?.isNotEmpty == true);
+    final hasCover =
+        (apiCover?.isNotEmpty == true) ||
+        (widget.contentItem.seriesStream?.cover?.isNotEmpty == true);
+
+    if (hasBackdrop || hasCover) {
+      String? imageUrl;
+
+      if (apiBackdrop?.isNotEmpty == true) {
+        imageUrl = apiBackdrop;
+      } else if (apiCover?.isNotEmpty == true) {
+        imageUrl = apiCover;
+      } else if (widget.contentItem.seriesStream?.backdropPath?.isNotEmpty ==
+          true) {
+        imageUrl = widget.contentItem.seriesStream!.backdropPath![0];
+      } else if (widget.contentItem.seriesStream?.cover?.isNotEmpty == true) {
+        imageUrl = widget.contentItem.seriesStream!.cover;
+      }
+
+      if (imageUrl != null) {
+        return Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+
+            return Container(
+              color: Colors.grey.withOpacity(0.2),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                          : null,
+                      color: Colors.grey.shade400,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Görsel yükleniyor...',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return _buildPlaceholder();
+          },
+        );
+      }
     }
-    
+
     return _buildPlaceholder();
   }
 
@@ -389,11 +805,7 @@ class SeriesScreen extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.tv,
-                size: 64,
-                color: Colors.grey.shade500,
-              ),
+              child: Icon(Icons.tv, size: 64, color: Colors.grey.shade500),
             ),
             const SizedBox(height: 16),
             Text(
@@ -406,7 +818,7 @@ class SeriesScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              contentItem.name,
+              seriesInfo?.name ?? widget.contentItem.name,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.grey.shade700,

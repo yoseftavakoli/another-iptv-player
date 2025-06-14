@@ -85,7 +85,7 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                     label: 'Canlı',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.movie),
+                    icon: Icon(Icons.movie_outlined),
                     label: 'Film',
                   ),
                   BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Dizi'),

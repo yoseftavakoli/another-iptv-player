@@ -13,7 +13,7 @@ String buildMediaUrl(Playlist playlist, ContentItem contentItem) {
     case ContentType.vod:
       return '${playlist.url}/movie/${playlist.username}/${playlist.password}/${contentItem.id}.${contentItem.containerExtension!}';
     case ContentType.series:
-      return '2';
+      return '${playlist.url}/series/${playlist.username}/${playlist.password}/${contentItem.id}.${contentItem.containerExtension!}';
   }
 }
 
@@ -64,7 +64,9 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
   Future<void> _initializeAudioService() async {
     _videoController = VideoController(_player);
-    _player.open(Media(buildMediaUrl(widget.playlist, widget.contentItem)));
+    var mediaUrl = buildMediaUrl(widget.playlist, widget.contentItem);
+    print('Media URL -> $mediaUrl');
+    _player.open(Media(mediaUrl));
 
     setState(() {
       _isInitialized = true;

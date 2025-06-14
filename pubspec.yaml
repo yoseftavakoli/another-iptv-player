@@ -25,6 +25,7 @@ dependencies:
   just_audio: ^0.10.4
   # rxdart: ^0.27.7
   flutter_in_app_pip: ^1.7.4
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +37,22 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo.png"
+  min_sdk_android: 21
+  macos:
+    generate: true
+    image_path: "assets/logo.png"
+  windows:
+    generate: true
+    image_path: "assets/logo.png"
+    icon_size: 48
+  linux:
+    generate: true
+    image_path: "assets/logo.png"
+  
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

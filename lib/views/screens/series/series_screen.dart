@@ -4,6 +4,7 @@ import 'package:iptv_player/models/api_configuration_model.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
+import 'package:iptv_player/views/screens/series/episode_screen.dart';
 
 class SeriesScreen extends StatefulWidget {
   final ContentItem contentItem;
@@ -576,8 +577,22 @@ class _SeriesScreenState extends State<SeriesScreen> {
         borderRadius: BorderRadius.circular(12),
         onTap: () {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${episode.title} oynatılıyor...')),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EpisodeScreen(
+                seriesInfo: seriesInfo,
+                seasons: seasons,
+                episodes: episodes,
+                contentItem: ContentItem(
+                  episode.episodeId,
+                  episode.title,
+                  episode.movieImage ?? "",
+                  ContentType.series,
+                  containerExtension: episode.containerExtension,
+                ),
+              ),
+            ),
           );
         },
         child: Padding(

@@ -17,7 +17,10 @@ class CategoryDetailScreen extends StatefulWidget {
 }
 
 class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
+  bool isSearching = false;
+  TextEditingController searchController = TextEditingController();
   List<ContentItem> contentItems = [];
+  List<ContentItem> contentItemsBySearchResults = [];
   bool isLoading = true;
   String? errorMessage;
 
@@ -25,6 +28,26 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   void initState() {
     super.initState();
     _loadContentItems();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void startSearch() {
+    setState(() {
+      contentItemsBySearchResults = [];
+      isSearching = true;
+    });
+  }
+
+  void stopSearch() {
+    setState(() {
+      isSearching = false;
+      searchController.clear();
+    });
   }
 
   Future<void> _loadContentItems() async {
@@ -104,7 +127,41 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return AppBar(title: SelectableText(widget.category.category.categoryName));
+    return AppBar(
+      title: isSearching
+          ? TextField(
+              controller: searchController,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'Ara...',
+                hintStyle: TextStyle(color: Colors.white70),
+                border: InputBorder.none,
+              ),
+              autofocus: true,
+              onChanged: (value) {
+                setState(() {
+                  if (value.isEmpty || value.trim().isEmpty) {
+                    contentItemsBySearchResults = [];
+                  } else {
+                    contentItemsBySearchResults = contentItems
+                        .where(
+                          (item) => item.name.toLowerCase().contains(
+                            value.trim().toLowerCase(),
+                          ),
+                        )
+                        .toList();
+                  }
+                });
+              },
+            )
+          : SelectableText(widget.category.category.categoryName),
+      actions: [
+        if (isSearching)
+          IconButton(icon: Icon(Icons.clear), onPressed: stopSearch)
+        else
+          IconButton(icon: Icon(Icons.search), onPressed: startSearch),
+      ],
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -116,7 +173,11 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
       return _buildErrorState();
     }
 
-    return _buildContentGrid(context);
+    if (isSearching) {
+      return _buildSearchContentGrid(context);
+    } else {
+      return _buildContentGrid(context);
+    }
   }
 
   Widget _buildErrorState() {
@@ -150,7 +211,22 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
       padding: const EdgeInsets.all(16),
       gridDelegate: _buildGridDelegate(context),
       itemCount: contentItems.length,
-      itemBuilder: (context, index) => _buildContentItem(context, index),
+      itemBuilder: (context, index) =>
+          _buildContentItem(context, index, contentItems),
+    );
+  }
+
+  Widget _buildSearchContentGrid(BuildContext context) {
+    if (contentItemsBySearchResults.isEmpty) {
+      return _buildEmptyState();
+    }
+
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: _buildGridDelegate(context),
+      itemCount: contentItemsBySearchResults.length,
+      itemBuilder: (context, index) =>
+          _buildContentItem(context, index, contentItemsBySearchResults),
     );
   }
 
@@ -181,7 +257,11 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     );
   }
 
-  Widget _buildContentItem(BuildContext context, int index) {
+  Widget _buildContentItem(
+    BuildContext context,
+    int index,
+    List<ContentItem> contentItems,
+  ) {
     final contentItem = contentItems[index];
 
     return ContentCard(

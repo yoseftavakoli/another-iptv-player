@@ -9,6 +9,7 @@ import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/utils/navigate_by_content_type.dart';
 import 'package:iptv_player/utils/responsive_helper.dart';
 import 'package:iptv_player/views/screens/home/category_detail_screen.dart';
+import 'package:iptv_player/views/screens/search/search_screen.dart';
 import 'package:iptv_player/views/widgets/category_section.dart';
 import 'package:provider/provider.dart';
 
@@ -86,6 +87,7 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                     'series',
                     controller,
                   ),
+                  SearchAppBar(),
                 ],
               ),
               bottomNavigationBar: BottomNavigationBar(
@@ -102,6 +104,10 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                     label: 'Film',
                   ),
                   BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Dizi'),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    label: 'Arama',
+                  ),
                 ],
               ),
             );

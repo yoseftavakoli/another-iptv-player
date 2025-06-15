@@ -9,6 +9,7 @@ import 'package:iptv_player/models/live_stream.dart';
 import 'package:iptv_player/models/series_response.dart';
 import 'package:iptv_player/models/vod_streams.dart';
 import 'package:iptv_player/models/series.dart';
+import 'package:iptv_player/utils/type_convertions.dart';
 
 class IptvRepository {
   final ApiConfig _config;
@@ -33,7 +34,6 @@ class IptvRepository {
     return await http.get(uri, headers: {'Content-Type': 'application/json'});
   }
 
-  @override
   Future<ApiResponse?> getPlayerInfo({bool forceRefresh = false}) async {
     try {
       if (!forceRefresh) {
@@ -70,7 +70,6 @@ class IptvRepository {
     }
   }
 
-  @override
   Future<List<LiveStream>?> getLiveChannels({
     String? categoryId,
     bool forceRefresh = false,
@@ -118,12 +117,14 @@ class IptvRepository {
   Future<List<LiveStream>?> getLiveChannelsByCategoryId({
     required String categoryId,
     bool forceRefresh = false,
+    int? top,
   }) async {
     try {
       if (!forceRefresh) {
         var liveStreams = await _database.getLiveStreamsByCategoryId(
           _playlistId,
           categoryId,
+          top: top,
         );
 
         if (liveStreams.isNotEmpty) {
@@ -162,10 +163,10 @@ class IptvRepository {
     }
   }
 
-  @override
   Future<List<VodStream>?> getMovies({
     String? categoryId,
     bool forceRefresh = false,
+    int? top,
   }) async {
     try {
       if (!forceRefresh) {
@@ -173,6 +174,7 @@ class IptvRepository {
           var vodStreams = await _database.getVodStreamsByCategoryAndPlaylistId(
             categoryId: categoryId,
             playlistId: _playlistId,
+            top: top,
           );
 
           if (vodStreams.isNotEmpty) {
@@ -221,10 +223,10 @@ class IptvRepository {
     }
   }
 
-  @override
   Future<List<SeriesStream>?> getSeries({
     String? categoryId,
     bool forceRefresh = false,
+    int? top,
   }) async {
     try {
       if (!forceRefresh) {
@@ -232,6 +234,7 @@ class IptvRepository {
           var series = await _database.getSeriesStreamsByCategoryAndPlaylistId(
             categoryId: categoryId,
             playlistId: _playlistId,
+            top: top,
           );
 
           if (series.isNotEmpty) {
@@ -280,8 +283,6 @@ class IptvRepository {
     }
   }
 
-  // Canlı Yayın Kategorileri
-  @override
   Future<List<Category>?> getLiveCategories({bool forceRefresh = false}) async {
     return _getCategories(
       CategoryType.live,
@@ -290,14 +291,10 @@ class IptvRepository {
     );
   }
 
-  // VOD Kategorileri
-  @override
   Future<List<Category>?> getVodCategories({bool forceRefresh = false}) async {
     return _getCategories(CategoryType.vod, 'get_vod_categories', forceRefresh);
   }
 
-  // Series Kategorileri
-  @override
   Future<List<Category>?> getSeriesCategories({
     bool forceRefresh = false,
   }) async {
@@ -308,7 +305,6 @@ class IptvRepository {
     );
   }
 
-  // Ortak kategori çekme methodu
   Future<List<Category>?> _getCategories(
     CategoryType type,
     String action,
@@ -361,7 +357,6 @@ class IptvRepository {
     }
   }
 
-  // Tüm kategorileri al
   Future<Map<CategoryType, List<Category>>?> getAllCategories({
     bool forceRefresh = false,
   }) async {
@@ -383,7 +378,6 @@ class IptvRepository {
     }
   }
 
-  // Cache'i temizle
   Future<void> clearCategoriesCache({CategoryType? type}) async {
     if (type != null) {
       await _database.deleteCategoriesByTypeAndPlaylist(_playlistId, type);
@@ -392,7 +386,6 @@ class IptvRepository {
     }
   }
 
-  // Kategori ara
   Future<List<Category>> searchCategories(
     CategoryType type,
     String query,
@@ -400,7 +393,24 @@ class IptvRepository {
     return await _database.searchCategories(_playlistId, type, query);
   }
 
-  // Series detaylarını getiren metod
+  Future<List<LiveStream>> searchLiveStreams(
+    CategoryType type,
+    String query,
+  ) async {
+    return await _database.searchLiveStreams(_playlistId, query);
+  }
+
+  Future<List<VodStream>> searchMovies(CategoryType type, String query) async {
+    return await _database.searchMovie(_playlistId, query);
+  }
+
+  Future<List<SeriesStream>> searchSeries(
+    CategoryType type,
+    String query,
+  ) async {
+    return await _database.searchSeries(_playlistId, query);
+  }
+
   Future<SeriesDetailResponse?> getSeriesInfo(
     String seriesId, {
     bool forceRefresh = false,
@@ -468,7 +478,6 @@ class IptvRepository {
     }
   }
 
-  // Series episodlarını sezona göre getir
   Future<List<EpisodesData>> getSeriesEpisodesBySeason(
     String seriesId,
     int seasonNumber, {
@@ -514,22 +523,22 @@ class IptvRepository {
         final seriesInfoCompanion = SeriesInfosCompanion(
           seriesId: drift.Value(seriesId),
           playlistId: drift.Value(_playlistId),
-          name: drift.Value(_safeString(info['name'])),
-          cover: drift.Value(_safeString(info['cover'])),
-          plot: drift.Value(_safeString(info['plot'])),
-          cast: drift.Value(_safeString(info['cast'])),
-          director: drift.Value(_safeString(info['director'])),
-          genre: drift.Value(_safeString(info['genre'])),
-          releaseDate: drift.Value(_safeString(info['releaseDate'])),
-          lastModified: drift.Value(_safeString(info['last_modified'])),
-          rating: drift.Value(_safeString(info['rating'])),
-          rating5based: drift.Value(_safeInt(info['rating_5based'])),
+          name: drift.Value(safeString(info['name'])),
+          cover: drift.Value(safeString(info['cover'])),
+          plot: drift.Value(safeString(info['plot'])),
+          cast: drift.Value(safeString(info['cast'])),
+          director: drift.Value(safeString(info['director'])),
+          genre: drift.Value(safeString(info['genre'])),
+          releaseDate: drift.Value(safeString(info['releaseDate'])),
+          lastModified: drift.Value(safeString(info['last_modified'])),
+          rating: drift.Value(safeString(info['rating'])),
+          rating5based: drift.Value(safeInt(info['rating_5based'])),
           backdropPath: drift.Value(
-            _getFirstBackdropPath(info['backdrop_path']),
+            getFirstBackdropPath(info['backdrop_path']),
           ),
-          youtubeTrailer: drift.Value(_safeString(info['youtube_trailer'])),
-          episodeRunTime: drift.Value(_safeString(info['episode_run_time'])),
-          categoryId: drift.Value(_safeString(info['category_id'])),
+          youtubeTrailer: drift.Value(safeString(info['youtube_trailer'])),
+          episodeRunTime: drift.Value(safeString(info['episode_run_time'])),
+          categoryId: drift.Value(safeString(info['category_id'])),
         );
 
         await _database.insertSeriesInfo(seriesInfoCompanion);
@@ -542,15 +551,15 @@ class IptvRepository {
           final seasonCompanion = SeasonsCompanion(
             seriesId: drift.Value(seriesId),
             playlistId: drift.Value(_playlistId),
-            airDate: drift.Value(_safeString(season['air_date'])),
-            episodeCount: drift.Value(_safeInt(season['episode_count'])),
-            seasonId: drift.Value(_safeInt(season['id']) ?? 0),
-            name: drift.Value(_safeString(season['name'])),
-            overview: drift.Value(_safeString(season['overview'])),
-            seasonNumber: drift.Value(_safeInt(season['season_number']) ?? 1),
-            voteAverage: drift.Value(_safeInt(season['vote_average'])),
-            cover: drift.Value(_safeString(season['cover'])),
-            coverBig: drift.Value(_safeString(season['cover_big'])),
+            airDate: drift.Value(safeString(season['air_date'])),
+            episodeCount: drift.Value(safeInt(season['episode_count'])),
+            seasonId: drift.Value(safeInt(season['id']) ?? 0),
+            name: drift.Value(safeString(season['name'])),
+            overview: drift.Value(safeString(season['overview'])),
+            seasonNumber: drift.Value(safeInt(season['season_number']) ?? 1),
+            voteAverage: drift.Value(safeInt(season['vote_average'])),
+            cover: drift.Value(safeString(season['cover'])),
+            coverBig: drift.Value(safeString(season['cover_big'])),
           );
 
           await _database.insertSeason(seasonCompanion);
@@ -568,36 +577,32 @@ class IptvRepository {
               final episodeCompanion = EpisodesCompanion(
                 seriesId: drift.Value(seriesId),
                 playlistId: drift.Value(_playlistId),
-                episodeId: drift.Value(_safeString(episode['id'])),
-                episodeNum: drift.Value(_safeInt(episode['episode_num']) ?? 0),
-                title: drift.Value(_safeString(episode['title'])),
+                episodeId: drift.Value(safeString(episode['id'])),
+                episodeNum: drift.Value(safeInt(episode['episode_num']) ?? 0),
+                title: drift.Value(safeString(episode['title'])),
                 containerExtension: drift.Value(
-                  _safeString(episode['container_extension']),
+                  safeString(episode['container_extension']),
                 ),
-                season: drift.Value(_safeInt(episode['season']) ?? 1),
-                customSid: drift.Value(_safeString(episode['custom_sid'])),
-                added: drift.Value(_safeString(episode['added'])),
-                directSource: drift.Value(
-                  _safeString(episode['direct_source']),
-                ),
+                season: drift.Value(safeInt(episode['season']) ?? 1),
+                customSid: drift.Value(safeString(episode['custom_sid'])),
+                added: drift.Value(safeString(episode['added'])),
+                directSource: drift.Value(safeString(episode['direct_source'])),
 
                 // Episode info
-                tmdbId: drift.Value(_safeInt(episode['info']?['tmdb_id'])),
+                tmdbId: drift.Value(safeInt(episode['info']?['tmdb_id'])),
                 releasedate: drift.Value(
-                  _safeString(episode['info']?['releasedate']),
+                  safeString(episode['info']?['releasedate']),
                 ),
-                plot: drift.Value(_safeString(episode['info']?['plot'])),
+                plot: drift.Value(safeString(episode['info']?['plot'])),
                 durationSecs: drift.Value(
-                  _safeInt(episode['info']?['duration_secs']),
+                  safeInt(episode['info']?['duration_secs']),
                 ),
-                duration: drift.Value(
-                  _safeString(episode['info']?['duration']),
-                ),
+                duration: drift.Value(safeString(episode['info']?['duration'])),
                 movieImage: drift.Value(
-                  _safeString(episode['info']?['movie_image']),
+                  safeString(episode['info']?['movie_image']),
                 ),
-                bitrate: drift.Value(_safeInt(episode['info']?['bitrate'])),
-                rating: drift.Value(_safeDouble(episode['info']?['rating'])),
+                bitrate: drift.Value(safeInt(episode['info']?['bitrate'])),
+                rating: drift.Value(safeDouble(episode['info']?['rating'])),
               );
 
               await _database.insertEpisode(episodeCompanion);
@@ -611,88 +616,5 @@ class IptvRepository {
       print('Save series data to database error: $e');
       rethrow;
     }
-  }
-
-  int _safeInt(dynamic value) {
-    if (value == null) return 0;
-    if (value is int) return value;
-    if (value is double) return value.toInt();
-    if (value is String) {
-      final trimmed = value.trim();
-      if (trimmed.isEmpty) return 0;
-      try {
-        return double.parse(trimmed).toInt();
-      } catch (e) {
-        return 0;
-      }
-    }
-    try {
-      return int.parse(value.toString());
-    } catch (e) {
-      return 0;
-    }
-  }
-
-  double? _safeDouble(dynamic value) {
-    if (value == null) return null;
-
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-
-    if (value is String) {
-      final trimmed = value.trim();
-      if (trimmed.isEmpty) return null;
-
-      try {
-        return double.parse(trimmed);
-      } catch (e) {
-        print('Double parsing error for value: "$value" - $e');
-        return null;
-      }
-    }
-
-    try {
-      return double.parse(value.toString());
-    } catch (e) {
-      print('Double parsing error for value: "$value" - $e');
-      return null;
-    }
-  }
-
-  bool _safeBool(dynamic value) {
-    if (value == null) return false;
-    if (value is bool) return value;
-
-    if (value is String) {
-      final trimmed = value.trim().toLowerCase();
-      return trimmed == 'true' || trimmed == '1' || trimmed == 'yes';
-    }
-
-    if (value is int) return value != 0;
-
-    return false;
-  }
-
-  String _safeString(dynamic value) {
-    if (value == null) return '';
-    if (value is String) return value.trim();
-    return value.toString().trim();
-  }
-
-  String? _getFirstBackdropPath(dynamic backdropPath) {
-    if (backdropPath == null) return null;
-
-    if (backdropPath is List && backdropPath.isNotEmpty) {
-      final first = backdropPath[0];
-      final safeFirst = _safeString(first);
-      return safeFirst.isEmpty ? null : safeFirst;
-    }
-
-    if (backdropPath is String) {
-      final safe = _safeString(backdropPath);
-      return safe.isEmpty ? null : safe;
-    }
-
-    return null;
   }
 }

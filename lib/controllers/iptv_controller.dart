@@ -9,8 +9,9 @@ import 'package:iptv_player/repositories/iptv_repository.dart';
 
 class IptvController extends ChangeNotifier {
   final IptvRepository _repository;
+  bool refreshAll = false;
 
-  IptvController(this._repository);
+  IptvController(this._repository, this.refreshAll);
 
   // State
   ApiResponse? _userInfo;
@@ -58,7 +59,7 @@ class IptvController extends ChangeNotifier {
       _setCurrentStep(ProgressStep.userInfo);
       _setError(null);
 
-      _userInfo = await _repository.getPlayerInfo();
+      _userInfo = await _repository.getPlayerInfo(forceRefresh: refreshAll);
 
       if (_userInfo == null) {
         throw Exception('Kullanıcı bilgileri alınamadı');
@@ -76,7 +77,7 @@ class IptvController extends ChangeNotifier {
     try {
       _setCurrentStep(ProgressStep.categories);
 
-      final categoriesMap = await _repository.getAllCategories();
+      final categoriesMap = await _repository.getAllCategories(forceRefresh: refreshAll);
 
       if (categoriesMap != null) {
         _liveCategories = categoriesMap[CategoryType.live] ?? [];
@@ -101,15 +102,15 @@ class IptvController extends ChangeNotifier {
 
       switch (type) {
         case CategoryType.live:
-          categories = await _repository.getLiveCategories();
+          categories = await _repository.getLiveCategories(forceRefresh: refreshAll);
           if (categories != null) _liveCategories = categories;
           break;
         case CategoryType.vod:
-          categories = await _repository.getVodCategories();
+          categories = await _repository.getVodCategories(forceRefresh: refreshAll);
           if (categories != null) _vodCategories = categories;
           break;
         case CategoryType.series:
-          categories = await _repository.getSeriesCategories();
+          categories = await _repository.getSeriesCategories(forceRefresh: refreshAll);
           if (categories != null) _seriesCategories = categories;
           break;
       }

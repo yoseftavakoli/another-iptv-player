@@ -1,3 +1,5 @@
+import 'package:iptv_player/utils/type_convertions.dart';
+
 class ServerInfo {
   final int? id;
   final String playlistId;
@@ -22,18 +24,17 @@ class ServerInfo {
     required this.timestampNow,
     required this.timeNow,
   });
-
   factory ServerInfo.fromJson(Map<String, dynamic> json, String playlistId) {
     return ServerInfo(
-      playlistId: playlistId,
-      url: json['url'] ?? '',
-      port: json['port'] ?? '',
-      httpsPort: json['https_port'] ?? '',
-      serverProtocol: json['server_protocol'] ?? '',
-      rtmpPort: json['rtmp_port'] ?? '',
-      timezone: json['timezone'] ?? '',
-      timestampNow: json['timestamp_now'] ?? 0,
-      timeNow: json['time_now'] ?? '',
+      playlistId: safeString(playlistId),
+      url: safeString(json['url']),
+      port: safeString(json['port']),
+      httpsPort: safeString(json['https_port']),
+      serverProtocol: safeString(json['server_protocol']),
+      rtmpPort: safeString(json['rtmp_port']),
+      timezone: safeString(json['timezone']),
+      timestampNow: safeInt(json['timestamp_now']),
+      timeNow: safeString(json['time_now']),
     );
   }
 

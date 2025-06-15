@@ -1,6 +1,7 @@
 // models/category.dart
 import 'package:drift/drift.dart';
 import 'package:iptv_player/database/database.dart';
+import 'package:iptv_player/utils/type_convertions.dart';
 
 enum CategoryType {
   live,
@@ -57,10 +58,10 @@ class Category {
     CategoryType type,
   ) {
     return Category(
-      categoryId: json['category_id']?.toString() ?? '',
-      categoryName: json['category_name']?.toString() ?? '',
-      parentId: int.tryParse(json['parent_id']?.toString() ?? '0') ?? 0,
-      playlistId: playlistId,
+      categoryId: safeString(json['category_id']),
+      categoryName: safeString(json['category_name']),
+      parentId: safeInt(json['parent_id']),
+      playlistId: safeString(playlistId),
       type: type,
     );
   }

@@ -713,15 +713,20 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<LiveStream>> getLiveStreamsByCategoryId(
     String playlistId,
-    String categoryId,
-  ) async {
-    final rows =
-        await (select(liveStreams)..where(
-              (ls) =>
-                  ls.playlistId.equals(playlistId) &
-                  ls.categoryId.equals(categoryId),
-            ))
-            .get();
+    String categoryId, {
+    int? top,
+  }) async {
+    var query = select(liveStreams)
+      ..where(
+        (ls) =>
+            ls.playlistId.equals(playlistId) & ls.categoryId.equals(categoryId),
+      );
+
+    if (top != null) {
+      query = query..limit(top);
+    }
+
+    final rows = await query.get();
 
     return rows.map((row) => LiveStream.fromDriftLiveStream(row)).toList();
   }
@@ -754,14 +759,19 @@ class AppDatabase extends _$AppDatabase {
   Future<List<VodStream>> getVodStreamsByCategoryAndPlaylistId({
     required String categoryId,
     required String playlistId,
+    int? top,
   }) async {
-    final rows =
-        await (select(vodStreams)..where(
-              (vs) =>
-                  vs.categoryId.equals(categoryId) &
-                  vs.playlistId.equals(playlistId),
-            ))
-            .get();
+    var query = select(vodStreams)
+      ..where(
+        (vs) =>
+            vs.categoryId.equals(categoryId) & vs.playlistId.equals(playlistId),
+      );
+
+    if (top != null) {
+      query = query..limit(top);
+    }
+
+    final rows = await query.get();
 
     return rows.map((row) => VodStream.fromDriftVodStream(row)).toList();
   }
@@ -845,14 +855,19 @@ class AppDatabase extends _$AppDatabase {
   Future<List<SeriesStream>> getSeriesStreamsByCategoryAndPlaylistId({
     required String categoryId,
     required String playlistId,
+    int? top,
   }) async {
-    final rows =
-        await (select(seriesStreams)..where(
-              (ss) =>
-                  ss.categoryId.equals(categoryId) &
-                  ss.playlistId.equals(playlistId),
-            ))
-            .get();
+    var query = select(seriesStreams)
+      ..where(
+        (ss) =>
+            ss.categoryId.equals(categoryId) & ss.playlistId.equals(playlistId),
+      );
+
+    if (top != null) {
+      query = query..limit(top);
+    }
+
+    final rows = await query.get();
 
     return rows.map((row) => SeriesStream.fromDriftSeriesStream(row)).toList();
   }
@@ -987,6 +1002,61 @@ class AppDatabase extends _$AppDatabase {
               tbl.seriesId.equals(seriesId) & tbl.seriesId.equals(seriesId),
         ))
         .go();
+  }
+
+  Future<List<LiveStream>> searchLiveStreams(
+    String playlistId,
+    String query,
+  ) async {
+    final liveStreamList =
+        await (select(liveStreams)
+              ..where(
+                (tbl) =>
+                    tbl.playlistId.equals(playlistId) &
+                    tbl.name.contains(query),
+              )
+              ..orderBy([(tbl) => OrderingTerm.asc(tbl.name)])
+              ..limit(20))
+            .get();
+
+    return liveStreamList
+        .map((x) => LiveStream.fromDriftLiveStream(x))
+        .toList();
+  }
+
+  Future<List<VodStream>> searchMovie(String playlistId, String query) async {
+    final movieList =
+        await (select(vodStreams)
+              ..where(
+                (tbl) =>
+                    tbl.playlistId.equals(playlistId) &
+                    tbl.name.contains(query),
+              )
+              ..orderBy([(tbl) => OrderingTerm.asc(tbl.name)])
+              ..limit(20))
+            .get();
+
+    return movieList.map((x) => VodStream.fromDriftVodStream(x)).toList();
+  }
+
+  Future<List<SeriesStream>> searchSeries(
+    String playlistId,
+    String query,
+  ) async {
+    final seriesList =
+        await (select(seriesStreams)
+              ..where(
+                (tbl) =>
+                    tbl.playlistId.equals(playlistId) &
+                    tbl.name.contains(query),
+              )
+              ..orderBy([(tbl) => OrderingTerm.asc(tbl.name)])
+              ..limit(20))
+            .get();
+
+    return seriesList
+        .map((x) => SeriesStream.fromDriftSeriesStream(x))
+        .toList();
   }
 
   // Database migration

@@ -53,7 +53,6 @@ class MovieScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColor,
                                 ),
                           ),
                         ),

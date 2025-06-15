@@ -1,8 +1,8 @@
 // views/screens/playlist/xstream_playlist_screen.dart
 import 'package:flutter/material.dart';
-import 'package:iptv_player/views/screens/progress/progress_loading_screen.dart';
+import 'package:iptv_player/views/screens/series/progress_loading_screen.dart';
 import 'package:provider/provider.dart';
-import '../../../controllers/playlist_controller.dart';
+import '../../../database/playlist_controller.dart';
 import '../../../models/playlist_model.dart';
 
 class XStreamPlaylistScreen extends StatefulWidget {
@@ -476,24 +476,24 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
         );
         // Navigator.of(context).popUntil((route) => route.isFirst);
 
-        // Başarı mesajı göster
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Playlist "${_nameController.text.trim()}" başarıyla oluşturuldu!',
-                  ),
-                ),
-              ],
-            ),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        // // Başarı mesajı göster
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Row(
+        //       children: [
+        //         Icon(Icons.check_circle, color: Colors.white),
+        //         SizedBox(width: 8),
+        //         Expanded(
+        //           child: Text(
+        //             'Playlist "${_nameController.text.trim()}" başarıyla oluşturuldu!',
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //     backgroundColor: Colors.green,
+        //     duration: Duration(seconds: 3),
+        //   ),
+        // );
       }
     }
   }

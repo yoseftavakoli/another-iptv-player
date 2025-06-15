@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/services/service_locator.dart';
 import 'package:provider/provider.dart';
-import 'controllers/playlist_controller.dart';
+import 'database/playlist_controller.dart';
 import 'views/screens/home/home_screen.dart';
 
 Future<void> main() async {

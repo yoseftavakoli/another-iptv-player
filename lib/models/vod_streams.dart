@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:iptv_player/database/database.dart';
+import 'package:iptv_player/utils/type_convertions.dart';
 
 class VodStream {
   final String streamId;
@@ -24,14 +25,14 @@ class VodStream {
 
   factory VodStream.fromJson(Map<String, dynamic> json, String playlistId) {
     return VodStream(
-      streamId: json['stream_id']?.toString() ?? '',
-      name: json['name'] ?? '',
-      streamIcon: json['stream_icon'] ?? '',
-      categoryId: json['category_id']?.toString() ?? '',
-      rating: json['rating']?.toString() ?? '',
-      rating5based: (json['rating_5based'] as num?)?.toDouble() ?? 0.0,
-      containerExtension: json['container_extension'] ?? '',
-      playlistId: playlistId
+      streamId: safeString(json['stream_id']),
+      name: safeString(json['name']),
+      streamIcon: safeString(json['stream_icon']),
+      categoryId: safeString(json['category_id']),
+      rating: safeString(json['rating']),
+      rating5based: safeDouble(json['rating_5based']) ?? 0.0,
+      containerExtension: safeString(json['container_extension']),
+      playlistId: safeString(playlistId),
     );
   }
 

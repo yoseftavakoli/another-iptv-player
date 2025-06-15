@@ -1,3 +1,5 @@
+import 'package:iptv_player/utils/type_convertions.dart';
+
 class UserInfo {
   final int? id;
   final String playlistId;
@@ -31,19 +33,21 @@ class UserInfo {
 
   factory UserInfo.fromJson(Map<String, dynamic> json, String playlistId) {
     return UserInfo(
-      playlistId: playlistId,
-      username: json['username'] ?? '',
-      password: json['password'] ?? '',
-      message: json['message'] ?? '',
-      auth: json['auth'] ?? 0,
-      status: json['status'] ?? '',
-      expDate: json['exp_date'] ?? '',
-      isTrial: json['is_trial'] ?? '',
-      activeCons: json['active_cons'] ?? '',
-      createdAt: json['created_at'] ?? '',
-      maxConnections: json['max_connections'] ?? '',
-      allowedOutputFormats: json['allowed_output_formats'] != null
-          ? List<String>.from(json['allowed_output_formats'])
+      playlistId: safeString(playlistId),
+      username: safeString(json['username']),
+      password: safeString(json['password']),
+      message: safeString(json['message']),
+      auth: safeInt(json['auth']),
+      status: safeString(json['status']),
+      expDate: safeString(json['exp_date']),
+      isTrial: safeString(json['is_trial']),
+      activeCons: safeString(json['active_cons']),
+      createdAt: safeString(json['created_at']),
+      maxConnections: safeString(json['max_connections']),
+      allowedOutputFormats: json['allowed_output_formats'] is List
+          ? (json['allowed_output_formats'] as List)
+                .map((e) => safeString(e))
+                .toList()
           : [],
     );
   }

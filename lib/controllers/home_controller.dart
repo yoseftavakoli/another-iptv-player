@@ -3,10 +3,13 @@ import 'package:iptv_player/models/category_view_model.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/models/view_state.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
+import 'package:iptv_player/services/app_state.dart';
+import 'package:iptv_player/views/screens/progress/progress_loading_screen.dart';
+import 'package:iptv_player/views/screens/series/progress_loading_screen.dart';
 
 class HomeController extends ChangeNotifier {
   late PageController _pageController;
-  final IptvRepository _repository;
+  final IptvRepository _repository = AppState.repository!;
   String? _errorMessage;
   ViewState _viewState = ViewState.idle;
 
@@ -26,8 +29,7 @@ class HomeController extends ChangeNotifier {
   List<CategoryViewModel>? get movieCategories => _movieCategories;
   List<CategoryViewModel>? get seriesCategories => _seriesCategories;
 
-  HomeController({required IptvRepository repository})
-    : _repository = repository {
+  HomeController() {
     _pageController = PageController();
     _loadCategories();
   }
@@ -95,6 +97,7 @@ class HomeController extends ChangeNotifier {
       for (var liveCategory in liveCategories!) {
         var liveStreams = await _repository.getLiveChannelsByCategoryId(
           categoryId: liveCategory.categoryId,
+          top: 10,
         );
 
         var categoryViewModel = CategoryViewModel(
@@ -118,6 +121,7 @@ class HomeController extends ChangeNotifier {
       for (var movieCategory in movieCategories!) {
         var movies = await _repository.getMovies(
           categoryId: movieCategory.categoryId,
+          top: 10,
         );
 
         var categoryViewModel = CategoryViewModel(
@@ -143,6 +147,7 @@ class HomeController extends ChangeNotifier {
       for (var seriesCategory in seriesCategories!) {
         var series = await _repository.getSeries(
           categoryId: seriesCategory.categoryId,
+          top: 10,
         );
 
         var categoryViewModel = CategoryViewModel(
@@ -167,5 +172,17 @@ class HomeController extends ChangeNotifier {
       _errorMessage = 'Kategoriler yüklenemedi: $e';
       _setViewState(ViewState.error);
     }
+  }
+
+  refreshAllData(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProgressLoadingScreen(
+          playlist: AppState.currentPlaylist!,
+          refreshAll: true,
+        ),
+      ),
+    );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/views/screens/home/iptv_home_screen.dart';
 import 'package:provider/provider.dart';
-import '../../../controllers/playlist_controller.dart';
+import '../../../database/playlist_controller.dart';
 import '../../../models/playlist_model.dart';
 import '../playlist/playlist_type_screen.dart';
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 import 'package:iptv_player/database/database.dart';
+import 'package:iptv_player/utils/type_convertions.dart';
 
 class SeriesStream {
   final String seriesId;
@@ -41,36 +42,37 @@ class SeriesStream {
   });
 
   factory SeriesStream.fromJson(Map<String, dynamic> json, String playlistId) {
-    // backdrop_path'i List<String>'e dönüştürme
+    // backdrop_path'i güvenli şekilde List<String>'e dönüştürme
     List<String> backdropPaths = [];
-    if (json['backdrop_path'] is List) {
-      backdropPaths = (json['backdrop_path'] as List)
-          .map((item) => item.toString())
-          .toList();
-    } else if (json['backdrop_path'] is String) {
-      backdropPaths = [json['backdrop_path']];
+    final rawBackdrop = json['backdrop_path'];
+    if (rawBackdrop is List) {
+      backdropPaths = rawBackdrop.map((item) => safeString(item)).toList();
+    } else if (rawBackdrop is String) {
+      final safeBackdrop = safeString(rawBackdrop);
+      if (safeBackdrop.isNotEmpty) {
+        backdropPaths = [safeBackdrop];
+      }
     }
 
     return SeriesStream(
-      seriesId: json['series_id']?.toString() ?? '',
-      name: json['name'] ?? '',
-      cover: json['cover'] ?? '',
-      plot: json['plot'] ?? '',
-      cast: json['cast'] ?? '',
-      director: json['director'] ?? '',
-      genre: json['genre'] ?? '',
-      releaseDate: json['releaseDate'] ?? '',
-      lastModified: json['last_modified']?.toString() ?? '',
-      rating: json['rating']?.toString() ?? '',
-      rating5based: (json['rating_5based'] as num?)?.toDouble() ?? 0.0,
+      seriesId: safeString(json['series_id']),
+      name: safeString(json['name']),
+      cover: safeString(json['cover']),
+      plot: safeString(json['plot']),
+      cast: safeString(json['cast']),
+      director: safeString(json['director']),
+      genre: safeString(json['genre']),
+      releaseDate: safeString(json['releaseDate']),
+      lastModified: safeString(json['last_modified']),
+      rating: safeString(json['rating']),
+      rating5based: safeDouble(json['rating_5based']) ?? 0.0,
       backdropPath: backdropPaths,
-      youtubeTrailer: json['youtube_trailer'] ?? '',
-      episodeRunTime: json['episode_run_time'] ?? '',
-      categoryId: json['category_id']?.toString() ?? '',
-      playlistId: playlistId,
+      youtubeTrailer: safeString(json['youtube_trailer']),
+      episodeRunTime: safeString(json['episode_run_time']),
+      categoryId: safeString(json['category_id']),
+      playlistId: safeString(playlistId),
     );
   }
-
   // Drift'ten SeriesStream oluşturmak için
   factory SeriesStream.fromDriftSeriesStream(
     SeriesStreamsData driftSeriesStream,

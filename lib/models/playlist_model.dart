@@ -1,3 +1,5 @@
+import 'package:iptv_player/utils/type_convertions.dart';
+
 class Playlist {
   final String id;
   final String name;
@@ -31,13 +33,18 @@ class Playlist {
 
   factory Playlist.fromJson(Map<String, dynamic> json) {
     return Playlist(
-      id: json['id'],
-      name: json['name'],
-      type: PlaylistType.values.firstWhere((e) => e.toString() == json['type']),
-      url: json['url'],
-      username: json['username'],
-      password: json['password'],
-      createdAt: DateTime.parse(json['createdAt']),
+      id: safeString(json['id']),
+      name: safeString(json['name']),
+      type: PlaylistType.values.firstWhere(
+        (e) => e.toString() == json['type'],
+        orElse: () =>
+            PlaylistType.m3u, // Varsayılan bir değer (gerekirse değiştir)
+      ),
+      url: safeString(json['url']),
+      username: safeString(json['username']),
+      password: safeString(json['password']),
+      createdAt:
+          DateTime.tryParse(safeString(json['createdAt'])) ?? DateTime.now(),
     );
   }
 }

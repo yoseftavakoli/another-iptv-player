@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:iptv_player/database/database.dart';
+import 'package:iptv_player/utils/type_convertions.dart';
 
 class LiveStream {
   final String streamId;
@@ -20,12 +21,12 @@ class LiveStream {
 
   factory LiveStream.fromJson(Map<String, dynamic> json, String playlistId) {
     return LiveStream(
-      streamId: json['stream_id']?.toString() ?? '',
-      name: json['name'] ?? '',
-      streamIcon: json['stream_icon'] ?? '',
-      categoryId: json['category_id']?.toString() ?? '',
-      epgChannelId: json['epg_channel_id'] ?? '',
-      playlistId: playlistId
+      streamId: safeString(json['stream_id']),
+      name: safeString(json['name']),
+      streamIcon: safeString(json['stream_icon']),
+      categoryId: safeString(json['category_id']),
+      epgChannelId: safeString(json['epg_channel_id']),
+      playlistId: safeString(playlistId),
     );
   }
 

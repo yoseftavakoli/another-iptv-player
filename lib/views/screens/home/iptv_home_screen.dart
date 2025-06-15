@@ -5,6 +5,7 @@ import 'package:iptv_player/models/api_configuration_model.dart';
 import 'package:iptv_player/models/category_view_model.dart';
 import 'package:iptv_player/models/playlist_model.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
+import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/utils/navigate_by_content_type.dart';
 import 'package:iptv_player/utils/responsive_helper.dart';
 import 'package:iptv_player/views/screens/home/category_detail_screen.dart';
@@ -26,7 +27,6 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
   @override
   void initState() {
     super.initState();
-
     final repository = IptvRepository(
       ApiConfig(
         baseUrl: widget.playlist.url!,
@@ -36,7 +36,9 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
       AppDatabase(),
       widget.playlist.id,
     );
-    _controller = HomeController(repository: repository);
+
+    AppState.repository = repository;
+    _controller = HomeController();
   }
 
   @override
@@ -64,15 +66,26 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                 ),
               );
             }
-
             return Scaffold(
               body: PageView(
                 controller: controller.pageController,
                 onPageChanged: controller.onPageChanged,
                 children: [
-                  _buildContentPage(controller.liveCategories!, 'live'),
-                  _buildContentPage(controller.movieCategories!, 'movie'),
-                  _buildContentPage(controller.seriesCategories!, 'series'),
+                  _buildContentPage(
+                    controller.liveCategories!,
+                    'live',
+                    controller,
+                  ),
+                  _buildContentPage(
+                    controller.movieCategories!,
+                    'movie',
+                    controller,
+                  ),
+                  _buildContentPage(
+                    controller.seriesCategories!,
+                    'series',
+                    controller,
+                  ),
                 ],
               ),
               bottomNavigationBar: BottomNavigationBar(
@@ -98,7 +111,11 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
     );
   }
 
-  Widget _buildContentPage(List<CategoryViewModel> categories, String type) {
+  Widget _buildContentPage(
+    List<CategoryViewModel> categories,
+    String type,
+    HomeController controller,
+  ) {
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
@@ -110,6 +127,14 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
             floating: true,
             snap: true,
             elevation: 0,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  controller.refreshAllData(context);
+                },
+              ),
+            ],
           ),
         ];
       },

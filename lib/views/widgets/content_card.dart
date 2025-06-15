@@ -28,8 +28,7 @@ class ContentCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
-                flex: 3,
-                child: content.imagePath != null
+                child: content.imagePath.isNotEmpty
                     ? CachedNetworkImage(
                         imageUrl: content.imagePath,
                         fit: BoxFit.contain,
@@ -47,28 +46,6 @@ class ContentCard extends StatelessWidget {
                             _buildTitleCard(context),
                       )
                     : _buildTitleCard(context),
-              ),
-              Container(
-                height: 45,
-                padding: EdgeInsets.all(6),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        content.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),

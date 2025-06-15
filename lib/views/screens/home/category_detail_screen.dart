@@ -123,44 +123,51 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: _buildAppBar(), body: _buildBody(context));
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      title: isSearching
-          ? TextField(
-              controller: searchController,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Ara...',
-                hintStyle: TextStyle(color: Colors.white70),
-                border: InputBorder.none,
-              ),
-              autofocus: true,
-              onChanged: (value) {
-                setState(() {
-                  if (value.isEmpty || value.trim().isEmpty) {
-                    contentItemsBySearchResults = [];
-                  } else {
-                    contentItemsBySearchResults = contentItems
-                        .where(
-                          (item) => item.name.toLowerCase().contains(
-                            value.trim().toLowerCase(),
-                          ),
-                        )
-                        .toList();
-                  }
-                });
-              },
-            )
-          : SelectableText(widget.category.category.categoryName),
-      actions: [
-        if (isSearching)
-          IconButton(icon: Icon(Icons.clear), onPressed: stopSearch)
-        else
-          IconButton(icon: Icon(Icons.search), onPressed: startSearch),
-      ],
+    return Scaffold(
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              title: isSearching
+                  ? TextField(
+                      controller: searchController,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: 'Ara...',
+                        hintStyle: TextStyle(color: Colors.white70),
+                        border: InputBorder.none,
+                      ),
+                      autofocus: true,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.isEmpty || value.trim().isEmpty) {
+                            contentItemsBySearchResults = [];
+                          } else {
+                            contentItemsBySearchResults = contentItems
+                                .where(
+                                  (item) => item.name.toLowerCase().contains(
+                                    value.trim().toLowerCase(),
+                                  ),
+                                )
+                                .toList();
+                          }
+                        });
+                      },
+                    )
+                  : SelectableText(widget.category.category.categoryName),
+              actions: [
+                if (isSearching)
+                  IconButton(icon: Icon(Icons.clear), onPressed: stopSearch)
+                else
+                  IconButton(icon: Icon(Icons.search), onPressed: startSearch),
+              ],
+            ),
+          ];
+        },
+        body: _buildBody(context),
+      ),
     );
   }
 

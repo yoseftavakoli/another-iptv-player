@@ -393,19 +393,15 @@ class IptvRepository {
     return await _database.searchCategories(_playlistId, type, query);
   }
 
-  Future<List<LiveStream>> searchLiveStreams(
-    CategoryType type,
-    String query,
-  ) async {
+  Future<List<LiveStream>> searchLiveStreams(String query) async {
     return await _database.searchLiveStreams(_playlistId, query);
   }
 
-  Future<List<VodStream>> searchMovies(CategoryType type, String query) async {
+  Future<List<VodStream>> searchMovies(String query) async {
     return await _database.searchMovie(_playlistId, query);
   }
 
   Future<List<SeriesStream>> searchSeries(
-    CategoryType type,
     String query,
   ) async {
     return await _database.searchSeries(_playlistId, query);

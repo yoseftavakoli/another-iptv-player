@@ -49,10 +49,8 @@ class _SearchAppBarState extends State<SearchAppBar> {
         title: isSearching
             ? TextField(
                 controller: searchController,
-                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: 'Ara...',
-                  hintStyle: TextStyle(color: Colors.white70),
                   border: InputBorder.none,
                 ),
                 autofocus: true,

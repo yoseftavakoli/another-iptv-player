@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/category_view_model.dart';
+import 'package:iptv_player/utils/helpers.dart';
 import 'package:iptv_player/views/widgets/content_card.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 
@@ -10,7 +11,6 @@ class CategorySection extends StatelessWidget {
   final double cardHeight;
   final VoidCallback? onSeeAllTap;
   final Function(ContentItem)? onContentTap;
-
   const CategorySection({
     Key? key,
     required this.category,
@@ -23,6 +23,8 @@ class CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController _scrollController = ScrollController();
+
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
@@ -51,23 +53,49 @@ class CategorySection extends StatelessWidget {
           ),
           SizedBox(
             height: cardHeight,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              itemCount: category.contentItems.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: cardWidth,
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  child: ContentCard(
-                    content: category.contentItems[index],
-                    width: cardWidth,
-                    onTap: () =>
-                        onContentTap?.call(category.contentItems[index]),
+            child: isDesktop
+                ? Scrollbar(
+                    controller: _scrollController,
+                    thumbVisibility:
+                        false, // Desktop'ta scroll bar'ı her zaman görünür yapar
+                    trackVisibility: false, // Track'i de görünür yapar
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      itemCount: category.contentItems.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: cardWidth,
+                          margin: EdgeInsets.symmetric(horizontal: 4),
+                          child: ContentCard(
+                            content: category.contentItems[index],
+                            width: cardWidth,
+                            onTap: () => onContentTap?.call(
+                              category.contentItems[index],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    itemCount: category.contentItems.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: cardWidth,
+                        margin: EdgeInsets.symmetric(horizontal: 4),
+                        child: ContentCard(
+                          content: category.contentItems[index],
+                          width: cardWidth,
+                          onTap: () =>
+                              onContentTap?.call(category.contentItems[index]),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),

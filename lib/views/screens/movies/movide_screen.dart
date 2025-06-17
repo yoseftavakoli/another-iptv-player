@@ -3,29 +3,28 @@ import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/views/widgets/player_widget.dart';
 
-class MovieScreen extends StatelessWidget {
+class MovieScreen extends StatefulWidget {
   final ContentItem contentItem;
+  MovieScreen({super.key, required this.contentItem});
 
-  const MovieScreen({super.key, required this.contentItem});
+  @override
+  _MovieScreenState createState() => _MovieScreenState();
+}
 
+class _MovieScreenState extends State<MovieScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: Colors.white,
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Hero(
-              tag: contentItem.id,
+              tag: widget.contentItem.id,
               child: PlayerWidget(
                 playlist: AppState.currentPlaylist!,
-                contentItem: contentItem,
+                contentItem: widget.contentItem,
               ),
             ),
             Container(
@@ -49,11 +48,9 @@ class MovieScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            contentItem.name,
+                            widget.contentItem.name,
                             style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
                         ...List.generate(5, (index) {
@@ -61,7 +58,10 @@ class MovieScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 4),
                             child: Icon(
                               index <
-                                      (contentItem.vodStream!.rating5based
+                                      (widget
+                                              .contentItem
+                                              .vodStream!
+                                              .rating5based
                                               ?.round() ??
                                           0)
                                   ? Icons.star_rounded
@@ -82,7 +82,7 @@ class MovieScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            '${contentItem.vodStream!.rating5based?.toStringAsFixed(1) ?? '0.0'}/5',
+                            '${widget.contentItem.vodStream!.rating5based?.toStringAsFixed(1) ?? '0.0'}/5',
                             style: TextStyle(
                               color: Colors.amber.shade700,
                               fontWeight: FontWeight.w600,
@@ -92,7 +92,7 @@ class MovieScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                 
+
                     const SizedBox(height: 12),
                     _buildDetailCard(
                       icon: Icons.calendar_today,
@@ -105,14 +105,15 @@ class MovieScreen extends StatelessWidget {
                       icon: Icons.category,
                       title: 'Kategori ID',
                       value:
-                          contentItem.vodStream?.categoryId ?? 'Belirtilmemiş',
+                          widget.contentItem.vodStream?.categoryId ??
+                          'Belirtilmemiş',
                     ),
                     const SizedBox(height: 12),
 
                     _buildDetailCard(
                       icon: Icons.tag,
                       title: 'Stream ID',
-                      value: contentItem.id.toString(),
+                      value: widget.contentItem.id.toString(),
                     ),
                     const SizedBox(height: 12),
 
@@ -120,7 +121,8 @@ class MovieScreen extends StatelessWidget {
                       icon: Icons.video_file,
                       title: 'Format',
                       value:
-                          contentItem.containerExtension?.toUpperCase() ??
+                          widget.contentItem.containerExtension
+                              ?.toUpperCase() ??
                           'Bilinmiyor',
                     ),
                     const SizedBox(height: 12),
@@ -196,4 +198,5 @@ class MovieScreen extends StatelessWidget {
       return 'Bilinmiyor';
     }
   }
+
 }

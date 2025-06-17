@@ -23,7 +23,7 @@ dependencies:
   cached_network_image: ^3.4.1
   audio_service: ^0.18.12
   just_audio: ^0.10.4
-  # rxdart: ^0.27.7
+  rxdart: ^0.28.0
   flutter_in_app_pip: ^1.7.4
   flutter_launcher_icons: ^0.14.4
   persistent_bottom_nav_bar: ^6.2.1

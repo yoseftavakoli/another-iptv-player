@@ -1,61 +1,15 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
-import 'package:media_kit/media_kit.dart' hide Playlist;
+import 'package:iptv_player/services/event_bus.dart';
+import 'package:iptv_player/views/widgets/video_widget.dart';
+import 'package:media_kit/media_kit.dart' hide Playlist, PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:iptv_player/models/playlist_model.dart';
 
-String buildMediaUrl(Playlist playlist, ContentItem contentItem) {
-  switch (contentItem.contentType) {
-    case ContentType.liveStream:
-      return '${playlist.url}/${playlist.username}/${playlist.password}/${contentItem.id}';
-    case ContentType.vod:
-      return '${playlist.url}/movie/${playlist.username}/${playlist.password}/${contentItem.id}.${contentItem.containerExtension!}';
-    case ContentType.series:
-      return '${playlist.url}/series/${playlist.username}/${playlist.password}/${contentItem.id}.${contentItem.containerExtension!}';
-  }
-}
-
-Widget getVideo(BuildContext context, VideoController controller) {
-  switch (Theme.of(context).platform) {
-    case TargetPlatform.android:
-    case TargetPlatform.iOS:
-      return MaterialVideoControlsTheme(
-        normal: MaterialVideoControlsThemeData().copyWith(
-          brightnessGesture: false,
-          volumeGesture: false,
-          seekGesture: false,
-          speedUpOnLongPress: true,
-          seekOnDoubleTap: true
-        ),
-        fullscreen: MaterialVideoControlsThemeData().copyWith(
-          brightnessGesture: false,
-          volumeGesture: false,
-          seekGesture: false,
-          speedUpOnLongPress: true,
-          seekOnDoubleTap: true
-        ),
-        child: Scaffold(body: Video(controller: controller!)),
-      );
-    case TargetPlatform.macOS:
-    case TargetPlatform.windows:
-    case TargetPlatform.linux:
-      return MaterialDesktopVideoControlsTheme(
-        normal: MaterialDesktopVideoControlsThemeData().copyWith(
-          modifyVolumeOnScroll: false,
-          toggleFullscreenOnDoublePress: true,
-        ),
-        fullscreen: MaterialDesktopVideoControlsThemeData().copyWith(
-          modifyVolumeOnScroll: false,
-          toggleFullscreenOnDoublePress: true,
-        ),
-        child: Scaffold(body: Video(controller: controller!)),
-      );
-    default:
-      return Video(controller: controller!, controls: NoVideoControls);
-  }
-}
+import '../../services/player_state.dart';
 
 class PlayerWidget extends StatefulWidget {
   final Playlist playlist;
@@ -81,6 +35,10 @@ class PlayerWidget extends StatefulWidget {
 
 class _PlayerWidgetState extends State<PlayerWidget>
     with WidgetsBindingObserver {
+  late StreamSubscription videoTrackSubscription;
+  late StreamSubscription audioTrackSubscription;
+  late StreamSubscription subtitleTranckSubscription;
+
   final Player _player = Player(configuration: PlayerConfiguration(osc: false));
   VideoController? _videoController;
 
@@ -99,6 +57,9 @@ class _PlayerWidgetState extends State<PlayerWidget>
   @override
   void dispose() {
     _player.dispose();
+    videoTrackSubscription.cancel();
+    audioTrackSubscription.cancel();
+    subtitleTranckSubscription.cancel();
     super.dispose();
   }
 
@@ -107,9 +68,51 @@ class _PlayerWidgetState extends State<PlayerWidget>
     var mediaUrl = buildMediaUrl(widget.playlist, widget.contentItem);
     print('Media URL -> $mediaUrl');
     _player.open(Media(mediaUrl));
+    _player.setVideoTrack(VideoTrack.auto());
+    _player.setAudioTrack(AudioTrack.auto());
+    _player.setSubtitleTrack(SubtitleTrack.auto());
 
     setState(() {
       _isInitialized = true;
+    });
+
+    videoTrackSubscription = EventBus()
+        .on<VideoTrack>('video_track_changed')
+        .listen((VideoTrack data) {
+          setState(() {
+            _player.setVideoTrack(data);
+          });
+        });
+
+    audioTrackSubscription = EventBus()
+        .on<AudioTrack>('audio_track_changed')
+        .listen((AudioTrack data) {
+          setState(() {
+            _player.setAudioTrack(data);
+          });
+        });
+
+    subtitleTranckSubscription = EventBus()
+        .on<SubtitleTrack>('subtitle_track_changed')
+        .listen((SubtitleTrack data) {
+          setState(() {
+            _player.setSubtitleTrack(data);
+          });
+        });
+
+    _player.stream.tracks.listen((event) {
+      PlayerState.videos = event.video;
+      PlayerState.audios = event.audio;
+      PlayerState.subtitles = event.subtitle;
+
+      EventBus().emit('player_tracks', event);
+    });
+
+    _player.stream.track.listen((event) {
+      PlayerState.selectedVideo = _player.state.track.video;
+      PlayerState.selectedAudio = _player.state.track.audio;
+      PlayerState.selectedSubtitle = _player.state.track.subtitle;
+      print('PLAYER -> TRACK -> $event');
     });
   }
 
@@ -191,5 +194,16 @@ class _PlayerWidgetState extends State<PlayerWidget>
       return '$hours:$minutes:$seconds';
     }
     return '$minutes:$seconds';
+  }
+}
+
+String buildMediaUrl(Playlist playlist, ContentItem contentItem) {
+  switch (contentItem.contentType) {
+    case ContentType.liveStream:
+      return '${playlist.url}/${playlist.username}/${playlist.password}/${contentItem.id}';
+    case ContentType.vod:
+      return '${playlist.url}/movie/${playlist.username}/${playlist.password}/${contentItem.id}.${contentItem.containerExtension!}';
+    case ContentType.series:
+      return '${playlist.url}/series/${playlist.username}/${playlist.password}/${contentItem.id}.${contentItem.containerExtension!}';
   }
 }

@@ -17,6 +17,42 @@ String buildMediaUrl(Playlist playlist, ContentItem contentItem) {
   }
 }
 
+Widget getVideo(BuildContext context, VideoController controller) {
+  switch (Theme.of(context).platform) {
+    case TargetPlatform.android:
+    case TargetPlatform.iOS:
+      return MaterialVideoControlsTheme(
+        normal: MaterialVideoControlsThemeData().copyWith(
+          brightnessGesture: false,
+          volumeGesture: false,
+          seekGesture: false,
+        ),
+        fullscreen: MaterialVideoControlsThemeData().copyWith(
+          brightnessGesture: false,
+          volumeGesture: false,
+          seekGesture: false,
+        ),
+        child: Scaffold(body: Video(controller: controller!)),
+      );
+    case TargetPlatform.macOS:
+    case TargetPlatform.windows:
+    case TargetPlatform.linux:
+      return MaterialDesktopVideoControlsTheme(
+        normal: MaterialDesktopVideoControlsThemeData().copyWith(
+          modifyVolumeOnScroll: false,
+          toggleFullscreenOnDoublePress: true,
+        ),
+        fullscreen: MaterialDesktopVideoControlsThemeData().copyWith(
+          modifyVolumeOnScroll: false,
+          toggleFullscreenOnDoublePress: true,
+        ),
+        child: Scaffold(body: Video(controller: controller!)),
+      );
+    default:
+      return Video(controller: controller!, controls: NoVideoControls);
+  }
+}
+
 class PlayerWidget extends StatefulWidget {
   final Playlist playlist;
   final ContentItem contentItem;
@@ -126,13 +162,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
     return Stack(
       children: [
-        if (_isInitialized)
-          Video(
-            controller: _videoController!,
-            controls: widget.showControls
-                ? AdaptiveVideoControls
-                : NoVideoControls,
-          ),
+        if (_isInitialized) getVideo(context, _videoController!),
         // Custom fullscreen button
         if (widget.onFullscreen != null)
           Positioned(

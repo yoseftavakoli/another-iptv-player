@@ -26,7 +26,8 @@ dependencies:
   # rxdart: ^0.27.7
   flutter_in_app_pip: ^1.7.4
   flutter_launcher_icons: ^0.14.4
-
+  persistent_bottom_nav_bar: ^6.2.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -26,11 +26,15 @@ Widget getVideo(BuildContext context, VideoController controller) {
           brightnessGesture: false,
           volumeGesture: false,
           seekGesture: false,
+          speedUpOnLongPress: true,
+          seekOnDoubleTap: true
         ),
         fullscreen: MaterialVideoControlsThemeData().copyWith(
           brightnessGesture: false,
           volumeGesture: false,
           seekGesture: false,
+          speedUpOnLongPress: true,
+          seekOnDoubleTap: true
         ),
         child: Scaffold(body: Video(controller: controller!)),
       );

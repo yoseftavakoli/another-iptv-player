@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:iptv_player/controllers/home_controller.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/api_configuration_model.dart';
@@ -24,10 +25,13 @@ class IPTVHomeScreen extends StatefulWidget {
 
 class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
   late HomeController _controller;
+  late PersistentTabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    _tabController = PersistentTabController(initialIndex: 0);
+
     final repository = IptvRepository(
       ApiConfig(
         baseUrl: widget.playlist.url!,
@@ -48,6 +52,52 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
     super.dispose();
   }
 
+  List<Widget> _buildScreens() {
+    return [
+      _buildContentPage(_controller.liveCategories ?? [], 'live', _controller),
+      _buildContentPage(
+        _controller.movieCategories ?? [],
+        'movie',
+        _controller,
+      ),
+      _buildContentPage(
+        _controller.seriesCategories ?? [],
+        'series',
+        _controller,
+      ),
+      SearchAppBar(),
+    ];
+  }
+
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.live_tv),
+        title: "Canlı",
+        activeColorPrimary: Theme.of(context).colorScheme.onSurface,
+        inactiveColorPrimary: Theme.of(context).colorScheme.onSurface,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.movie_outlined),
+        title: "Film",
+        activeColorPrimary: Theme.of(context).colorScheme.onSurface,
+        inactiveColorPrimary: Theme.of(context).colorScheme.onSurface,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.tv),
+        title: "Dizi",
+        activeColorPrimary: Theme.of(context).colorScheme.onSurface,
+        inactiveColorPrimary: Theme.of(context).colorScheme.onSurface,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.search),
+        title: "Arama",
+        activeColorPrimary: Theme.of(context).colorScheme.onSurface,
+        inactiveColorPrimary: Theme.of(context).colorScheme.onSurface,
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -56,60 +106,35 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
         child: Consumer<HomeController>(
           builder: (context, controller, child) {
             if (controller.isLoading) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 16),
-                    Text('Playlistler yükleniyor...'),
-                  ],
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      Text('Playlistler yükleniyor...'),
+                    ],
+                  ),
                 ),
               );
             }
-            return Scaffold(
-              body: PageView(
-                controller: controller.pageController,
-                onPageChanged: controller.onPageChanged,
-                children: [
-                  _buildContentPage(
-                    controller.liveCategories!,
-                    'live',
-                    controller,
-                  ),
-                  _buildContentPage(
-                    controller.movieCategories!,
-                    'movie',
-                    controller,
-                  ),
-                  _buildContentPage(
-                    controller.seriesCategories!,
-                    'series',
-                    controller,
-                  ),
-                  SearchAppBar(),
-                ],
+
+            return PersistentTabView(
+              context,
+              controller: _tabController,
+              screens: _buildScreens(),
+              items: _navBarsItems(),
+              backgroundColor: Theme.of(context).primaryColor,
+              handleAndroidBackButtonPress: true,
+              resizeToAvoidBottomInset: true,
+              stateManagement: true,
+              hideNavigationBarWhenKeyboardAppears: true,
+              decoration: NavBarDecoration(
+                borderRadius: BorderRadius.circular(0),
+                colorBehindNavBar: Colors.white,
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: controller.currentIndex,
-                onTap: controller.onNavigationTap,
-                type: BottomNavigationBarType.fixed,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.live_tv),
-                    label: 'Canlı',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.movie_outlined),
-                    label: 'Film',
-                  ),
-                  BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Dizi'),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.search),
-                    label: 'Arama',
-                  ),
-                ],
-              ),
+              navBarStyle: NavBarStyle.style9, // Bu stili değiştirebilirsiniz
             );
           },
         ),
@@ -127,7 +152,7 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
         return [
           SliverAppBar(
             title: SelectableText(
-              _controller.getPageTitle(),
+              _getPageTitle(type),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             floating: true,
@@ -146,6 +171,19 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
       },
       body: _buildCategoryList(categories, type),
     );
+  }
+
+  String _getPageTitle(String type) {
+    switch (type) {
+      case 'live':
+        return 'Canlı TV';
+      case 'movie':
+        return 'Filmler';
+      case 'series':
+        return 'Diziler';
+      default:
+        return 'IPTV Player';
+    }
   }
 
   Widget _buildCategoryList(List<CategoryViewModel> categories, String type) {

@@ -17,7 +17,9 @@ class ProgressLoadingScreen extends StatefulWidget {
     super.key,
     required this.playlist,
     bool refreshAll = false,
-  });
+  }) {
+    this.refreshAll = refreshAll;
+  }
 
   @override
   _ProgressLoadingScreenState createState() => _ProgressLoadingScreenState();

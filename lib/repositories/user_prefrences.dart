@@ -17,6 +17,11 @@ class UserPreferences {
     return prefs.getString(_keyLastPlaylist);
   }
 
+  static Future<void> removeLastPlaylist() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keyLastPlaylist);
+  }
+
   static Future<void> setVolume(double volume) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble(_keyVolume, volume);

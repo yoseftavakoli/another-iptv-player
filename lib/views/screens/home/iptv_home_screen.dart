@@ -9,6 +9,7 @@ import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/utils/navigate_by_content_type.dart';
 import 'package:iptv_player/utils/responsive_helper.dart';
 import 'package:iptv_player/views/screens/home/category_detail_screen.dart';
+import 'package:iptv_player/views/screens/home/playlist_detail.dart';
 import 'package:iptv_player/views/screens/search/search_screen.dart';
 import 'package:iptv_player/views/widgets/category_section.dart';
 import 'package:provider/provider.dart';
@@ -88,6 +89,7 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                     controller,
                   ),
                   SearchAppBar(),
+                  PlaylistSettingsScreen(playlist: widget.playlist),
                 ],
               ),
               bottomNavigationBar: BottomNavigationBar(
@@ -107,6 +109,10 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                   BottomNavigationBarItem(
                     icon: Icon(Icons.search),
                     label: 'Arama',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.settings),
+                    label: 'Ayarlar',
                   ),
                 ],
               ),

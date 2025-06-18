@@ -1,14 +1,12 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
+import 'package:iptv_player/repositories/user_prefrences.dart';
 import 'package:iptv_player/services/event_bus.dart';
 import 'package:iptv_player/views/widgets/video_widget.dart';
 import 'package:media_kit/media_kit.dart' hide Playlist, PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:iptv_player/models/playlist_model.dart';
-
 import '../../services/player_state.dart';
 
 class PlayerWidget extends StatefulWidget {
@@ -66,7 +64,6 @@ class _PlayerWidgetState extends State<PlayerWidget>
   Future<void> _initializeAudioService() async {
     _videoController = VideoController(_player);
     var mediaUrl = buildMediaUrl(widget.playlist, widget.contentItem);
-    print('Media URL -> $mediaUrl');
     _player.open(Media(mediaUrl));
     _player.setVideoTrack(VideoTrack.auto());
     _player.setAudioTrack(AudioTrack.auto());
@@ -79,40 +76,64 @@ class _PlayerWidgetState extends State<PlayerWidget>
     videoTrackSubscription = EventBus()
         .on<VideoTrack>('video_track_changed')
         .listen((VideoTrack data) {
-          setState(() {
+          setState(() async {
             _player.setVideoTrack(data);
+            await UserPreferences.setVideoTrack(data.id);
           });
         });
 
     audioTrackSubscription = EventBus()
         .on<AudioTrack>('audio_track_changed')
         .listen((AudioTrack data) {
-          setState(() {
+          setState(() async {
             _player.setAudioTrack(data);
+            await UserPreferences.setAudioTrack(data.language ?? 'null');
           });
         });
 
     subtitleTranckSubscription = EventBus()
         .on<SubtitleTrack>('subtitle_track_changed')
         .listen((SubtitleTrack data) {
-          setState(() {
+          setState(() async {
             _player.setSubtitleTrack(data);
+            await UserPreferences.setSubtitleTrack(data.language ?? 'null');
           });
         });
 
-    _player.stream.tracks.listen((event) {
+    _player.stream.tracks.listen((event) async {
       PlayerState.videos = event.video;
       PlayerState.audios = event.audio;
       PlayerState.subtitles = event.subtitle;
 
       EventBus().emit('player_tracks', event);
+
+      await _player.setVideoTrack(
+        VideoTrack(await UserPreferences.getVideoTrack(), null, null),
+      );
+
+      var selectedAudioLanguage = await UserPreferences.getAudioTrack();
+      var possibleAudioTrack = event.audio.firstWhere((x) {
+        return x.language == selectedAudioLanguage;
+      });
+
+      if (possibleAudioTrack != null) {
+        await _player.setAudioTrack(possibleAudioTrack);
+      }
+
+      var selectedSubtitleLanguage = await UserPreferences.getSubtitleTrack();
+      var possibleSubtitleLanguage = event.subtitle.firstWhere((x) {
+        return x.language == selectedSubtitleLanguage;
+      });
+
+      if (possibleSubtitleLanguage != null) {
+        await _player.setSubtitleTrack(possibleSubtitleLanguage);
+      }
     });
 
     _player.stream.track.listen((event) {
       PlayerState.selectedVideo = _player.state.track.video;
       PlayerState.selectedAudio = _player.state.track.audio;
       PlayerState.selectedSubtitle = _player.state.track.subtitle;
-      print('PLAYER -> TRACK -> $event');
     });
   }
 

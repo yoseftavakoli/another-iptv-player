@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/database/database.dart';
+import 'package:iptv_player/repositories/user_prefrences.dart';
+import 'package:iptv_player/services/app_state.dart';
+import 'package:iptv_player/views/screens/home/iptv_home_screen.dart';
 import '../models/playlist_model.dart';
 import '../services/playlist_service.dart';
 
@@ -23,24 +26,51 @@ class PlaylistController extends ChangeNotifier {
   int get m3uCount =>
       _playlists.where((p) => p.type == PlaylistType.m3u).length;
 
-  // Uygulama başlatıldığında çağrılacak
-  Future<void> initializeApp() async {
-    await loadPlaylists();
-  }
+  // // Uygulama başlatıldığında çağrılacak
+  // Future<void> initializeApp() async {
+  //   await loadPlaylists();
+  // }
 
   // Tüm playlistleri yükle
-  Future<void> loadPlaylists() async {
+  Future<void> loadPlaylists(
+    BuildContext context, {
+    bool navigateIfLastOpenedPlaylistExists = false,
+  }) async {
     _setLoading(true);
     _clearError();
 
     try {
       _playlists = await PlaylistService.getPlaylists();
+
+      var lastLoadedPlaylistId = await UserPreferences.getLastPlaylist();
+      if (lastLoadedPlaylistId != null) {
+        var playlist = _playlists.firstWhere(
+          (x) => x.id == lastLoadedPlaylistId,
+        );
+
+        if (playlist != null) {
+          await openPlaylist(context, playlist);
+        }
+      }
+
       _sortPlaylists();
     } catch (e) {
       _setError('Playlistler yüklenemedi: ${e.toString()}');
     } finally {
       _setLoading(false);
     }
+  }
+
+  openPlaylist(BuildContext context, Playlist playlist) async {
+    await UserPreferences.setLastPlaylist(playlist.id);
+    AppState.currentPlaylist = playlist;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => IPTVHomeScreen(playlist: playlist),
+      ),
+    );
   }
 
   // Yeni playlist oluştur
@@ -292,8 +322,8 @@ class PlaylistController extends ChangeNotifier {
   }
 
   // Verileri yenile (pull-to-refresh için)
-  Future<void> refreshPlaylists() async {
-    await loadPlaylists();
+  Future<void> refreshPlaylists(BuildContext context) async {
+    await loadPlaylists(context);
   }
 
   // Controller'ı temizle

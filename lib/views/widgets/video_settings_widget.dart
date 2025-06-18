@@ -57,7 +57,7 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.settings),
+      icon: Icon(Icons.settings, color: Colors.white),
       onPressed: () => _showSettingsBottomSheet(context),
     );
   }

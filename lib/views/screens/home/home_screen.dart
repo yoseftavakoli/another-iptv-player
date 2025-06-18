@@ -17,7 +17,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<PlaylistController>(context, listen: false).loadPlaylists();
+      Provider.of<PlaylistController>(
+        context,
+        listen: false,
+      ).loadPlaylists(context, navigateIfLastOpenedPlaylistExists: true);
     });
   }
 
@@ -69,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 24),
                     ElevatedButton.icon(
-                      onPressed: () => controller.loadPlaylists(),
+                      onPressed: () => controller.loadPlaylists(context),
                       icon: Icon(Icons.refresh),
                       label: Text('Tekrar Dene'),
                       style: ElevatedButton.styleFrom(
@@ -88,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           return RefreshIndicator(
-            onRefresh: () => controller.loadPlaylists(),
+            onRefresh: () => controller.loadPlaylists(context),
             child: ListView.builder(
               padding: EdgeInsets.all(16),
               itemCount: controller.playlists.length,
@@ -159,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: () => _openPlaylist(playlist),
+        onTap: () async => await controller.openPlaylist(context, playlist),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: EdgeInsets.all(16),
@@ -301,18 +304,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => PlaylistTypeScreen()),
-    );
-  }
-
-  void _openPlaylist(Playlist playlist) {
-    AppState.currentPlaylist = playlist;
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => IPTVHomeScreen(playlist: playlist),
-        // builder: (context) => PlaylistContentScreen(playlist: playlist),
-      ),
     );
   }
 

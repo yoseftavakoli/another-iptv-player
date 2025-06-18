@@ -135,6 +135,13 @@ class _PlayerWidgetState extends State<PlayerWidget>
       PlayerState.selectedAudio = _player.state.track.audio;
       PlayerState.selectedSubtitle = _player.state.track.subtitle;
     });
+
+    var volume = await UserPreferences.getVolume();
+    _player.setVolume(volume);
+
+    _player.stream.volume.listen((event) async {
+      await UserPreferences.setVolume(event);
+    });
   }
 
   String _getContentTypeDisplayName() {

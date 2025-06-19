@@ -1,6 +1,8 @@
 name: Build Windows
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -17,6 +19,9 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Generate files
+        run: flutter packages pub run build_runner build --delete-conflicting-outputs
 
       - name: Build Windows
         run: flutter build windows

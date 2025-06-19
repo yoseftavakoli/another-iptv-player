@@ -13,14 +13,12 @@ jobs:
     steps:
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Another IPTV Player ${{ github.ref }}
+          tag: ${{ github.ref_name }}
+          name: Another IPTV Player ${{ github.ref_name }}
           body: |
-            ## 🎉 New Release: ${{ github.ref }}
+            ## 🎉 New Release: ${{ github.ref_name }}
             
             ### 📺 Another IPTV Player
             A modern, cross-platform IPTV player application built with Flutter.
@@ -46,6 +44,7 @@ jobs:
             This release was automatically created with artifacts from our build pipeline.
           draft: false
           prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build-windows:
     needs: create-release
@@ -67,14 +66,12 @@ jobs:
           cd build/windows/x64/runner/Release
           7z a ../../../../../another-iptv-player-windows-${{ github.ref_name }}.zip .
       - name: Upload Windows Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./another-iptv-player-windows-${{ github.ref_name }}.zip
-          asset_name: another-iptv-player-windows-${{ github.ref_name }}.zip
-          asset_content_type: application/zip
+          tag: ${{ github.ref_name }}
+          artifacts: another-iptv-player-windows-${{ github.ref_name }}.zip
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build-macos:
     needs: create-release
@@ -96,14 +93,12 @@ jobs:
           cd build/macos/Build/Products/Release
           zip -r ../../../../../another-iptv-player-macos-${{ github.ref_name }}.zip .
       - name: Upload macOS Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./another-iptv-player-macos-${{ github.ref_name }}.zip
-          asset_name: another-iptv-player-macos-${{ github.ref_name }}.zip
-          asset_content_type: application/zip
+          tag: ${{ github.ref_name }}
+          artifacts: another-iptv-player-macos-${{ github.ref_name }}.zip
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build-linux:
     needs: create-release
@@ -133,14 +128,12 @@ jobs:
           cd build/linux/x64/release/bundle
           zip -r ../../../../../another-iptv-player-linux-${{ github.ref_name }}.zip .
       - name: Upload Linux Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./another-iptv-player-linux-${{ github.ref_name }}.zip
-          asset_name: another-iptv-player-linux-${{ github.ref_name }}.zip
-          asset_content_type: application/zip
+          tag: ${{ github.ref_name }}
+          artifacts: another-iptv-player-linux-${{ github.ref_name }}.zip
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build-android:
     needs: create-release
@@ -163,14 +156,13 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release
       - name: Upload Android APK
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./build/app/outputs/flutter-apk/app-release.apk
-          asset_name: another-iptv-player-android-${{ github.ref_name }}.apk
-          asset_content_type: application/vnd.android.package-archive
+          tag: ${{ github.ref_name }}
+          artifacts: build/app/outputs/flutter-apk/app-release.apk
+          artifactContentType: application/vnd.android.package-archive
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build-ios:
     needs: create-release
@@ -196,11 +188,9 @@ jobs:
           cd build/ios/iphoneos
           zip -r ../../../another-iptv-player-ios-${{ github.ref_name }}.zip .
       - name: Upload iOS Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./another-iptv-player-ios-${{ github.ref_name }}.zip
-          asset_name: another-iptv-player-ios-${{ github.ref_name }}.zip
-          asset_content_type: application/zip
+          tag: ${{ github.ref_name }}
+          artifacts: another-iptv-player-ios-${{ github.ref_name }}.zip
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}

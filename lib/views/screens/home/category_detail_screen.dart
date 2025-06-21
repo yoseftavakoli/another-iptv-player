@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/category.dart';
 import 'package:iptv_player/models/category_view_model.dart';
+import 'package:iptv_player/models/content_type.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/utils/navigate_by_content_type.dart';

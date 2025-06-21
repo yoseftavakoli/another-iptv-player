@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
+import 'package:iptv_player/models/watch_history.dart';
 import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/views/widgets/player_widget.dart';
 
@@ -9,6 +10,7 @@ class EpisodeScreen extends StatelessWidget {
   final List<SeasonsData> seasons;
   final List<EpisodesData> episodes;
   final ContentItem contentItem;
+  final WatchHistory? watchHistory;
 
   const EpisodeScreen({
     super.key,
@@ -16,13 +18,13 @@ class EpisodeScreen extends StatelessWidget {
     required this.seasons,
     required this.episodes,
     required this.contentItem,
+    this.watchHistory,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -32,6 +34,7 @@ class EpisodeScreen extends StatelessWidget {
               child: PlayerWidget(
                 playlist: AppState.currentPlaylist!,
                 contentItem: contentItem,
+                // watchHistory: watchHistory,
               ),
             ),
             Container(
@@ -57,9 +60,7 @@ class EpisodeScreen extends StatelessWidget {
                           child: SelectableText(
                             contentItem.name,
                             style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],

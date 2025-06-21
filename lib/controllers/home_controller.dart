@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/category_view_model.dart';
+import 'package:iptv_player/models/content_type.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/models/view_state.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
@@ -57,15 +58,21 @@ class HomeController extends ChangeNotifier {
   }
 
   String getPageTitle() {
-    switch (_currentIndex) {
+    switch (currentIndex) {
       case 0:
-        return 'Canlı Yayınlar';
+        return 'İzleme Geçmişi';
       case 1:
-        return 'Filmler';
+        return 'Canlı TV';
       case 2:
+        return 'Filmler';
+      case 3:
         return 'Diziler';
+      case 4:
+        return 'Arama';
+      case 5:
+        return 'Ayarlar';
       default:
-        return 'IP TV Player';
+        return 'IPTV Player';
     }
   }
 

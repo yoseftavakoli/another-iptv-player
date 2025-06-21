@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
+import 'package:iptv_player/models/watch_history.dart';
 import 'package:iptv_player/repositories/user_prefrences.dart';
 import 'package:iptv_player/services/event_bus.dart';
+import 'package:iptv_player/services/watch_history_service.dart';
 import 'package:iptv_player/views/widgets/video_widget.dart';
 import 'package:media_kit/media_kit.dart' hide Playlist, PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:iptv_player/models/playlist_model.dart';
+import '../../models/content_type.dart';
 import '../../services/player_state.dart';
 
 class PlayerWidget extends StatefulWidget {
@@ -37,18 +41,42 @@ class _PlayerWidgetState extends State<PlayerWidget>
   late StreamSubscription audioTrackSubscription;
   late StreamSubscription subtitleTranckSubscription;
 
-  final Player _player = Player(configuration: PlayerConfiguration(osc: false));
+  late Player _player;
   VideoController? _videoController;
+  late WatchHistoryService watchHistoryService;
 
   bool isLoading = true;
   bool hasError = false;
   String errorMessage = '';
-  bool _isInitialized = false;
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    _player = Player(configuration: PlayerConfiguration(osc: false));
+    watchHistoryService = WatchHistoryService(AppDatabase());
+
     super.initState();
+    videoTrackSubscription = EventBus()
+        .on<VideoTrack>('video_track_changed')
+        .listen((VideoTrack data) async {
+          _player.setVideoTrack(data);
+          await UserPreferences.setVideoTrack(data.id);
+        });
+
+    audioTrackSubscription = EventBus()
+        .on<AudioTrack>('audio_track_changed')
+        .listen((AudioTrack data) async {
+          _player.setAudioTrack(data);
+          await UserPreferences.setAudioTrack(data.language ?? 'null');
+        });
+
+    subtitleTranckSubscription = EventBus()
+        .on<SubtitleTrack>('subtitle_track_changed')
+        .listen((SubtitleTrack data) async {
+          _player.setSubtitleTrack(data);
+          await UserPreferences.setSubtitleTrack(data.language ?? 'null');
+        });
+
     _initializeAudioService();
   }
 
@@ -62,43 +90,27 @@ class _PlayerWidgetState extends State<PlayerWidget>
   }
 
   Future<void> _initializeAudioService() async {
+    if (!mounted) return;
     _videoController = VideoController(_player);
     var mediaUrl = buildMediaUrl(widget.playlist, widget.contentItem);
-    _player.open(Media(mediaUrl));
-    _player.setVideoTrack(VideoTrack.auto());
-    _player.setAudioTrack(AudioTrack.auto());
-    _player.setSubtitleTrack(SubtitleTrack.auto());
 
-    setState(() {
-      _isInitialized = true;
-    });
+    var watchHistory = await watchHistoryService.getWatchHistory(
+      widget.playlist.id,
+      widget.contentItem.id,
+    );
 
-    videoTrackSubscription = EventBus()
-        .on<VideoTrack>('video_track_changed')
-        .listen((VideoTrack data) {
-          setState(() async {
-            _player.setVideoTrack(data);
-            await UserPreferences.setVideoTrack(data.id);
-          });
-        });
+    await _player.open(
+      Media(mediaUrl, start: watchHistory?.watchDuration ?? Duration()),
+      play: true,
+    );
 
-    audioTrackSubscription = EventBus()
-        .on<AudioTrack>('audio_track_changed')
-        .listen((AudioTrack data) {
-          setState(() async {
-            _player.setAudioTrack(data);
-            await UserPreferences.setAudioTrack(data.language ?? 'null');
-          });
-        });
+    // try {
+    //   await _player.stream.buffer.first;
+    // } catch (e) {}
 
-    subtitleTranckSubscription = EventBus()
-        .on<SubtitleTrack>('subtitle_track_changed')
-        .listen((SubtitleTrack data) {
-          setState(() async {
-            _player.setSubtitleTrack(data);
-            await UserPreferences.setSubtitleTrack(data.language ?? 'null');
-          });
-        });
+    // await _player.setVideoTrack(VideoTrack.auto());
+    // await _player.setAudioTrack(AudioTrack.auto());
+    // await _player.setSubtitleTrack(SubtitleTrack.auto());
 
     _player.stream.tracks.listen((event) async {
       PlayerState.videos = event.video;
@@ -112,35 +124,48 @@ class _PlayerWidgetState extends State<PlayerWidget>
       );
 
       var selectedAudioLanguage = await UserPreferences.getAudioTrack();
-      var possibleAudioTrack = event.audio.firstWhere((x) {
-        return x.language == selectedAudioLanguage;
-      });
+      var possibleAudioTrack = event.audio.firstWhere(
+        (x) => x.language == selectedAudioLanguage,
+        orElse: AudioTrack.auto,
+      );
 
-      if (possibleAudioTrack != null) {
-        await _player.setAudioTrack(possibleAudioTrack);
-      }
+      await _player.setAudioTrack(possibleAudioTrack);
 
       var selectedSubtitleLanguage = await UserPreferences.getSubtitleTrack();
-      var possibleSubtitleLanguage = event.subtitle.firstWhere((x) {
-        return x.language == selectedSubtitleLanguage;
-      });
+      var possibleSubtitleLanguage = event.subtitle.firstWhere(
+        (x) => x.language == selectedSubtitleLanguage,
+        orElse: SubtitleTrack.auto,
+      );
 
-      if (possibleSubtitleLanguage != null) {
-        await _player.setSubtitleTrack(possibleSubtitleLanguage);
-      }
+      await _player.setSubtitleTrack(possibleSubtitleLanguage);
     });
 
-    _player.stream.track.listen((event) {
+    _player.stream.track.listen((event) async {
       PlayerState.selectedVideo = _player.state.track.video;
       PlayerState.selectedAudio = _player.state.track.audio;
       PlayerState.selectedSubtitle = _player.state.track.subtitle;
-    });
 
-    var volume = await UserPreferences.getVolume();
-    _player.setVolume(volume);
+      var volume = await UserPreferences.getVolume();
+      await _player.setVolume(volume);
+    });
 
     _player.stream.volume.listen((event) async {
       await UserPreferences.setVolume(event);
+    });
+
+    _player.stream.position.listen((position) async {
+      await watchHistoryService.saveWatchHistory(
+        WatchHistory(
+          playlistId: widget.playlist.id,
+          contentType: widget.contentItem.contentType,
+          streamId: widget.contentItem.id,
+          lastWatched: DateTime.now(),
+          title: widget.contentItem.name,
+          imagePath: widget.contentItem.imagePath,
+          totalDuration: _player.state.duration,
+          watchDuration: position,
+        ),
+      );
     });
   }
 
@@ -197,7 +222,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
     return Stack(
       children: [
-        if (_isInitialized) getVideo(context, _videoController!),
+        getVideo(context, _videoController!),
         // Custom fullscreen button
         if (widget.onFullscreen != null)
           Positioned(

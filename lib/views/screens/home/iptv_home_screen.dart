@@ -10,6 +10,7 @@ import 'package:iptv_player/utils/navigate_by_content_type.dart';
 import 'package:iptv_player/utils/responsive_helper.dart';
 import 'package:iptv_player/views/screens/home/category_detail_screen.dart';
 import 'package:iptv_player/views/screens/home/playlist_detail.dart';
+import 'package:iptv_player/views/screens/watch_history/watch_history_screen.dart';
 import 'package:iptv_player/views/screens/search/search_screen.dart';
 import 'package:iptv_player/views/widgets/category_section.dart';
 import 'package:provider/provider.dart';
@@ -73,6 +74,8 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                 controller: controller.pageController,
                 onPageChanged: controller.onPageChanged,
                 children: [
+                  // İzleme geçmişi ekranı eklendi
+                  WatchHistoryScreen(playlistId: widget.playlist.id),
                   _buildContentPage(
                     controller.liveCategories!,
                     'live',
@@ -97,6 +100,11 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                 onTap: controller.onNavigationTap,
                 type: BottomNavigationBarType.fixed,
                 items: [
+                  // İzleme geçmişi tab'ı eklendi
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.history),
+                    label: 'Geçmiş',
+                  ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.live_tv),
                     label: 'Canlı',

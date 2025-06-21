@@ -1,12 +1,12 @@
 import 'package:media_kit/media_kit.dart';
 
 abstract class PlayerState {
-  static late List<VideoTrack> videos;
-  static late VideoTrack selectedVideo;
+  static List<VideoTrack> videos = [];
+  static VideoTrack selectedVideo = VideoTrack.auto();
   
-  static late List<AudioTrack> audios;
-  static late AudioTrack selectedAudio;
+  static List<AudioTrack> audios = [];
+  static AudioTrack selectedAudio= AudioTrack.auto();
 
-  static late List<SubtitleTrack> subtitles;
-  static late SubtitleTrack selectedSubtitle;
+  static List<SubtitleTrack> subtitles = [];
+  static SubtitleTrack selectedSubtitle = SubtitleTrack.auto();
 }

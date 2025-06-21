@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/api_configuration_model.dart';
+import 'package:iptv_player/models/content_type.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
@@ -614,7 +615,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
                           episode.movieImage!,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
                             return Center(
                               child: Text(
@@ -765,7 +766,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
       if (imageUrl != null) {
         return Image.network(
           imageUrl,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
           width: double.infinity,
           height: double.infinity,
           loadingBuilder: (context, child, loadingProgress) {

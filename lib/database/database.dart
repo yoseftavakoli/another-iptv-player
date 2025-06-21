@@ -1,8 +1,10 @@
 import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart' hide Category;
 import 'package:iptv_player/drift_flutter.dart';
 import 'package:iptv_player/models/category.dart';
+import 'package:iptv_player/models/content_type.dart';
 import 'package:iptv_player/models/live_stream.dart';
 import 'package:iptv_player/models/series.dart';
 import 'package:iptv_player/models/vod_streams.dart';
@@ -189,6 +191,22 @@ class Episodes extends Table {
   RealColumn get rating => real().nullable()();
 }
 
+@DataClassName('WatchHistoriesData')
+class WatchHistories extends Table {
+  TextColumn get playlistId => text()();
+  IntColumn get contentType => intEnum<ContentType>()();
+  TextColumn get streamId => text()();
+  TextColumn get seriesId => text().nullable()();
+  IntColumn get watchDuration => integer().nullable()();
+  IntColumn get totalDuration => integer().nullable()();
+  DateTimeColumn get lastWatched => dateTime()();
+  TextColumn get imagePath => text().nullable()();
+  TextColumn get title => text()();
+
+  @override
+  Set<Column> get primaryKey => {playlistId, streamId};
+}
+
 @DriftDatabase(
   tables: [
     Playlists,
@@ -201,6 +219,7 @@ class Episodes extends Table {
     SeriesInfos,
     Seasons,
     Episodes,
+    WatchHistories,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -208,7 +227,7 @@ class AppDatabase extends _$AppDatabase {
     : super(
         e ??
             driftDatabase(
-              name: 'todo-app',
+              name: 'another-iptv-player',
               native: const DriftNativeOptions(
                 databaseDirectory: getApplicationSupportDirectory,
               ),
@@ -227,7 +246,7 @@ class AppDatabase extends _$AppDatabase {
             ),
       );
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 1;
   // === PLAYLIST İŞLEMLERİ ===
 
   // Playlist oluştur
@@ -985,6 +1004,26 @@ class AppDatabase extends _$AppDatabase {
         .get();
   }
 
+  Future<EpisodesData?> findEpisodesById(String episodeId, String playlistId) {
+    return (select(episodes)..where(
+          (tbl) =>
+              tbl.playlistId.equals(playlistId) &
+              tbl.episodeId.equals(episodeId),
+        ))
+        .getSingleOrNull();
+  }
+
+  Future<VodStream?> findMovieById(String streamId, String playlistId) async {
+    var vodStreamData = await (select(vodStreams)..where(
+          (tbl) =>
+      tbl.playlistId.equals(playlistId) &
+      tbl.streamId.equals(streamId),
+    ))
+        .getSingleOrNull();
+
+    return vodStreamData != null ? VodStream.fromDriftVodStream(vodStreamData) : null;
+  }
+
   // Clear operations
   Future<int> clearSeriesData(String seriesId, String playlistId) async {
     await (delete(episodes)..where(
@@ -1066,44 +1105,25 @@ class AppDatabase extends _$AppDatabase {
       await m.createAll();
     },
     onUpgrade: (Migrator m, int from, int to) async {
-      if (from < 2) {
+      if (from <= 2) {
         // Kategori tablosunu ekle
         await m.createTable(categories);
-      }
-      if (from < 3) {
-        // UserInfo ve ServerInfo tablolarını ekle
         await m.createTable(userInfos);
         await m.createTable(serverInfos);
-      }
-      if (from < 4) {
-        // LiveStreams tablosunu oluştur
         await m.createTable(liveStreams);
-      }
-      if (from < 5) {
         await m.createTable(vodStreams);
-      }
-      if (from < 6) {
         await m.createTable(seriesStreams);
-      }
-      if (from <= 6) {
-        // Yeni kolonları varsayılan değerlerle ekle
         await m.addColumn(seriesStreams, seriesStreams.lastModified);
         await m.addColumn(seriesStreams, seriesStreams.backdropPath);
-
-        // Varolan kayıtlar için varsayılan değerler set etmek isterseniz:
         await customStatement('''
         UPDATE series_streams 
         SET last_modified = '0', backdrop_path = '[]' 
         WHERE last_modified IS NULL OR backdrop_path IS NULL
       ''');
-      }
-      if (from <= 7) {
-        // SeriesInfo tablosu oluştur
         await m.createTable(seriesInfos);
-        // Seasons tablosu oluştur
         await m.createTable(seasons);
-        // Episodes tablosu oluştur
         await m.createTable(episodes);
+        await m.createTable(watchHistories);
       }
     },
   );
@@ -1112,7 +1132,7 @@ class AppDatabase extends _$AppDatabase {
   Future<void> deleteDatabase() async {
     await close(); // Önce bağlantıyı kapat
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'playlists.db'));
+    final file = File(p.join(dbFolder.path, 'playlists.sqlite'));
 
     if (await file.exists()) {
       await file.delete();

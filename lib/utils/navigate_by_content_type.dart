@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iptv_player/models/content_type.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/views/screens/live_stream/live_stream_screen.dart';
 import 'package:iptv_player/views/screens/movies/movide_screen.dart';

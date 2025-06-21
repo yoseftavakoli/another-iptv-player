@@ -1,8 +1,7 @@
+import 'package:iptv_player/models/content_type.dart';
 import 'package:iptv_player/models/live_stream.dart';
 import 'package:iptv_player/models/series.dart';
 import 'package:iptv_player/models/vod_streams.dart';
-
-enum ContentType { liveStream, vod, series }
 
 class ContentItem {
   final String id;

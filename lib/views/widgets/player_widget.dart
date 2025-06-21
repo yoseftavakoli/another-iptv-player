@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
@@ -11,7 +13,9 @@ import 'package:media_kit/media_kit.dart' hide Playlist, PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:iptv_player/models/playlist_model.dart';
 import '../../models/content_type.dart';
+import '../../services/audio_service_manager.dart';
 import '../../services/player_state.dart';
+import '../../utils/audio_handler.dart';
 
 class PlayerWidget extends StatefulWidget {
   final Playlist playlist;
@@ -44,6 +48,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
   late Player _player;
   VideoController? _videoController;
   late WatchHistoryService watchHistoryService;
+  MyAudioHandler? _audioHandler;
 
   bool isLoading = true;
   bool hasError = false;
@@ -84,6 +89,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
   @override
   void dispose() {
     _player.dispose();
+    _audioHandler?.setPlayer(null);
     videoTrackSubscription.cancel();
     audioTrackSubscription.cancel();
     subtitleTranckSubscription.cancel();
@@ -93,11 +99,25 @@ class _PlayerWidgetState extends State<PlayerWidget>
   Future<void> _initializeAudioService() async {
     if (!mounted) return;
     _videoController = VideoController(_player);
+
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+    _audioHandler = await AudioServiceManager.instance.getAudioHandler();
+
     var mediaUrl = buildMediaUrl(widget.playlist, widget.contentItem);
 
     var watchHistory = await watchHistoryService.getWatchHistory(
       widget.playlist.id,
       widget.contentItem.id,
+    );
+
+    // Audio handler'a player'ı bağla
+    _audioHandler?.setPlayer(_player);
+
+    _audioHandler?.setCurrentMediaItem(
+      title: widget.contentItem.name,
+      artist: _getContentTypeDisplayName(),
+      artUri: widget.contentItem.imagePath,
     );
 
     await _player.open(
@@ -184,6 +204,27 @@ class _PlayerWidgetState extends State<PlayerWidget>
         return 'Dizi';
       default:
         return 'Video';
+    }
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.paused:
+      // App arka plana geçti, ses devam etsin
+        break;
+      case AppLifecycleState.resumed:
+      // App ön plana geldi
+        break;
+      case AppLifecycleState.detached:
+      // App kapanıyor, AudioService'i tamamen kapat
+      //   AudioServiceManager.instance.stopAudioService();
+        break;
+      default:
+        break;
+        // await _audioHandler?.play();
     }
   }
 

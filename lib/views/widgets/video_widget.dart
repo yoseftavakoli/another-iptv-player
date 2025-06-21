@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/views/widgets/player_widget.dart';
-import 'package:iptv_player/views/widgets/video_settings_widget.dart';
+import 'package:iptv_player/services/player_state.dart';
+import 'package:iptv_player/views/widgets/player-buttons/back_button_widget.dart';
+import 'package:iptv_player/views/widgets/player-buttons/video_settings_widget.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 Widget getVideo(BuildContext context, VideoController controller) {
@@ -14,7 +15,12 @@ Widget getVideo(BuildContext context, VideoController controller) {
           seekGesture: false,
           speedUpOnLongPress: true,
           seekOnDoubleTap: true,
-          topButtonBar: [VideoSettingsWidget()],
+          topButtonBar: [
+            BackButtonWidget(),
+            Text(PlayerState.title),
+            Spacer(),
+            VideoSettingsWidget(),
+          ],
         ),
         fullscreen: MaterialVideoControlsThemeData().copyWith(
           brightnessGesture: false,
@@ -22,7 +28,12 @@ Widget getVideo(BuildContext context, VideoController controller) {
           seekGesture: false,
           speedUpOnLongPress: true,
           seekOnDoubleTap: true,
-          topButtonBar: [VideoSettingsWidget()],
+          topButtonBar: [
+            BackButtonWidget(),
+            Text(PlayerState.title),
+            Spacer(),
+            VideoSettingsWidget(),
+          ],
         ),
         child: Scaffold(body: Video(controller: controller!)),
       );
@@ -33,12 +44,22 @@ Widget getVideo(BuildContext context, VideoController controller) {
         normal: MaterialDesktopVideoControlsThemeData().copyWith(
           modifyVolumeOnScroll: false,
           toggleFullscreenOnDoublePress: true,
-          topButtonBar: [VideoSettingsWidget()],
+          topButtonBar: [
+            BackButtonWidget(),
+            Text(PlayerState.title),
+            Spacer(),
+            VideoSettingsWidget(),
+          ],
         ),
         fullscreen: MaterialDesktopVideoControlsThemeData().copyWith(
           modifyVolumeOnScroll: false,
           toggleFullscreenOnDoublePress: true,
-          topButtonBar: [VideoSettingsWidget()],
+          topButtonBar: [
+            BackButtonWidget(),
+            Text(PlayerState.title),
+            Spacer(),
+            VideoSettingsWidget(),
+          ],
         ),
         child: Scaffold(body: Video(controller: controller!)),
       );

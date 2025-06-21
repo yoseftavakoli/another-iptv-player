@@ -615,7 +615,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
                           episode.movieImage!,
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Center(
                               child: Text(
@@ -766,7 +766,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
       if (imageUrl != null) {
         return Image.network(
           imageUrl,
-          fit: BoxFit.contain,
+          fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
           loadingBuilder: (context, child, loadingProgress) {

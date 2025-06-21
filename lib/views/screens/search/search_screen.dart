@@ -20,12 +20,23 @@ class _SearchAppBarState extends State<SearchAppBar> {
   String? errorMessage;
   bool isSearched = false;
   TextEditingController searchController = TextEditingController();
+  FocusNode searchFocusNode = FocusNode();
   List<ContentItem> contentItems = [];
   IptvRepository repository = AppState.repository!;
 
   @override
+  void initState() {
+    super.initState();
+    // Ekran açıldığında otomatik olarak arama modunu başlat
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startSearch();
+    });
+  }
+
+  @override
   void dispose() {
     searchController.dispose();
+    searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -34,6 +45,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
       isSearching = true;
       isSearched = true;
     });
+    // Focus'u arama alanına yönlendir
+    Future.delayed(Duration(milliseconds: 100), () {
+      searchFocusNode.requestFocus();
+    });
   }
 
   void stopSearch() {
@@ -41,6 +56,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
       isSearching = false;
       searchController.clear();
     });
+    searchFocusNode.unfocus();
   }
 
   @override
@@ -49,65 +65,66 @@ class _SearchAppBarState extends State<SearchAppBar> {
       appBar: AppBar(
         title: isSearching
             ? TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  hintText: 'Ara...',
-                  border: InputBorder.none,
-                ),
-                autofocus: true,
-                onChanged: (value) async {
-                  if (value.isEmpty || value.trim().isEmpty) {
-                    setState(() {
-                      contentItems = [];
-                    });
-                  } else {
-                    setState(() {
-                      isLoading = true;
-                      errorMessage = null;
-                      contentItems = [];
-                    });
+          controller: searchController,
+          focusNode: searchFocusNode,
+          decoration: InputDecoration(
+            hintText: 'Ara...',
+            border: InputBorder.none,
+          ),
+          autofocus: true,
+          onChanged: (value) async {
+            if (value.isEmpty || value.trim().isEmpty) {
+              setState(() {
+                contentItems = [];
+              });
+            } else {
+              setState(() {
+                isLoading = true;
+                errorMessage = null;
+                contentItems = [];
+              });
 
-                    var liveStreams = await repository.searchLiveStreams(value);
-                    var vodStreams = await repository.searchMovies(value);
-                    var series = await repository.searchSeries(value);
+              var liveStreams = await repository.searchLiveStreams(value);
+              var vodStreams = await repository.searchMovies(value);
+              var series = await repository.searchSeries(value);
 
-                    setState(() {
-                      contentItems = [
-                        ...contentItems,
-                        ...liveStreams.map(
-                          (x) => ContentItem(
-                            x.streamId,
-                            x.name,
-                            x.streamIcon,
-                            ContentType.liveStream,
-                          ),
-                        ),
-                        ...vodStreams.map(
-                          (x) => ContentItem(
-                            x.streamId,
-                            x.name,
-                            x.streamIcon,
-                            ContentType.vod,
-                            containerExtension: x.containerExtension,
-                            vodStream: x,
-                          ),
-                        ),
-                        ...series.map(
-                          (x) => ContentItem(
-                            x.seriesId,
-                            x.name,
-                            x.cover,
-                            ContentType.series,
-                            seriesStream: x,
-                          ),
-                        ),
-                      ];
+              setState(() {
+                contentItems = [
+                  ...contentItems,
+                  ...liveStreams.map(
+                        (x) => ContentItem(
+                      x.streamId,
+                      x.name,
+                      x.streamIcon,
+                      ContentType.liveStream,
+                    ),
+                  ),
+                  ...vodStreams.map(
+                        (x) => ContentItem(
+                      x.streamId,
+                      x.name,
+                      x.streamIcon,
+                      ContentType.vod,
+                      containerExtension: x.containerExtension,
+                      vodStream: x,
+                    ),
+                  ),
+                  ...series.map(
+                        (x) => ContentItem(
+                      x.seriesId,
+                      x.name,
+                      x.cover,
+                      ContentType.series,
+                      seriesStream: x,
+                    ),
+                  ),
+                ];
 
-                      isLoading = false;
-                    });
-                  }
-                },
-              )
+                isLoading = false;
+              });
+            }
+          },
+        )
             : Text('Arama'),
         actions: [
           if (isSearching)
@@ -147,8 +164,8 @@ class _SearchAppBarState extends State<SearchAppBar> {
   }
 
   SliverGridDelegateWithFixedCrossAxisCount _buildGridDelegate(
-    BuildContext context,
-  ) {
+      BuildContext context,
+      ) {
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: ResponsiveHelper.getCrossAxisCount(context),
       childAspectRatio: 0.65,
@@ -158,10 +175,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
   }
 
   Widget _buildContentItem(
-    BuildContext context,
-    int index,
-    List<ContentItem> contentItems,
-  ) {
+      BuildContext context,
+      int index,
+      List<ContentItem> contentItems,
+      ) {
     final contentItem = contentItems[index];
 
     return ContentCard(

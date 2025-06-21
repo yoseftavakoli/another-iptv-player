@@ -51,6 +51,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
   @override
   void initState() {
+    PlayerState.title = widget.contentItem.name;
     WidgetsBinding.instance.addObserver(this);
     _player = Player(configuration: PlayerConfiguration(osc: false));
     watchHistoryService = WatchHistoryService(AppDatabase());
@@ -167,6 +168,10 @@ class _PlayerWidgetState extends State<PlayerWidget>
         ),
       );
     });
+
+    _player.stream.error.listen((error){
+      print('PLAYER ERROR -> $error');
+    });
   }
 
   String _getContentTypeDisplayName() {
@@ -184,16 +189,18 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: Column(
-        children: [
-          // Video Player Container
-          AspectRatio(
-            aspectRatio: widget.aspectRatio ?? 16 / 9,
-            child: _buildPlayerContent(),
-          ),
-        ],
+    return SafeArea(
+      child: Container(
+        color: Colors.black,
+        child: Column(
+          children: [
+            // Video Player Container
+            AspectRatio(
+              aspectRatio: widget.aspectRatio ?? 16 / 9,
+              child: _buildPlayerContent(),
+            ),
+          ],
+        ),
       ),
     );
   }

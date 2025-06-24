@@ -35,7 +35,13 @@ Widget getVideo(BuildContext context, VideoController controller) {
             VideoSettingsWidget(),
           ],
         ),
-        child: Scaffold(body: Video(controller: controller!)),
+        child: Scaffold(
+          body: Video(
+            controller: controller!,
+            resumeUponEnteringForegroundMode: true,
+            pauseUponEnteringBackgroundMode: false,
+          ),
+        ),
       );
     case TargetPlatform.macOS:
     case TargetPlatform.windows:
@@ -61,9 +67,20 @@ Widget getVideo(BuildContext context, VideoController controller) {
             VideoSettingsWidget(),
           ],
         ),
-        child: Scaffold(body: Video(controller: controller!)),
+        child: Scaffold(
+          body: Video(
+            controller: controller!,
+            resumeUponEnteringForegroundMode: true,
+            pauseUponEnteringBackgroundMode: false,
+          ),
+        ),
       );
     default:
-      return Video(controller: controller!, controls: NoVideoControls);
+      return Video(
+        controller: controller!,
+        controls: NoVideoControls,
+        resumeUponEnteringForegroundMode: true,
+        pauseUponEnteringBackgroundMode: false,
+      );
   }
 }

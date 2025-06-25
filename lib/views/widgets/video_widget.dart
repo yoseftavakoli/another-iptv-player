@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iptv_player/services/player_state.dart';
 import 'package:iptv_player/views/widgets/player-buttons/back_button_widget.dart';
 import 'package:iptv_player/views/widgets/player-buttons/video_settings_widget.dart';
+import 'package:iptv_player/views/widgets/player-buttons/video_title.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 Widget getVideo(BuildContext context, VideoController controller) {
@@ -17,7 +18,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           seekOnDoubleTap: true,
           topButtonBar: [
             BackButtonWidget(),
-            Text(PlayerState.title),
+            VideoTitleWidget(),
             Spacer(),
             VideoSettingsWidget(),
           ],
@@ -30,7 +31,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           seekOnDoubleTap: true,
           topButtonBar: [
             BackButtonWidget(),
-            Text(PlayerState.title),
+            VideoTitleWidget(),
             Spacer(),
             VideoSettingsWidget(),
           ],
@@ -52,7 +53,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           toggleFullscreenOnDoublePress: true,
           topButtonBar: [
             BackButtonWidget(),
-            Text(PlayerState.title),
+            VideoTitleWidget(),
             Spacer(),
             VideoSettingsWidget(),
           ],
@@ -62,7 +63,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           toggleFullscreenOnDoublePress: true,
           topButtonBar: [
             BackButtonWidget(),
-            Text(PlayerState.title),
+            VideoTitleWidget(),
             Spacer(),
             VideoSettingsWidget(),
           ],

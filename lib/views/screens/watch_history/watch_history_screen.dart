@@ -258,6 +258,11 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
     try {
       switch (history.contentType) {
         case ContentType.liveStream:
+          var liveStream = await _database.findLiveStreamById(
+            history.streamId,
+            AppState.currentPlaylist!.id,
+          );
+
           navigateByContentType(
             context,
             ContentItem(
@@ -265,6 +270,7 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
               history.title,
               history.imagePath ?? '',
               history.contentType,
+              liveStream: liveStream
             ),
           );
         case ContentType.vod:

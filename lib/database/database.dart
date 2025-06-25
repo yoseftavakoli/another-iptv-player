@@ -1024,6 +1024,17 @@ class AppDatabase extends _$AppDatabase {
     return vodStreamData != null ? VodStream.fromDriftVodStream(vodStreamData) : null;
   }
 
+  Future<LiveStream?> findLiveStreamById(String streamId, String playlistId) async {
+    var liveStreamData = await (select(liveStreams)..where(
+          (tbl) =>
+      tbl.playlistId.equals(playlistId) &
+      tbl.streamId.equals(streamId),
+    ))
+        .getSingleOrNull();
+
+    return liveStreamData != null ? LiveStream.fromDriftLiveStream(liveStreamData) : null;
+  }
+
   // Clear operations
   Future<int> clearSeriesData(String seriesId, String playlistId) async {
     await (delete(episodes)..where(

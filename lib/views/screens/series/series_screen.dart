@@ -91,13 +91,18 @@ class _SeriesScreenState extends State<SeriesScreen> {
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   children: [
-                    Hero(
-                      tag: widget.contentItem.id,
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: _buildCoverImage(),
-                      ),
+                    // Hero(
+                    //   tag: 'series_'+widget.contentItem.id,
+                    //   child: Container(
+                    //     width: double.infinity,
+                    //     height: double.infinity,
+                    //     child: _buildCoverImage(),
+                    //   ),
+                    // ),
+                    Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: _buildCoverImage(),
                     ),
                     Container(
                       decoration: BoxDecoration(

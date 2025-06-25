@@ -20,12 +20,14 @@ class _MovieScreenState extends State<MovieScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Hero(
-              tag: widget.contentItem.id,
-              child: PlayerWidget(
-                playlist: AppState.currentPlaylist!,
-                contentItem: widget.contentItem,
-              ),
+            // Hero(
+            //   tag: 'movie_'+widget.contentItem.id,
+            //   child: PlayerWidget(
+            //     contentItem: widget.contentItem,
+            //   ),
+            // ),
+            PlayerWidget(
+              contentItem: widget.contentItem,
             ),
             Container(
               decoration: BoxDecoration(

@@ -29,13 +29,16 @@ class EpisodeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Hero(
-              tag: contentItem.id,
-              child: PlayerWidget(
-                playlist: AppState.currentPlaylist!,
-                contentItem: contentItem,
-                // watchHistory: watchHistory,
-              ),
+            // Hero(
+            //   tag: 'episode-series_'+contentItem.id,
+            //   child: PlayerWidget(
+            //     contentItem: contentItem,
+            //     // watchHistory: watchHistory,
+            //   ),
+            // ),
+            PlayerWidget(
+              contentItem: contentItem,
+              // watchHistory: watchHistory,
             ),
             Container(
               decoration: BoxDecoration(

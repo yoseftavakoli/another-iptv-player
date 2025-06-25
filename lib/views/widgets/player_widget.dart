@@ -1,24 +1,23 @@
 import 'dart:async';
-import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/models/watch_history.dart';
 import 'package:iptv_player/repositories/user_prefrences.dart';
+import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/services/event_bus.dart';
 import 'package:iptv_player/services/watch_history_service.dart';
 import 'package:iptv_player/views/widgets/video_widget.dart';
-import 'package:media_kit/media_kit.dart' hide Playlist, PlayerState;
+import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:iptv_player/models/playlist_model.dart';
 import '../../models/content_type.dart';
 import '../../services/audio_service_manager.dart';
 import '../../services/player_state.dart';
 import '../../utils/audio_handler.dart';
+import '../../utils/build_media_url.dart';
 
 class PlayerWidget extends StatefulWidget {
-  final Playlist playlist;
   final ContentItem contentItem;
   final double? aspectRatio;
   final bool showControls;
@@ -27,7 +26,6 @@ class PlayerWidget extends StatefulWidget {
 
   const PlayerWidget({
     Key? key,
-    required this.playlist,
     required this.contentItem,
     this.aspectRatio,
     this.showControls = true,
@@ -44,11 +42,15 @@ class _PlayerWidgetState extends State<PlayerWidget>
   late StreamSubscription videoTrackSubscription;
   late StreamSubscription audioTrackSubscription;
   late StreamSubscription subtitleTranckSubscription;
+  late StreamSubscription contentItemIndexChangedSubscription;
 
   late Player _player;
   VideoController? _videoController;
   late WatchHistoryService watchHistoryService;
   MyAudioHandler? _audioHandler;
+  List<ContentItem>? _queue;
+  late ContentItem contentItem;
+
 
   bool isLoading = true;
   bool hasError = false;
@@ -56,6 +58,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
   @override
   void initState() {
+    contentItem = widget.contentItem;
     PlayerState.title = widget.contentItem.name;
     WidgetsBinding.instance.addObserver(this);
     _player = Player(configuration: PlayerConfiguration(osc: false));
@@ -93,45 +96,74 @@ class _PlayerWidgetState extends State<PlayerWidget>
     videoTrackSubscription.cancel();
     audioTrackSubscription.cancel();
     subtitleTranckSubscription.cancel();
+    contentItemIndexChangedSubscription.cancel();
     super.dispose();
+  }
+
+  Future<void> _initializeQueue() async {
+    switch (widget.contentItem.contentType) {
+      case ContentType.liveStream:
+        _queue =
+            (await AppState.repository!.getLiveChannelsByCategoryId(
+              categoryId: widget.contentItem.liveStream!.categoryId,
+            ))!.map((x) {
+              return ContentItem(
+                x.streamId,
+                x.name,
+                x.streamIcon,
+                ContentType.liveStream,
+                liveStream: x,
+              );
+            }).toList();
+      case ContentType.vod:
+      case ContentType.series:
+    }
   }
 
   Future<void> _initializeAudioService() async {
     if (!mounted) return;
+    await _initializeQueue();
+
     _videoController = VideoController(_player);
 
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.music());
     _audioHandler = await AudioServiceManager.instance.getAudioHandler();
 
-    var mediaUrl = buildMediaUrl(widget.playlist, widget.contentItem);
-
     var watchHistory = await watchHistoryService.getWatchHistory(
-      widget.playlist.id,
-      widget.contentItem.id,
+      AppState.currentPlaylist!.id,
+      contentItem.id,
     );
 
-    // Audio handler'a player'ı bağla
     _audioHandler?.setPlayer(_player);
-
     _audioHandler?.setCurrentMediaItem(
-      title: widget.contentItem.name,
+      title: contentItem.name,
       artist: _getContentTypeDisplayName(),
-      artUri: widget.contentItem.imagePath,
+      artUri: contentItem.imagePath,
     );
 
-    await _player.open(
-      Media(mediaUrl, start: watchHistory?.watchDuration ?? Duration()),
-      play: true,
-    );
+    var playlist = _queue?.map((x) {
+      return Media(buildMediaUrl(x));
+    }).toList();
 
-    // try {
-    //   await _player.stream.buffer.first;
-    // } catch (e) {}
+    var mediaUrl = buildMediaUrl(contentItem);
 
-    // await _player.setVideoTrack(VideoTrack.auto());
-    // await _player.setAudioTrack(AudioTrack.auto());
-    // await _player.setSubtitleTrack(SubtitleTrack.auto());
+    if (playlist != null) {
+      var currentItemIndex = playlist.indexOf(
+        Media(buildMediaUrl(contentItem)),
+      );
+      await _player.open(
+        Playlist(playlist, index: currentItemIndex),
+        play: true,
+      );
+    } else {
+      await _player.open(
+        Playlist([
+          Media(mediaUrl, start: watchHistory?.watchDuration ?? Duration()),
+        ]),
+        play: true,
+      );
+    }
 
     _player.stream.tracks.listen((event) async {
       PlayerState.videos = event.video;
@@ -177,20 +209,37 @@ class _PlayerWidgetState extends State<PlayerWidget>
     _player.stream.position.listen((position) async {
       await watchHistoryService.saveWatchHistory(
         WatchHistory(
-          playlistId: widget.playlist.id,
-          contentType: widget.contentItem.contentType,
-          streamId: widget.contentItem.id,
+          playlistId: AppState.currentPlaylist!.id,
+          contentType: contentItem.contentType,
+          streamId: contentItem.id,
           lastWatched: DateTime.now(),
-          title: widget.contentItem.name,
-          imagePath: widget.contentItem.imagePath,
+          title: contentItem.name,
+          imagePath: contentItem.imagePath,
           totalDuration: _player.state.duration,
           watchDuration: position,
         ),
       );
     });
 
-    _player.stream.error.listen((error){
+    _player.stream.error.listen((error) {
       print('PLAYER ERROR -> $error');
+    });
+
+    _player.stream.playlist.listen((playlist) {
+      contentItem = _queue![playlist.index];
+      PlayerState.title = contentItem.name;
+      EventBus().emit('player_content_item', contentItem);
+      EventBus().emit('player_content_item_index', playlist.index);
+    });
+
+    contentItemIndexChangedSubscription = EventBus()
+        .on<int>('player_content_item_index_changed')
+        .listen((int index) {
+          _player.jump(index);
+        });
+
+    setState(() {
+      isLoading = false;
     });
   }
 
@@ -213,18 +262,18 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
     switch (state) {
       case AppLifecycleState.paused:
-      // App arka plana geçti, ses devam etsin
+        // App arka plana geçti, ses devam etsin
         break;
       case AppLifecycleState.resumed:
-      // App ön plana geldi
+        // App ön plana geldi
         break;
       case AppLifecycleState.detached:
-      // App kapanıyor, AudioService'i tamamen kapat
-      //   AudioServiceManager.instance.stopAudioService();
+        // App kapanıyor, AudioService'i tamamen kapat
+        //   AudioServiceManager.instance.stopAudioService();
         break;
       default:
         break;
-        // await _audioHandler?.play();
+      // await _audioHandler?.play();
     }
   }
 
@@ -235,11 +284,11 @@ class _PlayerWidgetState extends State<PlayerWidget>
         color: Colors.black,
         child: Column(
           children: [
-            // Video Player Container
-            AspectRatio(
-              aspectRatio: widget.aspectRatio ?? 16 / 9,
-              child: _buildPlayerContent(),
-            ),
+            if (!isLoading)
+              AspectRatio(
+                aspectRatio: widget.aspectRatio ?? 16 / 9,
+                child: _buildPlayerContent(),
+              ),
           ],
         ),
       ),
@@ -295,16 +344,5 @@ class _PlayerWidgetState extends State<PlayerWidget>
       return '$hours:$minutes:$seconds';
     }
     return '$minutes:$seconds';
-  }
-}
-
-String buildMediaUrl(Playlist playlist, ContentItem contentItem) {
-  switch (contentItem.contentType) {
-    case ContentType.liveStream:
-      return '${playlist.url}/${playlist.username}/${playlist.password}/${contentItem.id}';
-    case ContentType.vod:
-      return '${playlist.url}/movie/${playlist.username}/${playlist.password}/${contentItem.id}.${contentItem.containerExtension!}';
-    case ContentType.series:
-      return '${playlist.url}/series/${playlist.username}/${playlist.password}/${contentItem.id}.${contentItem.containerExtension!}';
   }
 }

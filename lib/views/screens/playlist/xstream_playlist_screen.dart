@@ -42,56 +42,48 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     setState(() {
       _isFormValid =
           _nameController.text.trim().isNotEmpty &&
-          _urlController.text.trim().isNotEmpty &&
-          _usernameController.text.trim().isNotEmpty &&
-          _passwordController.text.trim().isNotEmpty;
+              _urlController.text.trim().isNotEmpty &&
+              _usernameController.text.trim().isNotEmpty &&
+              _passwordController.text.trim().isNotEmpty;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('XStream Playlist'),
-        backgroundColor: Colors.blue,
-        elevation: 0,
       ),
       body: Consumer<PlaylistController>(
         builder: (context, controller, child) {
-          return Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.blue.withOpacity(0.1), Colors.white],
-              ),
-            ),
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(),
-                    SizedBox(height: 32),
-                    _buildPlaylistNameField(),
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(24),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildHeader(colorScheme),
+                  SizedBox(height: 32),
+                  _buildPlaylistNameField(colorScheme),
+                  SizedBox(height: 20),
+                  _buildUrlField(colorScheme),
+                  SizedBox(height: 20),
+                  _buildUsernameField(colorScheme),
+                  SizedBox(height: 20),
+                  _buildPasswordField(colorScheme),
+                  SizedBox(height: 32),
+                  _buildSaveButton(controller, colorScheme),
+                  if (controller.error != null) ...[
                     SizedBox(height: 20),
-                    _buildUrlField(),
-                    SizedBox(height: 20),
-                    _buildUsernameField(),
-                    SizedBox(height: 20),
-                    _buildPasswordField(),
-                    SizedBox(height: 32),
-                    _buildSaveButton(controller),
-                    if (controller.error != null) ...[
-                      SizedBox(height: 20),
-                      _buildErrorCard(controller.error!),
-                    ],
-                    SizedBox(height: 20),
-                    _buildInfoCard(),
+                    _buildErrorCard(controller.error!, colorScheme),
                   ],
-                ),
+                  SizedBox(height: 20),
+                  _buildInfoCard(colorScheme),
+                ],
               ),
             ),
           );
@@ -100,7 +92,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(ColorScheme colorScheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,10 +100,10 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: colorScheme.primary,
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Icon(Icons.stream, size: 30, color: Colors.white),
+          child: Icon(Icons.stream, size: 30, color: colorScheme.onPrimary),
         ),
         SizedBox(height: 16),
         Text(
@@ -119,19 +111,22 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Colors.grey[800],
+            color: colorScheme.onBackground,
           ),
         ),
         SizedBox(height: 8),
         Text(
           'IPTV sağlayıcınızdan aldığınız bilgileri girin',
-          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+          style: TextStyle(
+            fontSize: 16,
+            color: colorScheme.onBackground.withOpacity(0.7),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildPlaylistNameField() {
+  Widget _buildPlaylistNameField(ColorScheme colorScheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -140,7 +135,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Colors.grey[700],
+            color: colorScheme.onBackground,
           ),
         ),
         SizedBox(height: 8),
@@ -148,17 +143,17 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           controller: _nameController,
           decoration: InputDecoration(
             hintText: 'Playlist için bir isim girin',
-            prefixIcon: Icon(Icons.playlist_add, color: Colors.blue),
+            prefixIcon: Icon(Icons.playlist_add, color: colorScheme.primary),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: BorderSide(color: colorScheme.outline),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.blue, width: 2),
+              borderSide: BorderSide(color: colorScheme.primary, width: 2),
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: colorScheme.surface,
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
@@ -174,7 +169,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     );
   }
 
-  Widget _buildUrlField() {
+  Widget _buildUrlField(ColorScheme colorScheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -183,7 +178,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Colors.grey[700],
+            color: colorScheme.onBackground,
           ),
         ),
         SizedBox(height: 8),
@@ -192,17 +187,17 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           keyboardType: TextInputType.url,
           decoration: InputDecoration(
             hintText: 'http://example.com:8080',
-            prefixIcon: Icon(Icons.link, color: Colors.blue),
+            prefixIcon: Icon(Icons.link, color: colorScheme.primary),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: BorderSide(color: colorScheme.outline),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.blue, width: 2),
+              borderSide: BorderSide(color: colorScheme.primary, width: 2),
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: colorScheme.surface,
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
@@ -226,7 +221,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     );
   }
 
-  Widget _buildUsernameField() {
+  Widget _buildUsernameField(ColorScheme colorScheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -235,7 +230,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Colors.grey[700],
+            color: colorScheme.onBackground,
           ),
         ),
         SizedBox(height: 8),
@@ -243,17 +238,17 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           controller: _usernameController,
           decoration: InputDecoration(
             hintText: 'Kullanıcı adınızı girin',
-            prefixIcon: Icon(Icons.person, color: Colors.blue),
+            prefixIcon: Icon(Icons.person, color: colorScheme.primary),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: BorderSide(color: colorScheme.outline),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.blue, width: 2),
+              borderSide: BorderSide(color: colorScheme.primary, width: 2),
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: colorScheme.surface,
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
@@ -269,7 +264,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     );
   }
 
-  Widget _buildPasswordField() {
+  Widget _buildPasswordField(ColorScheme colorScheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -278,7 +273,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Colors.grey[700],
+            color: colorScheme.onBackground,
           ),
         ),
         SizedBox(height: 8),
@@ -287,11 +282,11 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           obscureText: _obscurePassword,
           decoration: InputDecoration(
             hintText: 'Şifrenizi girin',
-            prefixIcon: Icon(Icons.lock, color: Colors.blue),
+            prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                color: Colors.grey[600],
+                color: colorScheme.onBackground.withOpacity(0.6),
               ),
               onPressed: () {
                 setState(() {
@@ -301,14 +296,14 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: BorderSide(color: colorScheme.outline),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.blue, width: 2),
+              borderSide: BorderSide(color: colorScheme.primary, width: 2),
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: colorScheme.surface,
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
@@ -324,7 +319,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     );
   }
 
-  Widget _buildSaveButton(PlaylistController controller) {
+  Widget _buildSaveButton(PlaylistController controller, ColorScheme colorScheme) {
     return Container(
       height: 56,
       child: ElevatedButton(
@@ -332,9 +327,9 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
             ? null
             : (_isFormValid ? _savePlaylist : null),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: Colors.grey[300],
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+          disabledBackgroundColor: colorScheme.onBackground.withOpacity(0.12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -342,49 +337,49 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
         ),
         child: controller.isLoading
             ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    'Kaydediliyor...',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.save, size: 20),
-                  SizedBox(width: 8),
-                  Text(
-                    'Playlist\'i Kaydet',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ],
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(colorScheme.onPrimary),
               ),
+            ),
+            SizedBox(width: 12),
+            Text(
+              'Kaydediliyor...',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ],
+        )
+            : Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.save, size: 20),
+            SizedBox(width: 8),
+            Text(
+              'Playlist\'i Kaydet',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildErrorCard(String error) {
+  Widget _buildErrorCard(String error, ColorScheme colorScheme) {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.1),
+        color: colorScheme.errorContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: colorScheme.error),
       ),
       child: Row(
         children: [
-          Icon(Icons.error_outline, color: Colors.red),
+          Icon(Icons.error_outline, color: colorScheme.error),
           SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -394,13 +389,16 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
                   'Hata Oluştu',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.red[800],
+                    color: colorScheme.onErrorContainer,
                   ),
                 ),
                 SizedBox(height: 4),
                 Text(
                   error,
-                  style: TextStyle(color: Colors.red[700], fontSize: 14),
+                  style: TextStyle(
+                    color: colorScheme.onErrorContainer,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -410,26 +408,26 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     );
   }
 
-  Widget _buildInfoCard() {
+  Widget _buildInfoCard(ColorScheme colorScheme) {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.1),
+        color: colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.blue.withOpacity(0.3)),
+        border: Border.all(color: colorScheme.primary),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.info_outline, color: Colors.blue, size: 20),
+              Icon(Icons.info_outline, color: colorScheme.primary, size: 20),
               SizedBox(width: 8),
               Text(
                 'Bilgi',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue[800],
+                  color: colorScheme.onPrimaryContainer,
                 ),
               ),
             ],
@@ -437,11 +435,11 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           SizedBox(height: 8),
           Text(
             '• Tüm bilgiler güvenli bir şekilde cihazınızda saklanır\n'
-            '• Şifre bilgileri şifrelenmiş olarak korunur\n'
-            '• URL formatı: http://sunucu:port şeklinde olmalıdır\n'
-            '• IPTV sağlayıcınızdan aldığınız bilgileri doğru giriniz',
+                '• Şifre bilgileri şifrelenmiş olarak korunur\n'
+                '• URL formatı: http://sunucu:port şeklinde olmalıdır\n'
+                '• IPTV sağlayıcınızdan aldığınız bilgileri doğru giriniz',
             style: TextStyle(
-              color: Colors.blue[700],
+              color: colorScheme.onPrimaryContainer,
               fontSize: 13,
               height: 1.4,
             ),

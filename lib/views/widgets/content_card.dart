@@ -9,7 +9,6 @@ class ContentCard extends StatelessWidget {
   final double width;
   final VoidCallback? onTap;
   final bool isSelected;
-  final bool heroEnabled;
 
   const ContentCard({
     Key? key,
@@ -17,7 +16,6 @@ class ContentCard extends StatelessWidget {
     required this.width,
     this.onTap,
     this.isSelected = false,
-    this.heroEnabled = true,
   }) : super(key: key);
 
   @override
@@ -59,20 +57,7 @@ class ContentCard extends StatelessWidget {
       ),
     );
 
-    if (heroEnabled) {
-      var heroTag = "";
-      if (content.contentType == ContentType.liveStream) {
-        heroTag = "live_stream_" + content.id;
-      } else if (content.contentType == ContentType.vod) {
-        heroTag = "movie_" + content.id;
-      } else if (content.contentType == ContentType.series) {
-        heroTag = "series_" + content.id;
-      }
-
-      return Hero(tag: heroTag, child: cardWidget);
-    }
-
-    return cardWidget;
+    return Hero(tag: content.id, child: cardWidget);
   }
 
   Widget _buildTitleCard(BuildContext context) {

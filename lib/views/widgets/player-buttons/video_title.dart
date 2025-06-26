@@ -21,11 +21,18 @@ class _VideoTitleWidgetState extends State<VideoTitleWidget> {
     subscription = EventBus().on<ContentItem>('player_content_item').listen((
       ContentItem data,
     ) {
-      setState(() {
-        if(!mounted) return;
-        videoTitle = data.name;
-      });
+      if (mounted) {
+        setState(() {
+          videoTitle = data.name;
+        });
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -37,6 +44,8 @@ class _VideoTitleWidgetState extends State<VideoTitleWidget> {
             ? Colors.white
             : Colors.black,
       ),
+      maxLines: 1,
+      overflow: TextOverflow.clip,
     );
   }
 }

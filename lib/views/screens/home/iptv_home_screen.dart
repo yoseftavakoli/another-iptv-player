@@ -15,6 +15,8 @@ import 'package:iptv_player/views/screens/search/search_screen.dart';
 import 'package:iptv_player/views/widgets/category_section.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/service_locator.dart';
+
 class IPTVHomeScreen extends StatefulWidget {
   final Playlist playlist;
 
@@ -26,6 +28,7 @@ class IPTVHomeScreen extends StatefulWidget {
 
 class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
   late HomeController _controller;
+  final _database = getIt<AppDatabase>();
 
   @override
   void initState() {
@@ -36,7 +39,6 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
         username: widget.playlist.username!,
         password: widget.playlist.password!,
       ),
-      AppDatabase(),
       widget.playlist.id,
     );
 
@@ -74,7 +76,6 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                 controller: controller.pageController,
                 onPageChanged: controller.onPageChanged,
                 children: [
-                  // İzleme geçmişi ekranı eklendi
                   WatchHistoryScreen(playlistId: widget.playlist.id),
                   _buildContentPage(
                     controller.liveCategories!,
@@ -100,7 +101,6 @@ class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
                 onTap: controller.onNavigationTap,
                 type: BottomNavigationBarType.fixed,
                 items: [
-                  // İzleme geçmişi tab'ı eklendi
                   BottomNavigationBarItem(
                     icon: Icon(Icons.history),
                     label: 'Geçmiş',

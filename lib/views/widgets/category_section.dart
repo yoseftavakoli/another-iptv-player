@@ -57,7 +57,7 @@ class CategorySection extends StatelessWidget {
             onContentTap: onContentTap,
             contentItems: category.contentItems,
             isSelectionModeEnabled: false,
-            heroEnabled: false,
+            key: key,
           ),
         ],
       ),

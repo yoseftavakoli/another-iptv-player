@@ -12,7 +12,6 @@ class ContentItemCardWidget extends StatefulWidget {
   final List<ContentItem> contentItems;
   int initialSelectedIndex;
   final bool isSelectionModeEnabled;
-  final bool heroEnabled;
 
   ContentItemCardWidget({
     super.key,
@@ -22,7 +21,6 @@ class ContentItemCardWidget extends StatefulWidget {
     this.onContentTap,
     this.initialSelectedIndex = -1,
     this.isSelectionModeEnabled = false,
-    this.heroEnabled = false
   });
 
   @override
@@ -73,11 +71,11 @@ class _ContentItemCardWidgetState extends State<ContentItemCardWidget> {
   void _scrollToIndex(int index) {
     if (index < 0 || index >= widget.contentItems.length) return;
 
-    if (!_scrollController.hasClients) return; // Controller attach değilse çık
+    if (!_scrollController.hasClients) return;
 
     double screenWidth = MediaQuery.of(context).size.width;
 
-    double cardTotalWidth = widget.cardWidth + 8; // 8 = margin
+    double cardTotalWidth = widget.cardWidth + 8;
     double targetPosition = (cardTotalWidth * index) + (widget.cardWidth / 2) - (screenWidth / 2);
 
     double maxScrollExtent = _scrollController.position.maxScrollExtent;
@@ -103,7 +101,7 @@ class _ContentItemCardWidgetState extends State<ContentItemCardWidget> {
       selectedIndex = index;
     });
 
-    _scrollToIndex(index);
+    // _scrollToIndex(index);
   }
 
   @override
@@ -132,7 +130,7 @@ class _ContentItemCardWidgetState extends State<ContentItemCardWidget> {
                         widget.onContentTap?.call(widget.contentItems[index]);
                       },
                       isSelected: selectedIndex == index,
-                      heroEnabled: widget.heroEnabled,
+                      key: widget.key,
                     ),
                   );
                 },
@@ -155,7 +153,8 @@ class _ContentItemCardWidgetState extends State<ContentItemCardWidget> {
                       widget.onContentTap?.call(widget.contentItems[index]);
                     },
                     isSelected: selectedIndex == index,
-                    heroEnabled: widget.heroEnabled,
+                    key: widget.key,
+
                   ),
                 );
               },

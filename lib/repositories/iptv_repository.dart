@@ -11,12 +11,14 @@ import 'package:iptv_player/models/vod_streams.dart';
 import 'package:iptv_player/models/series.dart';
 import 'package:iptv_player/utils/type_convertions.dart';
 
+import '../services/service_locator.dart';
+
 class IptvRepository {
   final ApiConfig _config;
-  final AppDatabase _database;
   final String _playlistId;
+  final _database = getIt<AppDatabase>();
 
-  IptvRepository(this._config, this._database, this._playlistId);
+  IptvRepository(this._config, this._playlistId);
 
   Future<http.Response> _makeRequest(
     String endpoint, {

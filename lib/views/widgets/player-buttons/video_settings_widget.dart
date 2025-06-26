@@ -35,10 +35,8 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
     selectedSubtitleTrack = PlayerState.selectedSubtitle.language ?? 'Empty';
 
     subscription = EventBus().on<Tracks>('player_tracks').listen((Tracks data) {
-      // Check if the widget is still mounted before calling setState
       if (mounted) {
         setState(() {
-          print('player_tracks' + data.toString());
           videoTracks = data.video;
           audioTracks = data.audio;
           subtitleTracks = data.subtitle;
@@ -49,7 +47,6 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
 
   @override
   void dispose() {
-    // Cancel the subscription to prevent memory leaks and setState calls after dispose
     subscription.cancel();
     super.dispose();
   }
@@ -65,6 +62,11 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
   void _showSettingsBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.9,
+        minHeight: MediaQuery.of(context).size.height * 0.3,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -136,6 +138,11 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
     Navigator.pop(context);
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.9,
+        minHeight: MediaQuery.of(context).size.height * 0.3,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -173,26 +180,32 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                 ],
               ),
               SizedBox(height: 10),
-              ...videoTracks
-                  .map(
-                    (track) => ListTile(
-                      title: Text(track.id),
-                      trailing: selectedVideoTrack == track.id
-                          ? Icon(Icons.check, color: Colors.blue)
-                          : null,
-                      onTap: () {
-                        EventBus().emit('video_track_changed', track);
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: videoTracks
+                        .map(
+                          (track) => ListTile(
+                        title: Text(track.id),
+                        trailing: selectedVideoTrack == track.id
+                            ? Icon(Icons.check, color: Colors.blue)
+                            : null,
+                        onTap: () {
+                          EventBus().emit('video_track_changed', track);
 
-                        if (mounted) {
-                          setState(() {
-                            selectedVideoTrack = track.id;
-                          });
-                        }
-                        Navigator.pop(context);
-                      },
-                    ),
-                  )
-                  .toList(),
+                          if (mounted) {
+                            setState(() {
+                              selectedVideoTrack = track.id;
+                            });
+                          }
+                          Navigator.pop(context);
+                        },
+                      ),
+                    )
+                        .toList(),
+                  ),
+                ),
+              ),
               SizedBox(height: 20),
             ],
           ),
@@ -205,6 +218,11 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
     Navigator.pop(context);
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.9,
+        minHeight: MediaQuery.of(context).size.height * 0.3,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -242,26 +260,32 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                 ],
               ),
               SizedBox(height: 10),
-              ...audioTracks
-                  .map(
-                    (track) => ListTile(
-                      title: Text(track.language ?? 'NULL'),
-                      trailing: selectedAudioTrack == (track.language ?? 'NULL')
-                          ? Icon(Icons.check, color: Colors.blue)
-                          : null,
-                      onTap: () {
-                        EventBus().emit('audio_track_changed', track);
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: audioTracks
+                        .map(
+                          (track) => ListTile(
+                        title: Text(track.language ?? 'NULL'),
+                        trailing: selectedAudioTrack == (track.language ?? 'NULL')
+                            ? Icon(Icons.check, color: Colors.blue)
+                            : null,
+                        onTap: () {
+                          EventBus().emit('audio_track_changed', track);
 
-                        if (mounted) {
-                          setState(() {
-                            selectedAudioTrack = track.language ?? 'NULL';
-                          });
-                        }
-                        Navigator.pop(context);
-                      },
-                    ),
-                  )
-                  .toList(),
+                          if (mounted) {
+                            setState(() {
+                              selectedAudioTrack = track.language ?? 'NULL';
+                            });
+                          }
+                          Navigator.pop(context);
+                        },
+                      ),
+                    )
+                        .toList(),
+                  ),
+                ),
+              ),
               SizedBox(height: 20),
             ],
           ),
@@ -274,6 +298,11 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
     Navigator.pop(context);
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.9,
+        minHeight: MediaQuery.of(context).size.height * 0.3,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -311,27 +340,33 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                 ],
               ),
               SizedBox(height: 10),
-              ...subtitleTracks
-                  .map(
-                    (track) => ListTile(
-                      title: Text(track.language ?? 'NULL'),
-                      trailing:
-                          selectedSubtitleTrack == (track.language ?? 'NULL')
-                          ? Icon(Icons.check, color: Colors.blue)
-                          : null,
-                      onTap: () {
-                        EventBus().emit('subtitle_track_changed', track);
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: subtitleTracks
+                        .map(
+                          (track) => ListTile(
+                        title: Text(track.language ?? 'NULL'),
+                        trailing:
+                        selectedSubtitleTrack == (track.language ?? 'NULL')
+                            ? Icon(Icons.check, color: Colors.blue)
+                            : null,
+                        onTap: () {
+                          EventBus().emit('subtitle_track_changed', track);
 
-                        if (mounted) {
-                          setState(() {
-                            selectedSubtitleTrack = track.language ?? 'NULL';
-                          });
-                        }
-                        Navigator.pop(context);
-                      },
-                    ),
-                  )
-                  .toList(),
+                          if (mounted) {
+                            setState(() {
+                              selectedSubtitleTrack = track.language ?? 'NULL';
+                            });
+                          }
+                          Navigator.pop(context);
+                        },
+                      ),
+                    )
+                        .toList(),
+                  ),
+                ),
+              ),
               SizedBox(height: 20),
             ],
           ),

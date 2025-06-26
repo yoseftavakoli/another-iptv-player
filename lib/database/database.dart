@@ -1139,15 +1139,13 @@ class AppDatabase extends _$AppDatabase {
     },
   );
 
-  // database.dart dosyanızda
   Future<void> deleteDatabase() async {
-    await close(); // Önce bağlantıyı kapat
+    await close();
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'playlists.sqlite'));
 
     if (await file.exists()) {
       await file.delete();
-      print('Database silindi');
     }
   }
 }

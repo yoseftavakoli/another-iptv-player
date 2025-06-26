@@ -38,7 +38,6 @@ class _SeriesScreenState extends State<SeriesScreen> {
         username: AppState.currentPlaylist!.username!,
         password: AppState.currentPlaylist!.password!,
       ),
-      AppDatabase(),
       AppState.currentPlaylist!.id,
     );
   }

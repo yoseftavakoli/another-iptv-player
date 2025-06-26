@@ -12,6 +12,8 @@ import 'package:iptv_player/views/screens/series/episode_screen.dart';
 import 'package:iptv_player/views/screens/watch_history/watch_history_card.dart';
 import 'package:iptv_player/views/screens/watch_history/watch_history_section.dart';
 
+import '../../../services/service_locator.dart';
+
 class WatchHistoryScreen extends StatefulWidget {
   final String playlistId;
 
@@ -25,7 +27,7 @@ class WatchHistoryScreen extends StatefulWidget {
 class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
   late WatchHistoryService _historyService;
   late IptvRepository repository;
-  AppDatabase _database = AppDatabase();
+  final _database = getIt<AppDatabase>();
 
   List<WatchHistory> _continueWatching = [];
   List<WatchHistory> _recentlyWatched = [];
@@ -37,7 +39,7 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
   @override
   void initState() {
     super.initState();
-    _historyService = WatchHistoryService(AppDatabase());
+    _historyService = WatchHistoryService();
     _loadWatchHistory();
     repository = AppState.repository!;
   }

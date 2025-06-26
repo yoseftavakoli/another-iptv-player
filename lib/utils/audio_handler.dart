@@ -1,14 +1,21 @@
-// services/audio_handler.dart
 import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:media_kit/media_kit.dart' hide Playlist;
 
-class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
-  static MyAudioHandler? _instance;
-  // static MyAudioHandler get instance => _instance ??= MyAudioHandler._();
+Future<MyAudioHandler> initAudioService() async {
+  return await AudioService.init(
+    builder: () => MyAudioHandler(),
+    config: const AudioServiceConfig(
+      androidNotificationChannelId: 'dev.ogos.another-iptv-player',
+      androidNotificationChannelName: 'Another IPTV Player',
+      androidNotificationOngoing: false,
+      androidShowNotificationBadge: true,
+      androidStopForegroundOnPause: true,
+    ),
+  );
+}
 
-  // MyAudioHandler._();
-  // Unnamed constructor ekle
+class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   MyAudioHandler();
 
   Player? _player;
@@ -42,28 +49,33 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     _durationSubscription?.cancel();
 
     _positionSubscription = _player!.stream.position.listen((position) {
-      playbackState.add(playbackState.value.copyWith(
-        updatePosition: position,
-        bufferedPosition: position, // updateTime yerine bufferedPosition kullan
-      ));
+      playbackState.add(
+        playbackState.value.copyWith(
+          updatePosition: position,
+          bufferedPosition:
+              position, // updateTime yerine bufferedPosition kullan
+        ),
+      );
     });
 
     _playbackStateSubscription = _player!.stream.playing.listen((playing) {
-      playbackState.add(playbackState.value.copyWith(
-        playing: playing,
-        controls: [
-          MediaControl.skipToPrevious,
-          if (playing) MediaControl.pause else MediaControl.play,
-          MediaControl.skipToNext,
-          MediaControl.stop,
-        ],
-        systemActions: const {
-          MediaAction.seek,
-          MediaAction.seekForward,
-          MediaAction.seekBackward,
-        },
-        processingState: AudioProcessingState.ready,
-      ));
+      playbackState.add(
+        playbackState.value.copyWith(
+          playing: playing,
+          controls: [
+            MediaControl.skipToPrevious,
+            if (playing) MediaControl.pause else MediaControl.play,
+            MediaControl.skipToNext,
+            MediaControl.stop,
+          ],
+          systemActions: const {
+            MediaAction.seek,
+            MediaAction.seekForward,
+            MediaAction.seekBackward,
+          },
+          processingState: AudioProcessingState.ready,
+        ),
+      );
     });
 
     _durationSubscription = _player!.stream.duration.listen((duration) {
@@ -73,20 +85,21 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     });
   }
 
-  // Override edilmiş updateMediaItem metodunu kaldır ve setMediaItem kullan
   void setCurrentMediaItem({
     required String title,
     String? artist,
     String? artUri,
     Duration? duration,
   }) {
-    mediaItem.add(MediaItem(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: title,
-      artist: artist ?? '',
-      artUri: artUri != null ? Uri.parse(artUri) : null,
-      duration: duration,
-    ));
+    mediaItem.add(
+      MediaItem(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: title,
+        artist: artist ?? '',
+        artUri: artUri != null ? Uri.parse(artUri) : null,
+        duration: duration,
+      ),
+    );
   }
 
   @override
@@ -102,10 +115,12 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   @override
   Future<void> stop() async {
     await _player?.stop();
-    playbackState.add(playbackState.value.copyWith(
-      processingState: AudioProcessingState.idle,
-      playing: false,
-    ));
+    playbackState.add(
+      playbackState.value.copyWith(
+        processingState: AudioProcessingState.idle,
+        playing: false,
+      ),
+    );
   }
 
   @override

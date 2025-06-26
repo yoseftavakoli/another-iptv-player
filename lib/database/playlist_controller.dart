@@ -10,7 +10,6 @@ class PlaylistController extends ChangeNotifier {
   List<Playlist> _playlists = [];
   bool _isLoading = false;
   String? _error;
-  AppDatabase _database = AppDatabase();
 
   // Getters
   List<Playlist> get playlists => List.unmodifiable(_playlists);

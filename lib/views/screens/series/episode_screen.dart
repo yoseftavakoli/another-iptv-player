@@ -24,52 +24,51 @@ class EpisodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Hero(
-            //   tag: 'episode-series_'+contentItem.id,
-            //   child: PlayerWidget(
-            //     contentItem: contentItem,
-            //     // watchHistory: watchHistory,
-            //   ),
-            // ),
+            // PlayerWidget scroll edilebilir alandan çıkarıldı
             PlayerWidget(
               contentItem: contentItem,
               // watchHistory: watchHistory,
             ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
-                    Theme.of(context).scaffoldBackgroundColor,
-                  ],
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Kanal Başlığı
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SelectableText(
-                            contentItem.name,
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
+
+            // Expanded widget ile kalan alanı kaplıyor ve scroll edilebilir
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
+                        Theme.of(context).scaffoldBackgroundColor,
                       ],
                     ),
-                    const SizedBox(height: 24),
-                  ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Kanal Başlığı
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SelectableText(
+                                contentItem.name,
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),

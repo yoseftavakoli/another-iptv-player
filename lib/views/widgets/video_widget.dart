@@ -18,8 +18,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           seekOnDoubleTap: true,
           topButtonBar: [
             BackButtonWidget(),
-            VideoTitleWidget(),
-            Spacer(),
+            Expanded(child: VideoTitleWidget()),
             VideoSettingsWidget(),
           ],
         ),
@@ -31,8 +30,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           seekOnDoubleTap: true,
           topButtonBar: [
             BackButtonWidget(),
-            VideoTitleWidget(),
-            Spacer(),
+            Expanded(child: VideoTitleWidget()),
             VideoSettingsWidget(),
           ],
         ),
@@ -53,8 +51,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           toggleFullscreenOnDoublePress: true,
           topButtonBar: [
             BackButtonWidget(),
-            VideoTitleWidget(),
-            Spacer(),
+            Expanded(child: VideoTitleWidget()),
             VideoSettingsWidget(),
           ],
         ),
@@ -63,8 +60,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           toggleFullscreenOnDoublePress: true,
           topButtonBar: [
             BackButtonWidget(),
-            VideoTitleWidget(),
-            Spacer(),
+            Expanded(child: VideoTitleWidget()),
             VideoSettingsWidget(),
           ],
         ),

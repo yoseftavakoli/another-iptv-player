@@ -15,120 +15,120 @@ class _MovieScreenState extends State<MovieScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Hero(
-            //   tag: 'movie_'+widget.contentItem.id,
-            //   child: PlayerWidget(
-            //     contentItem: widget.contentItem,
-            //   ),
-            // ),
+            // PlayerWidget scroll edilebilir alandan çıkarıldı
             PlayerWidget(
               contentItem: widget.contentItem,
             ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
-                    Theme.of(context).scaffoldBackgroundColor,
-                  ],
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Kanal Başlığı
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            widget.contentItem.name,
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        ...List.generate(5, (index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Icon(
-                              index <
-                                      (widget
-                                              .contentItem
-                                              .vodStream!
-                                              .rating5based
-                                              ?.round() ??
-                                          0)
-                                  ? Icons.star_rounded
-                                  : Icons.star_outline_rounded,
-                              color: Colors.amber,
-                              size: 24,
-                            ),
-                          );
-                        }),
-                        const SizedBox(width: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.amber.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            '${widget.contentItem.vodStream!.rating5based?.toStringAsFixed(1) ?? '0.0'}/5',
-                            style: TextStyle(
-                              color: Colors.amber.shade700,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
+
+            // Expanded widget ile kalan alanı kaplıyor ve scroll edilebilir
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
+                        Theme.of(context).scaffoldBackgroundColor,
                       ],
                     ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Kanal Başlığı
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.contentItem.name,
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            ...List.generate(5, (index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: Icon(
+                                  index <
+                                      (widget
+                                          .contentItem
+                                          .vodStream!
+                                          .rating5based
+                                          ?.round() ??
+                                          0)
+                                      ? Icons.star_rounded
+                                      : Icons.star_outline_rounded,
+                                  color: Colors.amber,
+                                  size: 24,
+                                ),
+                              );
+                            }),
+                            const SizedBox(width: 12),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.amber.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                '${widget.contentItem.vodStream!.rating5based?.toStringAsFixed(1) ?? '0.0'}/5',
+                                style: TextStyle(
+                                  color: Colors.amber.shade700,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
 
-                    const SizedBox(height: 12),
-                    _buildDetailCard(
-                      icon: Icons.calendar_today,
-                      title: 'Eklenme Tarihi',
-                      value: _formatDate('1746225795'),
-                    ),
-                    const SizedBox(height: 12),
+                        const SizedBox(height: 12),
+                        _buildDetailCard(
+                          icon: Icons.calendar_today,
+                          title: 'Eklenme Tarihi',
+                          value: _formatDate('1746225795'),
+                        ),
+                        const SizedBox(height: 12),
 
-                    _buildDetailCard(
-                      icon: Icons.category,
-                      title: 'Kategori ID',
-                      value:
+                        _buildDetailCard(
+                          icon: Icons.category,
+                          title: 'Kategori ID',
+                          value:
                           widget.contentItem.vodStream?.categoryId ??
-                          'Belirtilmemiş',
-                    ),
-                    const SizedBox(height: 12),
+                              'Belirtilmemiş',
+                        ),
+                        const SizedBox(height: 12),
 
-                    _buildDetailCard(
-                      icon: Icons.tag,
-                      title: 'Stream ID',
-                      value: widget.contentItem.id.toString(),
-                    ),
-                    const SizedBox(height: 12),
+                        _buildDetailCard(
+                          icon: Icons.tag,
+                          title: 'Stream ID',
+                          value: widget.contentItem.id.toString(),
+                        ),
+                        const SizedBox(height: 12),
 
-                    _buildDetailCard(
-                      icon: Icons.video_file,
-                      title: 'Format',
-                      value:
+                        _buildDetailCard(
+                          icon: Icons.video_file,
+                          title: 'Format',
+                          value:
                           widget.contentItem.containerExtension
                               ?.toUpperCase() ??
-                          'Bilinmiyor',
+                              'Bilinmiyor',
+                        ),
+                        const SizedBox(height: 12),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -200,5 +200,4 @@ class _MovieScreenState extends State<MovieScreen> {
       return 'Bilinmiyor';
     }
   }
-
 }

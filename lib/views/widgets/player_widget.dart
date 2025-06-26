@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
-import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/models/watch_history.dart';
 import 'package:iptv_player/repositories/user_prefrences.dart';
@@ -12,8 +11,8 @@ import 'package:iptv_player/views/widgets/video_widget.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
 import '../../models/content_type.dart';
-import '../../services/audio_service_manager.dart';
 import '../../services/player_state.dart';
+import '../../services/service_locator.dart';
 import '../../utils/audio_handler.dart';
 import '../../utils/build_media_url.dart';
 
@@ -47,10 +46,9 @@ class _PlayerWidgetState extends State<PlayerWidget>
   late Player _player;
   VideoController? _videoController;
   late WatchHistoryService watchHistoryService;
-  MyAudioHandler? _audioHandler;
+  final MyAudioHandler _audioHandler = getIt<MyAudioHandler>();
   List<ContentItem>? _queue;
   late ContentItem contentItem;
-
 
   bool isLoading = true;
   bool hasError = false;
@@ -62,7 +60,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
     PlayerState.title = widget.contentItem.name;
     WidgetsBinding.instance.addObserver(this);
     _player = Player(configuration: PlayerConfiguration(osc: false));
-    watchHistoryService = WatchHistoryService(AppDatabase());
+    watchHistoryService = WatchHistoryService();
 
     super.initState();
     videoTrackSubscription = EventBus()
@@ -92,7 +90,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
   @override
   void dispose() {
     _player.dispose();
-    _audioHandler?.setPlayer(null);
+    _audioHandler.setPlayer(null);
     videoTrackSubscription.cancel();
     audioTrackSubscription.cancel();
     subtitleTranckSubscription.cancel();
@@ -122,25 +120,25 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
   Future<void> _initializeAudioService() async {
     if (!mounted) return;
+
+
+    _audioHandler.setPlayer(_player);
+    // _audioHandler.setCurrentMediaItem(
+    //   title: contentItem.name,
+    //   artist: _getContentTypeDisplayName(),
+    //   artUri: contentItem.imagePath,
+    // );
+
     await _initializeQueue();
+    if (!mounted) return;
 
     _videoController = VideoController(_player);
-
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.music());
-    _audioHandler = await AudioServiceManager.instance.getAudioHandler();
 
     var watchHistory = await watchHistoryService.getWatchHistory(
       AppState.currentPlaylist!.id,
       contentItem.id,
     );
-
-    _audioHandler?.setPlayer(_player);
-    _audioHandler?.setCurrentMediaItem(
-      title: contentItem.name,
-      artist: _getContentTypeDisplayName(),
-      artUri: contentItem.imagePath,
-    );
+    if (!mounted) return; // Check after async operation
 
     var playlist = _queue?.map((x) {
       return Media(buildMediaUrl(x));
@@ -164,8 +162,11 @@ class _PlayerWidgetState extends State<PlayerWidget>
         play: true,
       );
     }
+    if (!mounted) return; // Check after async operation
 
     _player.stream.tracks.listen((event) async {
+      if (!mounted) return; // Check in stream listener
+
       PlayerState.videos = event.video;
       PlayerState.audios = event.audio;
       PlayerState.subtitles = event.subtitle;
@@ -194,6 +195,8 @@ class _PlayerWidgetState extends State<PlayerWidget>
     });
 
     _player.stream.track.listen((event) async {
+      if (!mounted) return; // Check in stream listener
+
       PlayerState.selectedVideo = _player.state.track.video;
       PlayerState.selectedAudio = _player.state.track.audio;
       PlayerState.selectedSubtitle = _player.state.track.subtitle;
@@ -226,7 +229,9 @@ class _PlayerWidgetState extends State<PlayerWidget>
     });
 
     _player.stream.playlist.listen((playlist) {
-      contentItem = _queue![playlist.index];
+      if (!mounted) return; // Check in stream listener
+
+      contentItem = _queue?[playlist.index] ?? widget.contentItem;
       PlayerState.title = contentItem.name;
       EventBus().emit('player_content_item', contentItem);
       EventBus().emit('player_content_item_index', playlist.index);
@@ -238,9 +243,11 @@ class _PlayerWidgetState extends State<PlayerWidget>
           _player.jump(index);
         });
 
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   String _getContentTypeDisplayName() {
@@ -279,18 +286,22 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        color: Colors.black,
-        child: Column(
-          children: [
-            if (!isLoading)
-              AspectRatio(
-                aspectRatio: widget.aspectRatio ?? 16 / 9,
-                child: _buildPlayerContent(),
-              ),
-          ],
-        ),
+    return Container(
+      color: Colors.black,
+      child: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: widget.aspectRatio ?? 16 / 9,
+            child: isLoading
+                ? Container(
+                    color: Colors.black,
+                    child: const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  )
+                : _buildPlayerContent(),
+          ),
+        ],
       ),
     );
   }

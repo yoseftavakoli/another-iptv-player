@@ -6,6 +6,7 @@ import 'package:iptv_player/models/api_configuration_model.dart';
 import 'package:iptv_player/models/playlist_model.dart';
 import 'package:iptv_player/models/progress_step.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
+import 'package:iptv_player/services/service_locator.dart';
 import 'package:iptv_player/views/screens/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -91,7 +92,6 @@ class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
         username: widget.playlist.username!,
         password: widget.playlist.password!,
       ),
-      AppDatabase(),
       widget.playlist.id,
     );
     _controller = IptvController(repository, widget.refreshAll);
@@ -117,7 +117,7 @@ class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
       _waveAnimationController.stop();
       await Future.delayed(Duration(milliseconds: 800));
 
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider.value(
@@ -125,6 +125,7 @@ class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
             child: HomeScreen(),
           ),
         ),
+        (route) => false,
       );
     }
   }
@@ -418,11 +419,12 @@ class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
                                   SizedBox(height: 16),
                                   ElevatedButton(
                                     onPressed: () {
-                                      Navigator.pushReplacement(
+                                      Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => HomeScreen(),
                                         ),
+                                        (route) => false,
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(

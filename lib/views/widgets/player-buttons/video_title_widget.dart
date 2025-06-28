@@ -40,9 +40,7 @@ class _VideoTitleWidgetState extends State<VideoTitleWidget> {
     return Text(
       videoTitle,
       style: TextStyle(
-        color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white
-            : Colors.black,
+        color:  Colors.white,
       ),
       maxLines: 1,
       overflow: TextOverflow.clip,

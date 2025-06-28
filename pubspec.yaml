@@ -29,13 +29,11 @@ dependencies:
       path: libs/universal/media_kit_libs_video
       ref: main
 
-
   provider: ^6.1.1
   drift: ^2.26.1
   sqlite3_flutter_libs: ^0.5.34
   cupertino_icons: ^1.0.8
   http: ^1.4.0
-  # screen_brightness: ^2.1.4
   cached_network_image: ^3.4.1
   audio_service: ^0.18.12
   just_audio: ^0.10.4
@@ -46,7 +44,6 @@ dependencies:
   shared_preferences: ^2.5.3
   audio_session: ^0.2.2
 
-# Tüm media-kit paketleri için dependency override
 dependency_overrides:
   media_kit:
     git:

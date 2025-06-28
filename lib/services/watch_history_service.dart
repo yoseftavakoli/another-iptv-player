@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/content_type.dart';
 import 'package:iptv_player/models/watch_history.dart';
+import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/services/service_locator.dart';
 
 class WatchHistoryService {
@@ -41,18 +42,22 @@ class WatchHistoryService {
   }
 
   Future<List<WatchHistory>> getWatchHistoryByContentType(
-    ContentType contentType,
+    ContentType contentType, String playlistId
   ) async {
     final query = _database.select(_database.watchHistories)
-      ..where((tbl) => tbl.contentType.equals(contentType.index))
+      ..where((tbl) => tbl.contentType.equals(contentType.index) & tbl.playlistId.equals(playlistId))
       ..orderBy([(tbl) => OrderingTerm.desc(tbl.lastWatched)]);
 
     final results = await query.get();
     return results.map((data) => WatchHistory.fromDrift(data)).toList();
   }
 
-  Future<List<WatchHistory>> getRecentlyWatched({int limit = 10}) async {
+  Future<List<WatchHistory>> getRecentlyWatched(
+    String playlistId, {
+    int limit = 10,
+  }) async {
     final query = _database.select(_database.watchHistories)
+      ..where((tbl) => tbl.playlistId.equals(playlistId))
       ..orderBy([(tbl) => OrderingTerm.desc(tbl.lastWatched)])
       ..limit(limit);
 
@@ -60,12 +65,14 @@ class WatchHistoryService {
     return results.map((data) => WatchHistory.fromDrift(data)).toList();
   }
 
-  Future<List<WatchHistory>> getContinueWatching() async {
+  Future<List<WatchHistory>> getContinueWatching(String playlistId) async {
     final query = _database.select(_database.watchHistories)
       ..where(
-        (tbl) => tbl.watchDuration.isNotNull() & tbl.totalDuration.isNotNull(),
-        // tbl.watchDuration * 10 <tbl.totalDuration * 9,
-      ) // %90'dan az
+        (tbl) =>
+            tbl.watchDuration.isNotNull() &
+            tbl.totalDuration.isNotNull() &
+            tbl.playlistId.equals(playlistId),
+      )
       ..orderBy([(tbl) => OrderingTerm.desc(tbl.lastWatched)]);
 
     final results = await query.get();

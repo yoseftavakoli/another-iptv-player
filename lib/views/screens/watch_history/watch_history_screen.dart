@@ -46,14 +46,23 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
 
   Future<void> _loadWatchHistory() async {
     setState(() => _isLoading = true);
-
+    var playlistId = AppState.currentPlaylist!.id;
     try {
       final futures = await Future.wait([
-        _historyService.getContinueWatching(),
-        _historyService.getRecentlyWatched(limit: 20),
-        _historyService.getWatchHistoryByContentType(ContentType.liveStream),
-        _historyService.getWatchHistoryByContentType(ContentType.vod),
-        _historyService.getWatchHistoryByContentType(ContentType.series),
+        _historyService.getContinueWatching(playlistId),
+        _historyService.getRecentlyWatched(limit: 20, playlistId),
+        _historyService.getWatchHistoryByContentType(
+          ContentType.liveStream,
+          playlistId,
+        ),
+        _historyService.getWatchHistoryByContentType(
+          ContentType.vod,
+          playlistId,
+        ),
+        _historyService.getWatchHistoryByContentType(
+          ContentType.series,
+          playlistId,
+        ),
       ]);
 
       setState(() {
@@ -272,7 +281,7 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
               history.title,
               history.imagePath ?? '',
               history.contentType,
-              liveStream: liveStream
+              liveStream: liveStream,
             ),
           );
         case ContentType.vod:
@@ -288,7 +297,7 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
               history.imagePath ?? '',
               history.contentType,
               containerExtension: movie!.containerExtension,
-              vodStream: movie
+              vodStream: movie,
             ),
           );
         case ContentType.series:

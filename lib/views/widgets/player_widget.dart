@@ -121,7 +121,6 @@ class _PlayerWidgetState extends State<PlayerWidget>
   Future<void> _initializeAudioService() async {
     if (!mounted) return;
 
-
     _audioHandler.setPlayer(_player);
     // _audioHandler.setCurrentMediaItem(
     //   title: contentItem.name,
@@ -286,21 +285,60 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isTablet = screenSize.shortestSide >= 600;
+    final isLandscape = screenSize.width > screenSize.height;
+    double calculateAspectRatio() {
+      if (widget.aspectRatio != null) return widget.aspectRatio!;
+
+      if (isTablet) {
+        // Tablet için daha küçük player
+        return isLandscape ? 21 / 9 : 16 / 9;
+      }
+      return 16 / 9;
+    }
+
+    // Tablet için maksimum yükseklik belirle
+    double? calculateMaxHeight() {
+      if (isTablet) {
+        if (isLandscape) {
+          return screenSize.height * 0.6; // Landscape'de ekranın %60'ı
+        } else {
+          return screenSize.height * 0.4; // Portrait'te ekranın %40'ı
+        }
+      }
+      return null;
+    }
+
+
+    Widget playerWidget = AspectRatio(
+      aspectRatio: calculateAspectRatio(),
+      child: isLoading
+          ? Container(
+        color: Colors.black,
+        child: const Center(
+          child: CircularProgressIndicator(color: Colors.white),
+        ),
+      )
+          : _buildPlayerContent(),
+    );
+
+    // Tablet için maksimum yükseklik uygula
+    if (isTablet) {
+      final maxHeight = calculateMaxHeight();
+      if (maxHeight != null) {
+        playerWidget = ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: maxHeight),
+          child: playerWidget,
+        );
+      }
+    }
+
     return Container(
       color: Colors.black,
       child: Column(
         children: [
-          AspectRatio(
-            aspectRatio: widget.aspectRatio ?? 16 / 9,
-            child: isLoading
-                ? Container(
-                    color: Colors.black,
-                    child: const Center(
-                      child: CircularProgressIndicator(color: Colors.white),
-                    ),
-                  )
-                : _buildPlayerContent(),
-          ),
+          playerWidget,
         ],
       ),
     );

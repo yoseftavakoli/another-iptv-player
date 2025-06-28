@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/models/watch_history.dart';
-import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/views/widgets/player_widget.dart';
 
 class EpisodeScreen extends StatelessWidget {
@@ -28,46 +27,28 @@ class EpisodeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // PlayerWidget scroll edilebilir alandan çıkarıldı
-            PlayerWidget(
-              contentItem: contentItem,
-              // watchHistory: watchHistory,
-            ),
-
-            // Expanded widget ile kalan alanı kaplıyor ve scroll edilebilir
+            PlayerWidget(contentItem: contentItem),
             Expanded(
               child: SingleChildScrollView(
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
-                        Theme.of(context).scaffoldBackgroundColor,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Kanal Başlığı
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SelectableText(
-                                contentItem.name,
-                                style: Theme.of(context).textTheme.headlineSmall
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Kanal Başlığı
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SelectableText(
+                              contentItem.name,
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                    ],
                   ),
                 ),
               ),

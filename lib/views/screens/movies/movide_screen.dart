@@ -19,26 +19,12 @@ class _MovieScreenState extends State<MovieScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // PlayerWidget scroll edilebilir alandan çıkarıldı
             PlayerWidget(
               contentItem: widget.contentItem,
             ),
-
-            // Expanded widget ile kalan alanı kaplıyor ve scroll edilebilir
             Expanded(
               child: SingleChildScrollView(
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
-                        Theme.of(context).scaffoldBackgroundColor,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
+                child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +117,6 @@ class _MovieScreenState extends State<MovieScreen> {
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

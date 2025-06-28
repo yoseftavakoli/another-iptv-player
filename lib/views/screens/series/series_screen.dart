@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/database/database.dart';
-import 'package:iptv_player/models/api_configuration_model.dart';
-import 'package:iptv_player/models/content_type.dart';
-import 'package:iptv_player/models/playlist_content_model.dart';
-import 'package:iptv_player/services/app_state.dart';
-import 'package:iptv_player/repositories/iptv_repository.dart';
-import 'package:iptv_player/views/screens/series/episode_screen.dart';
+import 'package:another_iptv_player/database/database.dart';
+import 'package:another_iptv_player/models/api_configuration_model.dart';
+import 'package:another_iptv_player/models/content_type.dart';
+import 'package:another_iptv_player/models/playlist_content_model.dart';
+import 'package:another_iptv_player/services/app_state.dart';
+import 'package:another_iptv_player/repositories/iptv_repository.dart';
+import 'package:another_iptv_player/views/screens/series/episode_screen.dart';
 
 class SeriesScreen extends StatefulWidget {
   final ContentItem contentItem;
@@ -90,19 +90,19 @@ class _SeriesScreenState extends State<SeriesScreen> {
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   children: [
-                    // Hero(
-                    //   tag: 'series_'+widget.contentItem.id,
-                    //   child: Container(
-                    //     width: double.infinity,
-                    //     height: double.infinity,
-                    //     child: _buildCoverImage(),
-                    //   ),
-                    // ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: _buildCoverImage(),
+                    Hero(
+                      tag: widget.contentItem.id,
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: _buildCoverImage(),
+                      ),
                     ),
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   height: double.infinity,
+                    //   child: _buildCoverImage(),
+                    // ),
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(

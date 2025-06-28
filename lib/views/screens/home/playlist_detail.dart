@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/models/api_response.dart';
-import 'package:iptv_player/models/playlist_model.dart';
-import 'package:iptv_player/repositories/user_prefrences.dart';
-import 'package:iptv_player/services/app_state.dart';
-import 'package:iptv_player/views/screens/home/home_screen.dart';
-import 'package:iptv_player/views/screens/series/progress_loading_screen.dart';
+import 'package:another_iptv_player/models/api_response.dart';
+import 'package:another_iptv_player/models/playlist_model.dart';
+import 'package:another_iptv_player/repositories/user_prefrences.dart';
+import 'package:another_iptv_player/services/app_state.dart';
+import 'package:another_iptv_player/views/screens/home/home_screen.dart';
+import 'package:another_iptv_player/views/screens/series/progress_loading_screen.dart';
 
 class PlaylistSettingsScreen extends StatefulWidget {
   final Playlist playlist;

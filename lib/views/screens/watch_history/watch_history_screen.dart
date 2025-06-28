@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/database/database.dart';
-import 'package:iptv_player/models/content_type.dart';
-import 'package:iptv_player/models/playlist_content_model.dart';
-import 'package:iptv_player/models/watch_history.dart';
-import 'package:iptv_player/repositories/iptv_repository.dart';
-import 'package:iptv_player/services/app_state.dart';
-import 'package:iptv_player/services/watch_history_service.dart';
-import 'package:iptv_player/utils/navigate_by_content_type.dart';
-import 'package:iptv_player/utils/responsive_helper.dart';
-import 'package:iptv_player/views/screens/series/episode_screen.dart';
-import 'package:iptv_player/views/screens/watch_history/watch_history_card.dart';
-import 'package:iptv_player/views/screens/watch_history/watch_history_section.dart';
+import 'package:another_iptv_player/database/database.dart';
+import 'package:another_iptv_player/models/content_type.dart';
+import 'package:another_iptv_player/models/playlist_content_model.dart';
+import 'package:another_iptv_player/models/watch_history.dart';
+import 'package:another_iptv_player/repositories/iptv_repository.dart';
+import 'package:another_iptv_player/services/app_state.dart';
+import 'package:another_iptv_player/services/watch_history_service.dart';
+import 'package:another_iptv_player/utils/navigate_by_content_type.dart';
+import 'package:another_iptv_player/utils/responsive_helper.dart';
+import 'package:another_iptv_player/views/screens/series/episode_screen.dart';
+import 'package:another_iptv_player/views/screens/watch_history/watch_history_card.dart';
+import 'package:another_iptv_player/views/screens/watch_history/watch_history_section.dart';
 
 import '../../../services/service_locator.dart';
 
@@ -178,7 +178,6 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
             //       _showAllHistory('Son İzlenen', _recentlyWatched),
             // ),
 
-            // Canlı Yayınlar
             WatchHistorySection(
               title: 'Canlı Yayınlar',
               histories: _liveHistory,
@@ -190,7 +189,6 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
                   _showAllHistory('Canlı Yayınlar', _liveHistory),
             ),
 
-            // Filmler
             WatchHistorySection(
               title: 'Filmler',
               histories: _movieHistory,
@@ -202,7 +200,6 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
               onSeeAllTap: () => _showAllHistory('Filmler', _movieHistory),
             ),
 
-            // Diziler
             WatchHistorySection(
               title: 'Diziler',
               histories: _seriesHistory,

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:iptv_player/services/event_bus.dart';
-import 'package:iptv_player/services/player_state.dart';
+import 'package:another_iptv_player/services/event_bus.dart';
+import 'package:another_iptv_player/services/player_state.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState;
 
 class VideoSettingsWidget extends StatefulWidget {

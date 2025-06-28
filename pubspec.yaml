@@ -1,4 +1,4 @@
-name: iptv_player
+name: another_iptv_player
 description: "Another IPTV Player"
 publish_to: "none"
 
@@ -16,13 +16,11 @@ dependencies:
       url: https://github.com/media-kit/media-kit.git
       path: media_kit
       ref: main
-
   media_kit_video:
     git:
       url: https://github.com/media-kit/media-kit.git
       path: media_kit_video
       ref: main
-
   media_kit_libs_video:
     git:
       url: https://github.com/media-kit/media-kit.git

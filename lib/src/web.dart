@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
-import 'package:iptv_player/src/connect.dart';
+import 'package:another_iptv_player/src/connect.dart';
 
 QueryExecutor driftDatabase({
   required String name,

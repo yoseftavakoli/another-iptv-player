@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart' hide Category;
-import 'package:iptv_player/models/api_response.dart';
-import 'package:iptv_player/models/category.dart';
-import 'package:iptv_player/models/live_stream.dart';
-import 'package:iptv_player/models/vod_streams.dart';
-import 'package:iptv_player/models/progress_step.dart';
-import 'package:iptv_player/models/series.dart';
-import 'package:iptv_player/repositories/iptv_repository.dart';
+import 'package:another_iptv_player/models/api_response.dart';
+import 'package:another_iptv_player/models/category.dart';
+import 'package:another_iptv_player/models/live_stream.dart';
+import 'package:another_iptv_player/models/vod_streams.dart';
+import 'package:another_iptv_player/models/progress_step.dart';
+import 'package:another_iptv_player/models/series.dart';
+import 'package:another_iptv_player/repositories/iptv_repository.dart';
 
 class IptvController extends ChangeNotifier {
   final IptvRepository _repository;

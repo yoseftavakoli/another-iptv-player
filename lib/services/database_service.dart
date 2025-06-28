@@ -1,4 +1,4 @@
-import 'package:iptv_player/services/service_locator.dart';
+import 'package:another_iptv_player/services/service_locator.dart';
 
 import '../database/database.dart';
 import '../models/playlist_model.dart';

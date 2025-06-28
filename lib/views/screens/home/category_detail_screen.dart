@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/models/category.dart';
-import 'package:iptv_player/models/category_view_model.dart';
-import 'package:iptv_player/models/content_type.dart';
-import 'package:iptv_player/models/playlist_content_model.dart';
-import 'package:iptv_player/services/app_state.dart';
-import 'package:iptv_player/utils/navigate_by_content_type.dart';
-import 'package:iptv_player/utils/responsive_helper.dart';
-import 'package:iptv_player/views/widgets/content_card.dart';
+import 'package:another_iptv_player/models/category.dart';
+import 'package:another_iptv_player/models/category_view_model.dart';
+import 'package:another_iptv_player/models/content_type.dart';
+import 'package:another_iptv_player/models/playlist_content_model.dart';
+import 'package:another_iptv_player/services/app_state.dart';
+import 'package:another_iptv_player/utils/navigate_by_content_type.dart';
+import 'package:another_iptv_player/utils/responsive_helper.dart';
+import 'package:another_iptv_player/views/widgets/content_card.dart';
 
 class CategoryDetailScreen extends StatefulWidget {
   final CategoryViewModel category;

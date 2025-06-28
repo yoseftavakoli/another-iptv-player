@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:iptv_player/models/playlist_content_model.dart';
-import 'package:iptv_player/models/watch_history.dart';
-import 'package:iptv_player/repositories/user_prefrences.dart';
-import 'package:iptv_player/services/app_state.dart';
-import 'package:iptv_player/services/event_bus.dart';
-import 'package:iptv_player/services/watch_history_service.dart';
-import 'package:iptv_player/views/widgets/video_widget.dart';
+import 'package:another_iptv_player/models/playlist_content_model.dart';
+import 'package:another_iptv_player/models/watch_history.dart';
+import 'package:another_iptv_player/repositories/user_prefrences.dart';
+import 'package:another_iptv_player/services/app_state.dart';
+import 'package:another_iptv_player/services/event_bus.dart';
+import 'package:another_iptv_player/services/watch_history_service.dart';
+import 'package:another_iptv_player/views/widgets/video_widget.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
 import '../../models/content_type.dart';
@@ -35,8 +35,7 @@ class PlayerWidget extends StatefulWidget {
   State<PlayerWidget> createState() => _PlayerWidgetState();
 }
 
-class _PlayerWidgetState extends State<PlayerWidget>
-    with WidgetsBindingObserver {
+class _PlayerWidgetState extends State<PlayerWidget> {
   late StreamSubscription videoTrackSubscription;
   late StreamSubscription audioTrackSubscription;
   late StreamSubscription subtitleTranckSubscription;
@@ -57,7 +56,6 @@ class _PlayerWidgetState extends State<PlayerWidget>
   void initState() {
     contentItem = widget.contentItem;
     PlayerState.title = widget.contentItem.name;
-    WidgetsBinding.instance.addObserver(this);
     _player = Player(configuration: PlayerConfiguration(osc: false));
     watchHistoryService = WatchHistoryService();
 
@@ -258,27 +256,6 @@ class _PlayerWidgetState extends State<PlayerWidget>
         return 'Dizi';
       default:
         return 'Video';
-    }
-  }
-
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    super.didChangeAppLifecycleState(state);
-
-    switch (state) {
-      case AppLifecycleState.paused:
-        // App arka plana geçti, ses devam etsin
-        break;
-      case AppLifecycleState.resumed:
-        // App ön plana geldi
-        break;
-      case AppLifecycleState.detached:
-        // App kapanıyor, AudioService'i tamamen kapat
-        //   AudioServiceManager.instance.stopAudioService();
-        break;
-      default:
-        break;
-      // await _audioHandler?.play();
     }
   }
 

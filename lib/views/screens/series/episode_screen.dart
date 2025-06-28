@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/database/database.dart';
-import 'package:iptv_player/models/playlist_content_model.dart';
-import 'package:iptv_player/models/watch_history.dart';
-import 'package:iptv_player/views/widgets/player_widget.dart';
+import 'package:another_iptv_player/database/database.dart';
+import 'package:another_iptv_player/models/playlist_content_model.dart';
+import 'package:another_iptv_player/models/watch_history.dart';
+import 'package:another_iptv_player/views/widgets/player_widget.dart';
 
-class EpisodeScreen extends StatelessWidget {
+class EpisodeScreen extends StatefulWidget {
   final SeriesInfosData? seriesInfo;
   final List<SeasonsData> seasons;
   final List<EpisodesData> episodes;
@@ -21,13 +21,20 @@ class EpisodeScreen extends StatelessWidget {
   });
 
   @override
+  State<EpisodeScreen> createState() => _EpisodeScreenState();
+}
+
+class _EpisodeScreenState extends State<EpisodeScreen> {
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            PlayerWidget(contentItem: contentItem),
+            PlayerWidget(contentItem: widget.contentItem),
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
@@ -40,7 +47,7 @@ class EpisodeScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: SelectableText(
-                              contentItem.name,
+                              widget.contentItem.name,
                               style: Theme.of(context).textTheme.headlineSmall
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),

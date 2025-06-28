@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
-import 'package:iptv_player/database/database.dart';
-import 'package:iptv_player/models/content_type.dart';
-import 'package:iptv_player/models/watch_history.dart';
-import 'package:iptv_player/services/service_locator.dart';
+import 'package:another_iptv_player/database/database.dart';
+import 'package:another_iptv_player/models/content_type.dart';
+import 'package:another_iptv_player/models/watch_history.dart';
+import 'package:another_iptv_player/services/service_locator.dart';
 
 class WatchHistoryService {
   final _database = getIt<AppDatabase>();

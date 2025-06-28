@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/views/widgets/player-buttons/back_button_widget.dart';
-import 'package:iptv_player/views/widgets/player-buttons/video_settings_widget.dart';
-import 'package:iptv_player/views/widgets/player-buttons/video_title_widget.dart';
+import 'package:another_iptv_player/views/widgets/player-buttons/back_button_widget.dart';
+import 'package:another_iptv_player/views/widgets/player-buttons/video_settings_widget.dart';
+import 'package:another_iptv_player/views/widgets/player-buttons/video_title_widget.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 Widget getVideo(BuildContext context, VideoController controller) {
@@ -32,6 +32,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
             Expanded(child: VideoTitleWidget()),
             VideoSettingsWidget(),
           ],
+          seekBarMargin: EdgeInsets.fromLTRB(0, 0, 0, 10)
         ),
         child: Scaffold(
           body: Video(

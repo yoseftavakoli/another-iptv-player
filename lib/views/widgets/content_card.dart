@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:iptv_player/models/playlist_content_model.dart';
+import 'package:another_iptv_player/models/playlist_content_model.dart';
 
 
 class ContentCard extends StatelessWidget {

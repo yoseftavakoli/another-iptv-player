@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/controllers/iptv_controller.dart';
-import 'package:iptv_player/models/api_configuration_model.dart';
-import 'package:iptv_player/models/playlist_model.dart';
-import 'package:iptv_player/models/progress_step.dart';
-import 'package:iptv_player/repositories/iptv_repository.dart';
-import 'package:iptv_player/views/screens/home/home_screen.dart';
+import 'package:another_iptv_player/controllers/iptv_controller.dart';
+import 'package:another_iptv_player/models/api_configuration_model.dart';
+import 'package:another_iptv_player/models/playlist_model.dart';
+import 'package:another_iptv_player/models/progress_step.dart';
+import 'package:another_iptv_player/repositories/iptv_repository.dart';
+import 'package:another_iptv_player/views/screens/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProgressLoadingScreen extends StatefulWidget {

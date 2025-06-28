@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:iptv_player/models/playlist_content_model.dart';
-import 'package:iptv_player/services/app_state.dart';
-import 'package:iptv_player/views/widgets/player_widget.dart';
+import 'package:another_iptv_player/models/playlist_content_model.dart';
+import 'package:another_iptv_player/services/app_state.dart';
+import 'package:another_iptv_player/views/widgets/player_widget.dart';
 import '../../../models/content_type.dart';
 import '../../../services/event_bus.dart';
 import '../../../utils/responsive_helper.dart';

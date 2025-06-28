@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/repositories/user_prefrences.dart';
-import 'package:iptv_player/services/app_state.dart';
-import 'package:iptv_player/views/screens/home/iptv_home_screen.dart';
+import 'package:another_iptv_player/repositories/user_prefrences.dart';
+import 'package:another_iptv_player/services/app_state.dart';
+import 'package:another_iptv_player/views/screens/home/iptv_home_screen.dart';
 import '../models/playlist_model.dart';
 import '../services/playlist_service.dart';
 

@@ -17,8 +17,7 @@ import '../../../services/service_locator.dart';
 class WatchHistoryScreen extends StatefulWidget {
   final String playlistId;
 
-  const WatchHistoryScreen({Key? key, required this.playlistId})
-    : super(key: key);
+  const WatchHistoryScreen({super.key, required this.playlistId});
 
   @override
   State<WatchHistoryScreen> createState() => _WatchHistoryScreenState();
@@ -317,7 +316,7 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
                 seasons: seriesResponse.seasons,
                 episodes: seriesResponse.episodes,
                 contentItem: ContentItem(
-                  episode!.episodeId.toString(),
+                  episode.episodeId.toString(),
                   history.title,
                   history.imagePath ?? "",
                   ContentType.series,
@@ -494,12 +493,12 @@ class WatchHistoryListScreen extends StatelessWidget {
   final Function(WatchHistory)? onHistoryRemove;
 
   const WatchHistoryListScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.histories,
     this.onHistoryTap,
     this.onHistoryRemove,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,6 @@ import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/models/view_state.dart';
 import 'package:iptv_player/repositories/iptv_repository.dart';
 import 'package:iptv_player/services/app_state.dart';
-import 'package:iptv_player/views/screens/progress/progress_loading_screen.dart';
 import 'package:iptv_player/views/screens/series/progress_loading_screen.dart';
 
 class HomeController extends ChangeNotifier {
@@ -15,12 +14,12 @@ class HomeController extends ChangeNotifier {
   ViewState _viewState = ViewState.idle;
 
   int _currentIndex = 0;
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   // Kategoriler
-  List<CategoryViewModel>? _liveCategories = [];
-  List<CategoryViewModel>? _movieCategories = [];
-  List<CategoryViewModel>? _seriesCategories = [];
+  final List<CategoryViewModel> _liveCategories = [];
+  final List<CategoryViewModel> _movieCategories = [];
+  final List<CategoryViewModel> _seriesCategories = [];
 
   // Getters
   PageController get pageController => _pageController;
@@ -121,7 +120,7 @@ class HomeController extends ChangeNotifier {
               )
               .toList(),
         );
-        _liveCategories!.add(categoryViewModel);
+        _liveCategories.add(categoryViewModel);
       }
 
       var movieCategories = await _repository.getVodCategories();
@@ -147,7 +146,7 @@ class HomeController extends ChangeNotifier {
               .toList(),
         );
 
-        _movieCategories!.add(categoryViewModel);
+        _movieCategories.add(categoryViewModel);
       }
 
       var seriesCategories = await _repository.getSeriesCategories();
@@ -171,7 +170,7 @@ class HomeController extends ChangeNotifier {
               )
               .toList(),
         );
-        _seriesCategories!.add(categoryViewModel);
+        _seriesCategories.add(categoryViewModel);
       }
 
       notifyListeners();

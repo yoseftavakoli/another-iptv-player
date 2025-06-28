@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 
-import '../../models/content_type.dart';
 
 class ContentCard extends StatelessWidget {
   final ContentItem content;
@@ -11,12 +10,12 @@ class ContentCard extends StatelessWidget {
   final bool isSelected;
 
   const ContentCard({
-    Key? key,
+    super.key,
     required this.content,
     required this.width,
     this.onTap,
     this.isSelected = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class ContentCard extends StatelessWidget {
                       imageUrl: content.imagePath,
                       fit: BoxFit.contain,
                       placeholder: (context, url) => Container(
-                        color: Theme.of(context).colorScheme.surfaceVariant,
+                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
                         child: Center(
                           child: SizedBox(
                             width: 16,
@@ -64,7 +63,7 @@ class ContentCard extends StatelessWidget {
     return Container(
       color: isSelected
           ? Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3)
-          : Theme.of(context).colorScheme.surfaceVariant,
+          : Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Center(
         child: Padding(
           padding: EdgeInsets.all(6),

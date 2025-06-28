@@ -9,8 +9,7 @@ import 'package:iptv_player/views/screens/series/progress_loading_screen.dart';
 class PlaylistSettingsScreen extends StatefulWidget {
   final Playlist playlist;
 
-  const PlaylistSettingsScreen({Key? key, required this.playlist})
-      : super(key: key);
+  const PlaylistSettingsScreen({super.key, required this.playlist});
 
   @override
   _PlaylistSettingsScreenState createState() => _PlaylistSettingsScreenState();
@@ -86,7 +85,7 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
   }
 
   String _getRemainingDays() {
-    if (_serverInfo?.userInfo?.expDate != null) {
+    if (_serverInfo?.userInfo.expDate != null) {
       final expDate = _serverInfo!.userInfo.expDate;
       try {
         final expiryDate = DateTime.fromMillisecondsSinceEpoch(
@@ -213,12 +212,12 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
                           _buildModernInfoTile(
                             Icons.devices_rounded,
                             'Aktif Bağlantı',
-                            _serverInfo!.userInfo.activeCons?.toString() ?? '0',
+                            _serverInfo!.userInfo.activeCons.toString() ?? '0',
                           ),
                           _buildModernInfoTile(
                             Icons.device_hub_rounded,
                             'Maksimum Bağlantı',
-                            _serverInfo!.userInfo.maxConnections?.toString() ?? 'Bilinmiyor',
+                            _serverInfo!.userInfo.maxConnections.toString() ?? 'Bilinmiyor',
                           ),
                         ],
                       ],
@@ -233,13 +232,12 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
                         icon: Icons.dns_rounded,
                         iconColor: Colors.green,
                         children: [
-                          if (_serverInfo!.serverInfo.url != null)
-                            _buildModernInfoTile(
-                              Icons.public_rounded,
-                              'Server URL',
-                              _serverInfo!.serverInfo.url!,
-                              isUrl: true,
-                            ),
+                          _buildModernInfoTile(
+                            Icons.public_rounded,
+                            'Server URL',
+                            _serverInfo!.serverInfo.url,
+                            isUrl: true,
+                          ),
                           _buildModernInfoTile(
                             Icons.access_time_rounded,
                             'Saat Dilimi',

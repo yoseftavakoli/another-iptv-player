@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/repositories/user_prefrences.dart';
 import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/views/screens/home/iptv_home_screen.dart';
@@ -47,10 +46,8 @@ class PlaylistController extends ChangeNotifier {
           (x) => x.id == lastLoadedPlaylistId,
         );
 
-        if (playlist != null) {
-          await openPlaylist(context, playlist);
-        }
-      }
+        await openPlaylist(context, playlist);
+            }
 
       _sortPlaylists();
     } catch (e) {

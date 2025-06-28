@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
-import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/views/widgets/player_widget.dart';
 
 class MovieScreen extends StatefulWidget {
   final ContentItem contentItem;
-  MovieScreen({super.key, required this.contentItem});
+  const MovieScreen({super.key, required this.contentItem});
 
   @override
   _MovieScreenState createState() => _MovieScreenState();
@@ -48,7 +47,7 @@ class _MovieScreenState extends State<MovieScreen> {
                                           .contentItem
                                           .vodStream!
                                           .rating5based
-                                          ?.round() ??
+                                          .round() ??
                                           0)
                                       ? Icons.star_rounded
                                       : Icons.star_outline_rounded,
@@ -68,7 +67,7 @@ class _MovieScreenState extends State<MovieScreen> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                '${widget.contentItem.vodStream!.rating5based?.toStringAsFixed(1) ?? '0.0'}/5',
+                                '${widget.contentItem.vodStream!.rating5based.toStringAsFixed(1) ?? '0.0'}/5',
                                 style: TextStyle(
                                   color: Colors.amber.shade700,
                                   fontWeight: FontWeight.w600,

@@ -20,7 +20,7 @@ import '../../../services/service_locator.dart';
 class IPTVHomeScreen extends StatefulWidget {
   final Playlist playlist;
 
-  const IPTVHomeScreen({Key? key, required this.playlist}) : super(key: key);
+  const IPTVHomeScreen({super.key, required this.playlist});
 
   @override
   _IPTVHomeScreenState createState() => _IPTVHomeScreenState();

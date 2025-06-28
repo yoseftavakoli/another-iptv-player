@@ -947,7 +947,7 @@ class AppDatabase extends _$AppDatabase {
 
   // Series Info CRUD Operations
   Future<int> insertSeriesInfo(SeriesInfosCompanion seriesInfo) {
-    return into(this.seriesInfos).insert(seriesInfo);
+    return into(seriesInfos).insert(seriesInfo);
   }
 
   Future<SeriesInfosData?> getSeriesInfo(String seriesId, String playlistId) {

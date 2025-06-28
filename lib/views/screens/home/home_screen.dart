@@ -5,6 +5,8 @@ import '../../../models/playlist_model.dart';
 import '../playlist/playlist_type_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -102,8 +104,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToCreatePlaylist,
-        child: Icon(Icons.add, color: Colors.white),
         tooltip: 'Yeni Playlist Oluştur',
+        child: Icon(Icons.add, color: Colors.white),
       ),
     );
   }

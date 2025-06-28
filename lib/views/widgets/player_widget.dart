@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 import 'package:iptv_player/models/watch_history.dart';
@@ -24,13 +23,13 @@ class PlayerWidget extends StatefulWidget {
   final VoidCallback? onFullscreen;
 
   const PlayerWidget({
-    Key? key,
+    super.key,
     required this.contentItem,
     this.aspectRatio,
     this.showControls = true,
     this.showInfo = false,
     this.onFullscreen,
-  }) : super(key: key);
+  });
 
   @override
   State<PlayerWidget> createState() => _PlayerWidgetState();

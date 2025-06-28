@@ -2,7 +2,6 @@ import 'package:iptv_player/services/app_state.dart';
 
 import '../models/content_type.dart';
 import '../models/playlist_content_model.dart';
-import '../models/playlist_model.dart';
 
 String buildMediaUrl(ContentItem contentItem) {
   var playlist = AppState.currentPlaylist!;

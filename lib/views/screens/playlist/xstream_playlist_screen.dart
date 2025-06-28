@@ -6,6 +6,8 @@ import '../../../database/playlist_controller.dart';
 import '../../../models/playlist_model.dart';
 
 class XStreamPlaylistScreen extends StatefulWidget {
+  const XStreamPlaylistScreen({super.key});
+
   @override
   _XStreamPlaylistScreenState createState() => _XStreamPlaylistScreenState();
 }
@@ -111,7 +113,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         SizedBox(height: 8),
@@ -119,7 +121,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           'IPTV sağlayıcınızdan aldığınız bilgileri girin',
           style: TextStyle(
             fontSize: 16,
-            color: colorScheme.onBackground.withOpacity(0.7),
+            color: colorScheme.onSurface.withOpacity(0.7),
           ),
         ),
       ],
@@ -135,7 +137,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         SizedBox(height: 8),
@@ -178,7 +180,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         SizedBox(height: 8),
@@ -230,7 +232,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         SizedBox(height: 8),
@@ -273,7 +275,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         SizedBox(height: 8),
@@ -286,7 +288,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
             suffixIcon: IconButton(
               icon: Icon(
                 _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                color: colorScheme.onBackground.withOpacity(0.6),
+                color: colorScheme.onSurface.withOpacity(0.6),
               ),
               onPressed: () {
                 setState(() {
@@ -320,7 +322,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
   }
 
   Widget _buildSaveButton(PlaylistController controller, ColorScheme colorScheme) {
-    return Container(
+    return SizedBox(
       height: 56,
       child: ElevatedButton(
         onPressed: controller.isLoading
@@ -329,7 +331,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
-          disabledBackgroundColor: colorScheme.onBackground.withOpacity(0.12),
+          disabledBackgroundColor: colorScheme.onSurface.withOpacity(0.12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

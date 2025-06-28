@@ -12,14 +12,14 @@ class WatchHistoryCard extends StatelessWidget {
   final bool showProgress;
 
   const WatchHistoryCard({
-    Key? key,
+    super.key,
     required this.history,
     required this.width,
     required this.height,
     this.onTap,
     this.onRemove,
     this.showProgress = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

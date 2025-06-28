@@ -136,10 +136,8 @@ class IptvRepository {
 
       final additionalParams = <String, String>{'action': 'get_live_streams'};
 
-      if (categoryId != null) {
-        additionalParams['category_id'] = categoryId;
-      }
-
+      additionalParams['category_id'] = categoryId;
+    
       final response = await _makeRequest(
         'player_api.php',
         additionalParams: additionalParams,

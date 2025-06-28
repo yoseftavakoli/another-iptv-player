@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/category_view_model.dart';
-import 'package:iptv_player/utils/helpers.dart';
-import 'package:iptv_player/views/widgets/content_card.dart';
 import 'package:iptv_player/models/playlist_content_model.dart';
 
 import 'content_item_card_widget.dart';
@@ -14,14 +12,14 @@ class CategorySection extends StatelessWidget {
   final VoidCallback? onSeeAllTap;
   final Function(ContentItem)? onContentTap;
   const CategorySection({
-    Key? key,
+    super.key,
     required this.category,
     required this.type,
     required this.cardWidth,
     required this.cardHeight,
     this.onSeeAllTap,
     this.onContentTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

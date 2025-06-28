@@ -1,4 +1,3 @@
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:iptv_player/models/content_type.dart';
@@ -10,6 +9,8 @@ import 'package:iptv_player/utils/responsive_helper.dart';
 import 'package:iptv_player/views/widgets/content_card.dart';
 
 class SearchAppBar extends StatefulWidget {
+  const SearchAppBar({super.key});
+
   @override
   _SearchAppBarState createState() => _SearchAppBarState();
 }

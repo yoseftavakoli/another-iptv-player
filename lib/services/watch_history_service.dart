@@ -2,7 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:iptv_player/database/database.dart';
 import 'package:iptv_player/models/content_type.dart';
 import 'package:iptv_player/models/watch_history.dart';
-import 'package:iptv_player/services/app_state.dart';
 import 'package:iptv_player/services/service_locator.dart';
 
 class WatchHistoryService {

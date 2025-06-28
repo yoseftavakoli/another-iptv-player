@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'xstream_playlist_screen.dart';
 
 class PlaylistTypeScreen extends StatelessWidget {
+  const PlaylistTypeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;

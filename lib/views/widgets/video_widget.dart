@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iptv_player/services/player_state.dart';
 import 'package:iptv_player/views/widgets/player-buttons/back_button_widget.dart';
 import 'package:iptv_player/views/widgets/player-buttons/video_settings_widget.dart';
 import 'package:iptv_player/views/widgets/player-buttons/video_title_widget.dart';
@@ -36,7 +35,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
         ),
         child: Scaffold(
           body: Video(
-            controller: controller!,
+            controller: controller,
             resumeUponEnteringForegroundMode: true,
             pauseUponEnteringBackgroundMode: false,
           ),
@@ -66,7 +65,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
         ),
         child: Scaffold(
           body: Video(
-            controller: controller!,
+            controller: controller,
             resumeUponEnteringForegroundMode: true,
             pauseUponEnteringBackgroundMode: false,
           ),
@@ -74,7 +73,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
       );
     default:
       return Video(
-        controller: controller!,
+        controller: controller,
         controls: NoVideoControls,
         resumeUponEnteringForegroundMode: true,
         pauseUponEnteringBackgroundMode: false,

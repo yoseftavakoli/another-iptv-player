@@ -13,7 +13,7 @@ class WatchHistorySection extends StatelessWidget {
   final VoidCallback? onSeeAllTap;
 
   const WatchHistorySection({
-    Key? key,
+    super.key,
     required this.title,
     required this.histories,
     required this.cardWidth,
@@ -22,7 +22,7 @@ class WatchHistorySection extends StatelessWidget {
     this.onHistoryTap,
     this.onHistoryRemove,
     this.onSeeAllTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

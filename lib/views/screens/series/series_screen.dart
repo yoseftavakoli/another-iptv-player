@@ -98,7 +98,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                     //     child: _buildCoverImage(),
                     //   ),
                     // ),
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       height: double.infinity,
                       child: _buildCoverImage(),
@@ -252,7 +252,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
   Widget _buildRatingSection() {
     final rating = seriesInfo?.rating5based ?? 0;
     final ratingText =
-        widget.contentItem.seriesStream?.rating5based?.toStringAsFixed(1) ??
+        widget.contentItem.seriesStream?.rating5based.toStringAsFixed(1) ??
         '0.0';
 
     return Row(
@@ -458,7 +458,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
     // Dizi ID
     final seriesIdValue =
         seriesInfo?.seriesId ??
-        widget.contentItem.seriesStream?.seriesId?.toString() ??
+        widget.contentItem.seriesStream?.seriesId.toString() ??
         widget.contentItem.id.toString();
     details.add({
       'icon': Icons.tag,
@@ -714,7 +714,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                           Icon(Icons.star, color: Colors.amber, size: 12),
                           const SizedBox(width: 2),
                           Text(
-                            '${episode.rating!.toStringAsFixed(1)}',
+                            episode.rating!.toStringAsFixed(1),
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
@@ -748,10 +748,10 @@ class _SeriesScreenState extends State<SeriesScreen> {
     // Fallback olarak contentItem'dan al
     final hasBackdrop =
         (apiBackdrop?.isNotEmpty == true) ||
-        (widget.contentItem.seriesStream?.backdropPath?.isNotEmpty == true);
+        (widget.contentItem.seriesStream?.backdropPath.isNotEmpty == true);
     final hasCover =
         (apiCover?.isNotEmpty == true) ||
-        (widget.contentItem.seriesStream?.cover?.isNotEmpty == true);
+        (widget.contentItem.seriesStream?.cover.isNotEmpty == true);
 
     if (hasBackdrop || hasCover) {
       String? imageUrl;
@@ -760,10 +760,10 @@ class _SeriesScreenState extends State<SeriesScreen> {
         imageUrl = apiBackdrop;
       } else if (apiCover?.isNotEmpty == true) {
         imageUrl = apiCover;
-      } else if (widget.contentItem.seriesStream?.backdropPath?.isNotEmpty ==
+      } else if (widget.contentItem.seriesStream?.backdropPath.isNotEmpty ==
           true) {
-        imageUrl = widget.contentItem.seriesStream!.backdropPath![0];
-      } else if (widget.contentItem.seriesStream?.cover?.isNotEmpty == true) {
+        imageUrl = widget.contentItem.seriesStream!.backdropPath[0];
+      } else if (widget.contentItem.seriesStream?.cover.isNotEmpty == true) {
         imageUrl = widget.contentItem.seriesStream!.cover;
       }
 

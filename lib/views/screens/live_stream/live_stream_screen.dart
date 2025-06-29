@@ -7,6 +7,7 @@ import '../../../models/content_type.dart';
 import '../../../services/event_bus.dart';
 import '../../../utils/responsive_helper.dart';
 import '../../widgets/content_item_card_widget.dart';
+import '../../widgets/loading_widget.dart';
 
 class LiveStreamScreen extends StatefulWidget {
   final ContentItem content;
@@ -28,10 +29,10 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
   void initState() {
     super.initState();
     contentItem = widget.content;
-    _initializeCategory();
+    _initializeQueue();
   }
 
-  Future<void> _initializeCategory() async {
+  Future<void> _initializeQueue() async {
     allContents =
         (await AppState.repository!.getLiveChannelsByCategoryId(
           categoryId: widget.content.liveStream!.categoryId,
@@ -72,12 +73,20 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!allContentsLoaded) {
+      return Scaffold(
+        body: SafeArea(
+          child: buildFullScreenLoadingWidget(),
+        ),
+      );
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            PlayerWidget(contentItem: widget.content),
+            PlayerWidget(contentItem: widget.content, queue: allContents),
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
@@ -139,15 +148,14 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      if (allContentsLoaded)
-                        ContentItemCardWidget(
-                          cardHeight: ResponsiveHelper.getCardHeight(context),
-                          cardWidth: ResponsiveHelper.getCardWidth(context),
-                          contentItems: allContents,
-                          onContentTap: _onContentTap,
-                          initialSelectedIndex: selectedContentItemIndex,
-                          isSelectionModeEnabled: true,
-                        ),
+                      ContentItemCardWidget(
+                        cardHeight: ResponsiveHelper.getCardHeight(context),
+                        cardWidth: ResponsiveHelper.getCardWidth(context),
+                        contentItems: allContents,
+                        onContentTap: _onContentTap,
+                        initialSelectedIndex: selectedContentItemIndex,
+                        isSelectionModeEnabled: true,
+                      ),
                       const SizedBox(height: 24),
 
                       // Kanal Bilgileri
@@ -273,4 +281,7 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
       selectedContentItemIndex,
     );
   }
+
+
+
 }

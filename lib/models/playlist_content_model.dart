@@ -15,6 +15,7 @@ class ContentItem {
   final LiveStream? liveStream;
   final VodStream? vodStream;
   final SeriesStream? seriesStream;
+  final int? season;
 
   ContentItem(
     this.id,
@@ -28,6 +29,7 @@ class ContentItem {
     this.liveStream,
     this.vodStream,
     this.seriesStream,
+    this.season,
   });
 }
 

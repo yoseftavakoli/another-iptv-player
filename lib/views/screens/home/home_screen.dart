@@ -245,16 +245,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               PopupMenuButton<String>(
                 itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'edit',
-                    child: Row(
-                      children: [
-                        Icon(Icons.edit, size: 20),
-                        SizedBox(width: 8),
-                        Text('Düzenle'),
-                      ],
-                    ),
-                  ),
+                  // PopupMenuItem(
+                  //   value: 'edit',
+                  //   child: Row(
+                  //     children: [
+                  //       Icon(Icons.edit, size: 20),
+                  //       SizedBox(width: 8),
+                  //       Text('Düzenle'),
+                  //     ],
+                  //   ),
+                  // ),
                   PopupMenuItem(
                     value: 'delete',
                     child: Row(

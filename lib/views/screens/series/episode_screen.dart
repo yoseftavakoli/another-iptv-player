@@ -1,8 +1,14 @@
+import 'dart:async';
+
+import 'package:another_iptv_player/views/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/database/database.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/models/watch_history.dart';
 import 'package:another_iptv_player/views/widgets/player_widget.dart';
+
+import '../../../models/content_type.dart';
+import '../../../services/event_bus.dart';
 
 class EpisodeScreen extends StatefulWidget {
   final SeriesInfosData? seriesInfo;
@@ -25,135 +31,335 @@ class EpisodeScreen extends StatefulWidget {
 }
 
 class _EpisodeScreenState extends State<EpisodeScreen> {
+  late ContentItem contentItem;
+  List<ContentItem> allContents = [];
+  bool allContentsLoaded = false;
+  int selectedContentItemIndex = 0;
+  late StreamSubscription contentItemIndexChangedSubscription;
+  final ScrollController _scrollController = ScrollController();
 
+  @override
+  void initState() {
+    super.initState();
+    contentItem = widget.contentItem;
+    _initializeQueue();
+  }
+
+  @override
+  void dispose() {
+    contentItemIndexChangedSubscription.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _initializeQueue() async {
+    allContents = widget.episodes
+        .where((x) {
+          return x.season == widget.contentItem.season;
+        })
+        .map((x) {
+          return ContentItem(
+            x.episodeId,
+            x.title,
+            x.movieImage ?? "",
+            ContentType.series,
+            containerExtension: x.containerExtension,
+            season: x.season,
+          );
+        })
+        .toList();
+
+    setState(() {
+      selectedContentItemIndex = allContents.indexWhere(
+        (element) => element.id == widget.contentItem.id,
+      );
+      allContentsLoaded = true;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToSelectedItem();
+      });
+    });
+
+    contentItemIndexChangedSubscription = EventBus()
+        .on<int>('player_content_item_index')
+        .listen((int index) {
+          if (!mounted) return;
+
+          setState(() {
+            selectedContentItemIndex = index;
+            contentItem = allContents[selectedContentItemIndex];
+          });
+        });
+  }
+
+  void _scrollToSelectedItem() {
+    if (_scrollController.hasClients && selectedContentItemIndex >= 0) {
+      final double itemHeight = 110.0;
+      final double scrollOffset = selectedContentItemIndex * itemHeight;
+
+      _scrollController.animateTo(
+        scrollOffset,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  _onContentTap(ContentItem contentItem) {
+    setState(() {
+      if (!mounted) return;
+
+      selectedContentItemIndex = allContents.indexOf(contentItem);
+    });
+    EventBus().emit(
+      'player_content_item_index_changed',
+      selectedContentItemIndex,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            PlayerWidget(contentItem: widget.contentItem),
-            Expanded(
-              child: SingleChildScrollView(
+    if (!allContentsLoaded) {
+      return buildFullScreenLoadingWidget();
+    } else {
+      return Scaffold(
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              PlayerWidget(contentItem: widget.contentItem, queue: allContents),
+              Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Kanal Başlığı
-                      Row(
-                        children: [
-                          Expanded(
-                            child: SelectableText(
-                              widget.contentItem.name,
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(20),
                             ),
                           ),
-                        ],
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        contentItem.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                    Text(
+                                      '${allContents.length} Bölüm',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: allContents.isEmpty
+                                    ? const Center(
+                                        child: Text(
+                                          'Bu sezona ait bölüm bulunamadı',
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        controller: _scrollController,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                        ),
+                                        itemCount: allContents.length,
+                                        itemBuilder: (context, index) {
+                                          final episode = widget.episodes.where(
+                                            (x) {
+                                              return x.episodeId ==
+                                                  allContents[index].id;
+                                            },
+                                          ).first;
+                                          return _buildEpisodeCard(
+                                            episode,
+                                            index,
+                                          );
+                                        },
+                                      ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 24),
                     ],
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
-  Widget _buildInfoCard({
-    required IconData icon,
-    required String title,
-    required String value,
-    required Color color,
-  }) {
+  Widget _buildEpisodeCard(EpisodesData episode, int index) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: selectedContentItemIndex == index
+            ? Theme.of(context).colorScheme.primaryContainer
+            : Colors.grey.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.withOpacity(0.2), width: 1),
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, size: 20, color: color),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SelectableText(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w500,
-                  ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          _onContentTap(allContents[index]);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(height: 4),
-                SelectableText(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+                child:
+                    episode.movieImage != null && episode.movieImage!.isNotEmpty
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          episode.movieImage!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Text(
+                                '${episode.episodeNum}',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : Center(
+                        child: Text(
+                          '${episode.episodeNum}',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      episode.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+
+                    // Süre bilgisi
+                    if (episode.duration != null &&
+                        episode.duration!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        'Süre: ${episode.duration}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+
+                    // Plot
+                    if (episode.plot != null && episode.plot!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        episode.plot!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+
+              // Rating ve play icon
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (episode.rating != null && episode.rating! > 0) ...[
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 12),
+                          const SizedBox(width: 2),
+                          Text(
+                            episode.rating!.toStringAsFixed(1),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.amber.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  Icon(
+                    Icons.play_circle_outline,
+                    color: Theme.of(context).primaryColor,
+                    size: 24,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  String _getQualityText() {
-    // Bu fonksiyon content modeline göre kalite bilgisini döndürebilir
-    // Şu an için sabit bir değer döndürüyorum
-    return 'HD';
   }
 }

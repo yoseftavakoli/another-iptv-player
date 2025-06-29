@@ -595,6 +595,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                   episode.movieImage ?? "",
                   ContentType.series,
                   containerExtension: episode.containerExtension,
+                  season: episode.season
                 ),
               ),
             ),

@@ -21,6 +21,7 @@ class PlayerWidget extends StatefulWidget {
   final bool showControls;
   final bool showInfo;
   final VoidCallback? onFullscreen;
+  final List<ContentItem>? queue;
 
   const PlayerWidget({
     super.key,
@@ -29,6 +30,7 @@ class PlayerWidget extends StatefulWidget {
     this.showControls = true,
     this.showInfo = false,
     this.onFullscreen,
+    this.queue = null,
   });
 
   @override
@@ -55,6 +57,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   @override
   void initState() {
     contentItem = widget.contentItem;
+    _queue = widget.queue;
     PlayerState.title = widget.contentItem.name;
     _player = Player(configuration: PlayerConfiguration(osc: false));
     watchHistoryService = WatchHistoryService();
@@ -95,37 +98,17 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     super.dispose();
   }
 
-  Future<void> _initializeQueue() async {
-    switch (widget.contentItem.contentType) {
-      case ContentType.liveStream:
-        _queue =
-            (await AppState.repository!.getLiveChannelsByCategoryId(
-              categoryId: widget.contentItem.liveStream!.categoryId,
-            ))!.map((x) {
-              return ContentItem(
-                x.streamId,
-                x.name,
-                x.streamIcon,
-                ContentType.liveStream,
-                liveStream: x,
-              );
-            }).toList();
-      case ContentType.vod:
-      case ContentType.series:
-    }
-  }
-
   Future<void> _initializeAudioService() async {
     if (!mounted) return;
 
     _audioHandler.setPlayer(_player);
-    // _audioHandler.setCurrentMediaItem(
-    //   title: contentItem.name,
-    //   artist: _getContentTypeDisplayName(),
-    //   artUri: contentItem.imagePath,
-    // );
+    _audioHandler.setCurrentMediaItem(
+      title: contentItem.name,
+      artist: _getContentTypeDisplayName(),
+      artUri: contentItem.imagePath,
+    );
 
-    await _initializeQueue();
+    // await _initializeQueue();
     if (!mounted) return;
 
     _videoController = VideoController(_player);
@@ -136,16 +119,25 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     );
     if (!mounted) return; // Check after async operation
 
-    var playlist = _queue?.map((x) {
-      return Media(buildMediaUrl(x));
+    var playlistFutures = _queue?.map((x) async {
+      var watchHistory = await watchHistoryService.getWatchHistory(
+        AppState.currentPlaylist!.id,
+        x.id,
+      );
+
+      return Media(
+        buildMediaUrl(x),
+        start: watchHistory?.watchDuration ?? Duration(),
+      );
     }).toList();
 
     var mediaUrl = buildMediaUrl(contentItem);
+    var currentItemIndex = 0;
+    if (playlistFutures != null) {
+      var playlist = await Future.wait(playlistFutures);
 
-    if (playlist != null) {
-      var currentItemIndex = playlist.indexOf(
-        Media(buildMediaUrl(contentItem)),
-      );
+      currentItemIndex = playlist.indexOf(Media(buildMediaUrl(contentItem)));
+
       await _player.open(
         Playlist(playlist, index: currentItemIndex),
         play: true,
@@ -206,6 +198,11 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     });
 
     _player.stream.position.listen((position) async {
+      _player.state.playlist.medias[currentItemIndex] = Media(
+        buildMediaUrl(contentItem),
+        start: position,
+      );
+
       await watchHistoryService.saveWatchHistory(
         WatchHistory(
           playlistId: AppState.currentPlaylist!.id,
@@ -226,7 +223,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
     _player.stream.playlist.listen((playlist) {
       if (!mounted) return;
-
+      currentItemIndex = playlist.index;
       contentItem = _queue?[playlist.index] ?? widget.contentItem;
       PlayerState.title = contentItem.name;
       EventBus().emit('player_content_item', contentItem);
@@ -284,16 +281,15 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       return null;
     }
 
-
     Widget playerWidget = AspectRatio(
       aspectRatio: calculateAspectRatio(),
       child: isLoading
           ? Container(
-        color: Colors.black,
-        child: const Center(
-          child: CircularProgressIndicator(color: Colors.white),
-        ),
-      )
+              color: Colors.black,
+              child: const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            )
           : _buildPlayerContent(),
     );
 
@@ -310,11 +306,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
     return Container(
       color: Colors.black,
-      child: Column(
-        children: [
-          playerWidget,
-        ],
-      ),
+      child: Column(children: [playerWidget]),
     );
   }
 

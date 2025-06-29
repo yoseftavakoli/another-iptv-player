@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/models/series.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/database/database.dart';
 import 'package:another_iptv_player/models/content_type.dart';
@@ -318,6 +319,7 @@ class _WatchHistoryScreenState extends State<WatchHistoryScreen> {
                   history.imagePath ?? "",
                   ContentType.series,
                   containerExtension: episode.containerExtension,
+                  season: episode.season
                 ),
                 watchHistory: history,
               ),

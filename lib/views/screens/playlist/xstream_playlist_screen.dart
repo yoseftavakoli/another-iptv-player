@@ -1,6 +1,6 @@
 // views/screens/playlist/xstream_playlist_screen.dart
 import 'package:flutter/material.dart';
-import 'package:another_iptv_player/views/screens/series/progress_loading_screen.dart';
+import 'package:another_iptv_player/views/screens/playlist/progress_loading_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../database/playlist_controller.dart';
 import '../../../models/playlist_model.dart';

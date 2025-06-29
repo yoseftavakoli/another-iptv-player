@@ -37,8 +37,6 @@ class WatchHistoryCard extends StatelessWidget {
               // Background/Thumbnail
               _buildThumbnail(),
 
-            
-
               // Remove Button
               if (onRemove != null)
                 Positioned(
@@ -96,12 +94,10 @@ class WatchHistoryCard extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    
                     ],
                   ),
                 ),
               ),
-
             ],
           ),
         ),
@@ -150,14 +146,15 @@ class WatchHistoryCard extends StatelessWidget {
   }
 
   Widget _buildProgressBar() {
-    final progress =
-        history.watchDuration!.inMilliseconds /
-        history.totalDuration!.inMilliseconds;
+    final progress = history.totalDuration!.inMilliseconds.isInfinite
+        ? 0.0
+        : (history.watchDuration!.inMilliseconds /
+              history.totalDuration!.inMilliseconds);
 
     return Column(
       children: [
         LinearProgressIndicator(
-          value: progress,
+          value: progress.isInfinite || progress.isNaN ? 0 : progress,
           backgroundColor: Colors.white30,
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           minHeight: 3,

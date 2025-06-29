@@ -92,7 +92,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                   children: [
                     Hero(
                       tag: widget.contentItem.id,
-                      child: Container(
+                      child: SizedBox(
                         width: double.infinity,
                         height: double.infinity,
                         child: _buildCoverImage(),

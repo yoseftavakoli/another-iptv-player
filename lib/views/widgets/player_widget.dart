@@ -225,7 +225,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     });
 
     _player.stream.playlist.listen((playlist) {
-      if (!mounted) return; // Check in stream listener
+      if (!mounted) return;
 
       contentItem = _queue?[playlist.index] ?? widget.contentItem;
       PlayerState.title = contentItem.name;
@@ -254,8 +254,6 @@ class _PlayerWidgetState extends State<PlayerWidget> {
         return 'Film';
       case ContentType.series:
         return 'Dizi';
-      default:
-        return 'Video';
     }
   }
 

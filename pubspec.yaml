@@ -42,6 +42,11 @@ dependencies:
   shared_preferences: ^2.5.3
   audio_session: ^0.2.2
 
+  drift_dev: any
+  sqlite3: any
+  path_provider: any
+  path: any
+  meta: any
 dependency_overrides:
   media_kit:
     git:
@@ -64,11 +69,11 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  drift_dev: ^2.26.1
   build_runner: ^2.4.15
   flutter_lints: ^5.0.0
   build_web_compilers: ^4.1.5
 
+  build: any
 flutter:
   uses-material-design: true
 

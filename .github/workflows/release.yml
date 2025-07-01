@@ -91,7 +91,7 @@ jobs:
       - name: Generate files
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
       - name: Build macOS
-        run: flutter build macos --release
+        run: flutter build macos --release --no-codesign
       - name: Create macOS Archive
         run: |
           cd build/macos/Build/Products/Release

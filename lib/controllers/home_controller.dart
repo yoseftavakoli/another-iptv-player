@@ -23,10 +23,15 @@ class HomeController extends ChangeNotifier {
 
   // Getters
   PageController get pageController => _pageController;
+
   int get currentIndex => _currentIndex;
+
   bool get isLoading => _isLoading;
+
   List<CategoryViewModel>? get liveCategories => _liveCategories;
+
   List<CategoryViewModel>? get movieCategories => _movieCategories;
+
   List<CategoryViewModel>? get seriesCategories => _seriesCategories;
 
   HomeController() {

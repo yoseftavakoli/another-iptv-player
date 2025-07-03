@@ -47,7 +47,7 @@ class PlaylistTypeScreen extends StatelessWidget {
                         SizedBox(height: 40),
                         _buildPlaylistTypeCard(
                           context,
-                          title: 'XStream Code',
+                          title: 'Xtream Codes',
                           subtitle:
                               'API URL, kullanıcı adı ve şifre ile bağlanın',
                           description:

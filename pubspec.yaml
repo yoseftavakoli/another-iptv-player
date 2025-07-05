@@ -2,7 +2,7 @@ name: another_iptv_player
 description: "Another IPTV Player"
 publish_to: "none"
 
-version: 0.5.3
+version: 0.5.3+2
 
 environment:
   sdk: ^3.8.1

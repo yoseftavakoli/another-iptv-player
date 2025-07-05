@@ -28,3 +28,31 @@ features:
     details: Automatically remembers your selected video, audio, and subtitle tracks along with volume settings for each episode.
 ---
 
+<div id="lightbox-modal" style="display:none;" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Big picture" />
+</div>
+
+## Screenshots
+
+Explore Another IPTV Player on different platforms. See how the main screen, playlist, and settings panel look on each device.
+
+### iPhone
+<div class="screenshot-gallery">
+  <img src="/screenshots/iphone/serie.png" alt="Ana ekran" onclick="openLightbox(this)" />
+  <img src="/screenshots/iphone/series.png" alt="Oynatma listesi" onclick="openLightbox(this)" />
+  <img src="/screenshots/iphone/movies.png" alt="Ayarlar paneli" onclick="openLightbox(this)" />
+</div>
+
+### iPad
+<div class="screenshot-gallery">
+  <img src="/screenshots/ipad/serie.png" alt="Ana ekran" onclick="openLightbox(this)" />
+  <img src="/screenshots/ipad/episode.png" alt="Oynatma listesi" onclick="openLightbox(this)" />
+  <img src="/screenshots/ipad/movies.png" alt="Ayarlar paneli" onclick="openLightbox(this)" />
+</div>
+
+### Android
+<div class="screenshot-gallery">
+  <img src="/screenshots/android/series-info.png" alt="Ana ekran" onclick="openLightbox(this)" />
+  <img src="/screenshots/android/episodes.png" alt="Oynatma listesi" onclick="openLightbox(this)" />
+  <img src="/screenshots/android/movies.png" alt="Ayarlar paneli" onclick="openLightbox(this)" />
+</div>

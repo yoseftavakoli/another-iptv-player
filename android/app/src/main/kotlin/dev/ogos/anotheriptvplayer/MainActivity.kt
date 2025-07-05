@@ -1,4 +1,4 @@
-package com.example.iptv_player
+package com.example.anotheriptvplayer
 
 import io.flutter.embedding.android.FlutterActivity
 

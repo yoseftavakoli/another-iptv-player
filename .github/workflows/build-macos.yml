@@ -27,7 +27,7 @@ jobs:
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
 
       - name: Build macOS
-        run: flutter build macos --no-codesign
+        run: flutter build macos
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4

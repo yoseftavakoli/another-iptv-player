@@ -6,7 +6,7 @@ export default defineConfig({
   description: "Free & Open Source",
   base: '/another-iptv-player/',
   themeConfig: {
-    logo: 'assets/logo.png',
+    logo: '/logo.png',
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Download', link: '/download' },

@@ -1,5 +1,7 @@
 # Another IPTV Player
 
+<img align="right" width="110" src="https://raw.githubusercontent.com/bsogulcan/another-iptv-player/refs/heads/main/docs/public/logo.png">
+
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/bsogulcan/another-iptv-player?label=Latest%20Release)
 ![GitHub](https://img.shields.io/github/license/bsogulcan/another-iptv-player?color=brightgreen&label=License)
 ![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-windows.yml/badge.svg)

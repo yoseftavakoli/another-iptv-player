@@ -41,5 +41,10 @@ Official documentation: [https://bsogulcan.github.io/another-iptv-player](https:
 - [ ] EPG (Electronic Program Guide) Support
 - [ ] Favorites & Custom Playlists
 - [ ] Improved UI/UX
+
+## Contributing
+
+We welcome contributions!  
+For guidelines and details, please see [CONTRIBUTING.md](CONTRIBUTING.md).
   
 **Another IPTV Player does not provide any IPTV content or subscriptions. Use your own legal IPTV service.**

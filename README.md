@@ -1,16 +1,45 @@
-# iptv_player
+# Another IPTV Player
 
-A new Flutter project.
+![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-windows.yml/badge.svg)
+![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-linux.yml/badge.svg)
+![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-macos.yml/badge.svg)
+![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-ios.yml/badge.svg)
+![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-android.yml/badge.svg)
+![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-web.yml/badge.svg)
 
-## Getting Started
+**Free & Open Source IPTV Streaming Solution**
 
-This project is a starting point for a Flutter application.
+Another IPTV Player is a lightweight, multi-platform, and feature-rich IPTV player built with Flutter.  
+Our goal is to provide all the premium features of paid IPTV players for free and with full transparency.
 
-A few resources to get you started if this is your first Flutter project:
+Official documentation: [https://bsogulcan.github.io/another-iptv-player](https://bsogulcan.github.io/another-iptv-player/)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+> **Note:**  
+> We are **not** an IPTV provider and do **not** offer or sell any IPTV subscriptions or content.  
+> You need your own IPTV provider that supports the Xtream Codes API to use the app.  
+> No registration or payment is required.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+- Xtream Codes API support
+- Continue Watching & Auto Play Next
+- Global Search
+- Available on iOS, Android, Web, Windows, macOS, and Linux
+
+## Roadmap
+
+- [x] Xtream Codes API Support
+- [x] Live TV Streaming
+- [x] Movies Streaming
+- [x] Series Streaming
+- [x] Watch History
+- [x] Global Search
+- [x] Video, Audio, and Subtitle Track Selection
+- [x] Track Selection Memory
+- [ ] Subtitle Customization
+- [ ] Localization (Multi-language Support)
+- [ ] M3U & M3U8 Playlist Support
+- [ ] EPG (Electronic Program Guide) Support
+- [ ] Favorites & Custom Playlists
+- [ ] Improved UI/UX
+  
+**Another IPTV Player does not provide any IPTV content or subscriptions. Use your own legal IPTV service.**

@@ -124,3 +124,7 @@ firebase_options.dart
 **/windows/build/
 **/macos/build/
 **/linux/build/
+
+docs/.vitepress/cache/
+
+docs/.vitepress/dist/

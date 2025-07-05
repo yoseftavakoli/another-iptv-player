@@ -1,5 +1,7 @@
 # Another IPTV Player
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/bsogulcan/another-iptv-player?label=Latest%20Release)
+![GitHub](https://img.shields.io/github/license/bsogulcan/another-iptv-player?color=brightgreen&label=License)
 ![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-windows.yml/badge.svg)
 ![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-linux.yml/badge.svg)
 ![](https://github.com/bsogulcan/another-iptv-player/actions/workflows/build-macos.yml/badge.svg)
@@ -42,9 +44,16 @@ Official documentation: [https://bsogulcan.github.io/another-iptv-player](https:
 - [ ] Favorites & Custom Playlists
 - [ ] Improved UI/UX
 
+## Acknowledgement
+
+- The project name "Another IPTV Player" is inspired by [Another Redis Desktop Manager](https://github.com/qishibo/AnotherRedisDesktopManager).
+- This project uses [media_kit](https://github.com/media-kit/media-kit) as the cross-platform video & audio player for Flutter & Dart.
+
 ## Contributing
 
 We welcome contributions!  
 For guidelines and details, please see [CONTRIBUTING.md](CONTRIBUTING.md).
-  
+
+---
+
 **Another IPTV Player does not provide any IPTV content or subscriptions. Use your own legal IPTV service.**

@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Another IPTV Player",
   description: "Free & Open Source",
+  base: '/another-iptv-player/',
   themeConfig: {
     logo: 'assets/logo.png',
     nav: [

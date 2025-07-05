@@ -51,7 +51,7 @@ class PlaylistController extends ChangeNotifier {
 
       _sortPlaylists();
     } catch (e) {
-      _setError('Playlistler yüklenemedi: ${e.toString()}');
+      setError('Playlistler yüklenemedi: ${e.toString()}');
     } finally {
       _setLoading(false);
     }
@@ -83,7 +83,7 @@ class PlaylistController extends ChangeNotifier {
     try {
       // Duplicate name kontrolü
       if (_playlists.any((p) => p.name.toLowerCase() == name.toLowerCase())) {
-        _setError('Bu isimde bir playlist zaten mevcut');
+        setError('Bu isimde bir playlist zaten mevcut');
         return null;
       }
 
@@ -103,7 +103,7 @@ class PlaylistController extends ChangeNotifier {
 
       return playlist;
     } catch (e) {
-      _setError('Playlist kaydedilemedi: ${e.toString()}');
+      setError('Playlist kaydedilemedi: ${e.toString()}');
       return null;
     } finally {
       _setLoading(false);
@@ -118,7 +118,7 @@ class PlaylistController extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _setError('Playlist silinemedi: ${e.toString()}');
+      setError('Playlist silinemedi: ${e.toString()}');
       return false;
     }
   }
@@ -135,7 +135,7 @@ class PlaylistController extends ChangeNotifier {
             p.id != updatedPlaylist.id &&
             p.name.toLowerCase() == updatedPlaylist.name.toLowerCase(),
       )) {
-        _setError('Bu isimde bir playlist zaten mevcut');
+        setError('Bu isimde bir playlist zaten mevcut');
         return false;
       }
 
@@ -149,7 +149,7 @@ class PlaylistController extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      _setError('Playlist güncellenemedi: ${e.toString()}');
+      setError('Playlist güncellenemedi: ${e.toString()}');
       return false;
     } finally {
       _setLoading(false);
@@ -220,7 +220,7 @@ class PlaylistController extends ChangeNotifier {
   }
 
   // Hata durumunu ayarla
-  void _setError(String errorMessage) {
+  void setError(String errorMessage) {
     _error = errorMessage;
     _isLoading = false;
     notifyListeners();
@@ -294,7 +294,7 @@ class PlaylistController extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _setError('Playlistler silinemedi: ${e.toString()}');
+      setError('Playlistler silinemedi: ${e.toString()}');
       return false;
     } finally {
       _setLoading(false);

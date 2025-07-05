@@ -63,30 +63,30 @@ class PlaylistTypeScreen extends StatelessWidget {
                             );
                           },
                         ),
-                        SizedBox(height: 20),
-                        _buildPlaylistTypeCard(
-                          context,
-                          title: 'M3U Playlist',
-                          subtitle: 'M3U dosyası veya URL ile playlist ekleyin',
-                          description:
-                              'Geleneksel M3U format dosyalarını destekler',
-                          icon: Icons.playlist_play,
-                          color: Colors.green,
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Row(
-                                  children: [
-                                    Icon(Icons.info, color: Colors.white),
-                                    SizedBox(width: 8),
-                                    Text('M3U özelliği yakında eklenecek'),
-                                  ],
-                                ),
-                                backgroundColor: Colors.orange,
-                              ),
-                            );
-                          },
-                        ),
+                        // SizedBox(height: 20),
+                        // _buildPlaylistTypeCard(
+                        //   context,
+                        //   title: 'M3U Playlist',
+                        //   subtitle: 'M3U dosyası veya URL ile playlist ekleyin',
+                        //   description:
+                        //       'Geleneksel M3U format dosyalarını destekler',
+                        //   icon: Icons.playlist_play,
+                        //   color: Colors.green,
+                        //   onTap: () {
+                        //     ScaffoldMessenger.of(context).showSnackBar(
+                        //       SnackBar(
+                        //         content: Row(
+                        //           children: [
+                        //             Icon(Icons.info, color: Colors.white),
+                        //             SizedBox(width: 8),
+                        //             Text('M3U özelliği yakında eklenecek'),
+                        //           ],
+                        //         ),
+                        //         backgroundColor: Colors.orange,
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
                         Spacer(), // Bu alan büyük ekranlarda genişleyecek
                         Container(
                           padding: EdgeInsets.all(16),

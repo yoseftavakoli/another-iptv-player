@@ -2,8 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/views/screens/playlist/progress_loading_screen.dart';
 import 'package:provider/provider.dart';
+import '../../../controllers/iptv_controller.dart';
 import '../../../database/playlist_controller.dart';
+import '../../../models/api_configuration_model.dart';
 import '../../../models/playlist_model.dart';
+import '../../../repositories/iptv_repository.dart';
 
 class XStreamPlaylistScreen extends StatefulWidget {
   const XStreamPlaylistScreen({super.key});
@@ -44,9 +47,9 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     setState(() {
       _isFormValid =
           _nameController.text.trim().isNotEmpty &&
-              _urlController.text.trim().isNotEmpty &&
-              _usernameController.text.trim().isNotEmpty &&
-              _passwordController.text.trim().isNotEmpty;
+          _urlController.text.trim().isNotEmpty &&
+          _usernameController.text.trim().isNotEmpty &&
+          _passwordController.text.trim().isNotEmpty;
     });
   }
 
@@ -56,9 +59,7 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('XStream Playlist'),
-      ),
+      appBar: AppBar(title: Text('XStream Playlist')),
       body: Consumer<PlaylistController>(
         builder: (context, controller, child) {
           return SingleChildScrollView(
@@ -321,7 +322,10 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
     );
   }
 
-  Widget _buildSaveButton(PlaylistController controller, ColorScheme colorScheme) {
+  Widget _buildSaveButton(
+    PlaylistController controller,
+    ColorScheme colorScheme,
+  ) {
     return SizedBox(
       height: 56,
       child: ElevatedButton(
@@ -339,34 +343,36 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
         ),
         child: controller.isLoading
             ? Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(colorScheme.onPrimary),
-              ),
-            ),
-            SizedBox(width: 12),
-            Text(
-              'Kaydediliyor...',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-          ],
-        )
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        colorScheme.onPrimary,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'Kaydediliyor...',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              )
             : Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.save, size: 20),
-            SizedBox(width: 8),
-            Text(
-              'Playlist\'i Kaydet',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.save, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Playlist\'i Kaydet',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
       ),
     );
   }
@@ -437,9 +443,9 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
           SizedBox(height: 8),
           Text(
             '• Tüm bilgiler güvenli bir şekilde cihazınızda saklanır\n'
-                '• Şifre bilgileri şifrelenmiş olarak korunur\n'
-                '• URL formatı: http://sunucu:port şeklinde olmalıdır\n'
-                '• IPTV sağlayıcınızdan aldığınız bilgileri doğru giriniz',
+            '• Şifre bilgileri şifrelenmiş olarak korunur\n'
+            '• URL formatı: http://sunucu:port şeklinde olmalıdır\n'
+            '• IPTV sağlayıcınızdan aldığınız bilgileri doğru giriniz',
             style: TextStyle(
               color: colorScheme.onPrimaryContainer,
               fontSize: 13,
@@ -458,43 +464,66 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
         listen: false,
       );
 
-      final playlist = await controller.createPlaylist(
-        name: _nameController.text.trim(),
-        type: PlaylistType.xstream,
-        url: _urlController.text.trim(),
-        username: _usernameController.text.trim(),
-        password: _passwordController.text.trim(),
+      controller.clearError();
+
+      final repository = IptvRepository(
+        ApiConfig(
+          baseUrl: _urlController.text.trim(),
+          username: _usernameController.text.trim(),
+          password: _passwordController.text.trim(),
+        ),
+        _nameController.text.trim(),
       );
 
-      if (playlist != null) {
-        // Başarı durumunda ana sayfaya dön
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProgressLoadingScreen(playlist: playlist),
-          ),
-        );
-        // Navigator.of(context).popUntil((route) => route.isFirst);
+      try {
+        var playerInfo = await repository.getPlayerInfo(forceRefresh: true);
 
-        // // Başarı mesajı göster
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: Row(
-        //       children: [
-        //         Icon(Icons.check_circle, color: Colors.white),
-        //         SizedBox(width: 8),
-        //         Expanded(
-        //           child: Text(
-        //             'Playlist "${_nameController.text.trim()}" başarıyla oluşturuldu!',
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //     backgroundColor: Colors.green,
-        //     duration: Duration(seconds: 3),
-        //   ),
-        // );
-      }
+        if (playerInfo == null) {
+          controller.setError(
+            'Giriş bilgileri hatalı! Lütfen kullanıcı adı, şifre ve URL bilgilerinizi kontrol ediniz.',
+          );
+          return;
+        }
+
+        final playlist = await controller.createPlaylist(
+          name: _nameController.text.trim(),
+          type: PlaylistType.xstream,
+          url: _urlController.text.trim(),
+          username: _usernameController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+        if (playlist != null) {
+          // Başarı durumunda ana sayfaya dön
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProgressLoadingScreen(playlist: playlist),
+            ),
+          );
+        }
+      } catch (ex) {}
+
+      // Navigator.of(context).popUntil((route) => route.isFirst);
+
+      // // Başarı mesajı göster
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Row(
+      //       children: [
+      //         Icon(Icons.check_circle, color: Colors.white),
+      //         SizedBox(width: 8),
+      //         Expanded(
+      //           child: Text(
+      //             'Playlist "${_nameController.text.trim()}" başarıyla oluşturuldu!',
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //     backgroundColor: Colors.green,
+      //     duration: Duration(seconds: 3),
+      //   ),
+      // );
     }
   }
 }

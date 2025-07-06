@@ -33,10 +33,10 @@ jobs:
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
 
       - name: Build Android APK
-        run: flutter build apk
+        run: flutter build apk --build-name=releaseUnsigned
 
       - name: Build Android App Bundle
-        run: flutter build appbundle
+        run: flutter build appbundle --build-name=releaseUnsigned
 
       - name: Upload Android APK
         uses: actions/upload-artifact@v4

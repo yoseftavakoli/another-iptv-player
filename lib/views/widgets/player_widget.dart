@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+
 import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/models/watch_history.dart';
 import 'package:another_iptv_player/repositories/user_prefrences.dart';
@@ -7,8 +7,12 @@ import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/services/event_bus.dart';
 import 'package:another_iptv_player/services/watch_history_service.dart';
 import 'package:another_iptv_player/views/widgets/video_widget.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
+import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
+
 import '../../models/content_type.dart';
 import '../../services/player_state.dart';
 import '../../services/service_locator.dart';
@@ -103,46 +107,73 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     if (!mounted) return;
 
     _audioHandler.setPlayer(_player);
-    _audioHandler.setCurrentMediaItem(
-      title: contentItem.name,
-      artist: _getContentTypeDisplayName(),
-      artUri: contentItem.imagePath,
-    );
-
-    if (!mounted) return;
-
     _videoController = VideoController(_player);
 
     var watchHistory = await watchHistoryService.getWatchHistory(
       AppState.currentPlaylist!.id,
       contentItem.id,
     );
-    if (!mounted) return;
 
-    var playlistFutures = _queue?.map((x) async {
-      var watchHistory = await watchHistoryService.getWatchHistory(
-        AppState.currentPlaylist!.id,
-        x.id,
-      );
-
-      return Media(
-        buildMediaUrl(x),
-        start: watchHistory?.watchDuration ?? Duration(),
-      );
-    }).toList();
-
+    List<MediaItem> mediaItems = [];
     var mediaUrl = buildMediaUrl(contentItem);
     var currentItemIndex = 0;
-    if (playlistFutures != null) {
-      var playlist = await Future.wait(playlistFutures);
 
-      currentItemIndex = playlist.indexOf(Media(buildMediaUrl(contentItem)));
+    if (_queue != null) {
+      for (int i = 0; i < _queue!.length; i++) {
+        final item = _queue![i];
+        final itemWatchHistory = await watchHistoryService.getWatchHistory(
+          AppState.currentPlaylist!.id,
+          item.id,
+        );
+
+        mediaItems.add(
+          MediaItem(
+            id: item.id.toString(),
+            title: item.name,
+            artist: _getContentTypeDisplayName(),
+            album: AppState.currentPlaylist?.name ?? '',
+            artUri: item.imagePath != null ? Uri.parse(item.imagePath!) : null,
+            playable: true,
+            extras: {
+              'url': buildMediaUrl(item),
+              'startPosition': itemWatchHistory?.watchDuration?.inMilliseconds ?? 0,
+            },
+          ),
+        );
+
+        if (item.id == contentItem.id) {
+          currentItemIndex = i;
+        }
+      }
+
+      await _audioHandler.setQueue(mediaItems, initialIndex: currentItemIndex);
+
+      var playlist = mediaItems.map((mediaItem) {
+        final url = mediaItem.extras!['url'] as String;
+        final startMs = mediaItem.extras!['startPosition'] as int;
+        return Media(url, start: Duration(milliseconds: startMs));
+      }).toList();
 
       await _player.open(
         Playlist(playlist, index: currentItemIndex),
         play: true,
       );
     } else {
+      final mediaItem = MediaItem(
+        id: contentItem.id.toString(),
+        title: contentItem.name,
+        artist: _getContentTypeDisplayName(),
+        artUri: contentItem.imagePath != null
+            ? Uri.parse(contentItem.imagePath!)
+            : null,
+        extras: {
+          'url': mediaUrl,
+          'startPosition': watchHistory?.watchDuration?.inMilliseconds ?? 0,
+        },
+      );
+
+      await _audioHandler.setQueue([mediaItem]);
+
       await _player.open(
         Playlist([
           Media(mediaUrl, start: watchHistory?.watchDuration ?? Duration()),
@@ -150,7 +181,6 @@ class _PlayerWidgetState extends State<PlayerWidget> {
         play: true,
       );
     }
-    if (!mounted) return;
 
     _player.stream.tracks.listen((event) async {
       if (!mounted) return;
@@ -346,5 +376,4 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       ],
     );
   }
-
 }

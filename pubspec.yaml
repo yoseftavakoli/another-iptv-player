@@ -33,7 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.4.0
   cached_network_image: ^3.4.1
-  audio_service: ^0.18.12
+  audio_service: ^0.18.18
   just_audio: ^0.10.4
   rxdart: ^0.28.0
   flutter_in_app_pip: ^1.7.4

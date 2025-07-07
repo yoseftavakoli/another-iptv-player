@@ -8,26 +8,9 @@ GetIt getIt = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
 
-  getIt.registerSingleton<AppDatabase>(AppDatabase());
   getIt.registerSingleton<MyAudioHandler>(await initAudioService());
+  getIt.registerSingleton<AppDatabase>(AppDatabase());
 
-  // var player = Player(
-  //   configuration: const PlayerConfiguration(title: 'Media Kit Player'),
-  // );
-  // var videoController = VideoController(player);
-
-  // getIt.registerSingleton<Player>(player);
-  // print('Player registered');
-
-  // getIt.registerSingleton<VideoController>(videoController);
-  // print('VideoController registered');
-
-  // print('Setting up service locator...');
-
-  // getIt.registerSingleton<MediaKitAudioHandler>(await initAudioService());
-  // print('AudioHandler registered');
-
-  // print('Service locator setup complete');
+  MediaKit.ensureInitialized();
 }

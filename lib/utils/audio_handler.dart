@@ -6,7 +6,7 @@ Future<MyAudioHandler> initAudioService() async {
   return await AudioService.init(
     builder: () => MyAudioHandler(),
     config: const AudioServiceConfig(
-      androidNotificationChannelId: 'dev.ogos.another-iptv-player',
+      androidNotificationChannelId: 'dev.ogos.anotheriptvplayer',
       androidNotificationChannelName: 'Another IPTV Player',
       androidNotificationOngoing: false,
       androidShowNotificationBadge: true,
@@ -53,7 +53,7 @@ class MyAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
         playbackState.value.copyWith(
           updatePosition: position,
           bufferedPosition:
-              position, // updateTime yerine bufferedPosition kullan
+              position,
         ),
       );
     });

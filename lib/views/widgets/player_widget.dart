@@ -30,7 +30,7 @@ class PlayerWidget extends StatefulWidget {
     this.showControls = true,
     this.showInfo = false,
     this.onFullscreen,
-    this.queue = null,
+    this.queue,
   });
 
   @override
@@ -40,7 +40,7 @@ class PlayerWidget extends StatefulWidget {
 class _PlayerWidgetState extends State<PlayerWidget> {
   late StreamSubscription videoTrackSubscription;
   late StreamSubscription audioTrackSubscription;
-  late StreamSubscription subtitleTranckSubscription;
+  late StreamSubscription subtitleTrackSubscription;
   late StreamSubscription contentItemIndexChangedSubscription;
 
   late Player _player;
@@ -77,7 +77,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           await UserPreferences.setAudioTrack(data.language ?? 'null');
         });
 
-    subtitleTranckSubscription = EventBus()
+    subtitleTrackSubscription = EventBus()
         .on<SubtitleTrack>('subtitle_track_changed')
         .listen((SubtitleTrack data) async {
           _player.setSubtitleTrack(data);
@@ -91,9 +91,10 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   void dispose() {
     _player.dispose();
     _audioHandler.setPlayer(null);
+    _audioHandler.stop();
     videoTrackSubscription.cancel();
     audioTrackSubscription.cancel();
-    subtitleTranckSubscription.cancel();
+    subtitleTrackSubscription.cancel();
     contentItemIndexChangedSubscription.cancel();
     super.dispose();
   }
@@ -108,7 +109,6 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       artUri: contentItem.imagePath,
     );
 
-    // await _initializeQueue();
     if (!mounted) return;
 
     _videoController = VideoController(_player);
@@ -117,7 +117,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       AppState.currentPlaylist!.id,
       contentItem.id,
     );
-    if (!mounted) return; // Check after async operation
+    if (!mounted) return;
 
     var playlistFutures = _queue?.map((x) async {
       var watchHistory = await watchHistoryService.getWatchHistory(
@@ -150,10 +150,10 @@ class _PlayerWidgetState extends State<PlayerWidget> {
         play: true,
       );
     }
-    if (!mounted) return; // Check after async operation
+    if (!mounted) return;
 
     _player.stream.tracks.listen((event) async {
-      if (!mounted) return; // Check in stream listener
+      if (!mounted) return;
 
       PlayerState.videos = event.video;
       PlayerState.audios = event.audio;
@@ -183,7 +183,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     });
 
     _player.stream.track.listen((event) async {
-      if (!mounted) return; // Check in stream listener
+      if (!mounted) return;
 
       PlayerState.selectedVideo = _player.state.track.video;
       PlayerState.selectedAudio = _player.state.track.audio;
@@ -263,19 +263,17 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       if (widget.aspectRatio != null) return widget.aspectRatio!;
 
       if (isTablet) {
-        // Tablet için daha küçük player
         return isLandscape ? 21 / 9 : 16 / 9;
       }
       return 16 / 9;
     }
 
-    // Tablet için maksimum yükseklik belirle
     double? calculateMaxHeight() {
       if (isTablet) {
         if (isLandscape) {
-          return screenSize.height * 0.6; // Landscape'de ekranın %60'ı
+          return screenSize.height * 0.6;
         } else {
-          return screenSize.height * 0.4; // Portrait'te ekranın %40'ı
+          return screenSize.height * 0.4;
         }
       }
       return null;
@@ -293,7 +291,6 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           : _buildPlayerContent(),
     );
 
-    // Tablet için maksimum yükseklik uygula
     if (isTablet) {
       final maxHeight = calculateMaxHeight();
       if (maxHeight != null) {
@@ -335,7 +332,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     return Stack(
       children: [
         getVideo(context, _videoController!),
-        // Custom fullscreen button
+
         if (widget.onFullscreen != null)
           Positioned(
             top: 8,
@@ -350,14 +347,4 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     );
   }
 
-  String _formatDuration(Duration duration) {
-    String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-    String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
-
-    if (duration.inHours > 0) {
-      String hours = duration.inHours.toString().padLeft(2, '0');
-      return '$hours:$minutes:$seconds';
-    }
-    return '$minutes:$seconds';
-  }
 }

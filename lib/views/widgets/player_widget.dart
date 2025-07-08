@@ -10,8 +10,10 @@ import 'package:another_iptv_player/views/widgets/video_widget.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 import '../../models/content_type.dart';
 import '../../services/player_state.dart';
@@ -41,7 +43,7 @@ class PlayerWidget extends StatefulWidget {
   State<PlayerWidget> createState() => _PlayerWidgetState();
 }
 
-class _PlayerWidgetState extends State<PlayerWidget> {
+class _PlayerWidgetState extends State<PlayerWidget> with WidgetsBindingObserver {
   late StreamSubscription videoTrackSubscription;
   late StreamSubscription audioTrackSubscription;
   late StreamSubscription subtitleTrackSubscription;
@@ -60,6 +62,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     contentItem = widget.contentItem;
     _queue = widget.queue;
     PlayerState.title = widget.contentItem.name;
@@ -270,6 +273,19 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.detached:
+        await _player.dispose();
+        _audioHandler.setPlayer(null);
+        await _audioHandler.stop();
+        break;
+      default:
+        break;
     }
   }
 

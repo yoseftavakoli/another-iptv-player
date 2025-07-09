@@ -1,8 +1,9 @@
+import 'package:another_iptv_player/views/screens/app_initializer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/services/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'database/playlist_controller.dart';
-import 'views/screens/home/home_screen.dart';
+import 'themes/app_themes.dart';
 
 Future<void> main() async {
   await setupServiceLocator();
@@ -14,27 +15,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => PlaylistController())],
+    return ChangeNotifierProvider(
+      create: (_) => PlaylistController(),
       child: MaterialApp(
         title: 'Another IPTV Player',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blue,
-            brightness: Brightness.light,
-          ),
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blue,
-            brightness: Brightness.dark,
-          ),
-        ),
+        theme: AppThemes.lightTheme,
+        darkTheme: AppThemes.darkTheme,
         themeMode: ThemeMode.system,
-        home: HomeScreen(),
-        debugShowCheckedModeBanner: false,
+        home: AppInitializerScreen(),
       ),
     );
   }

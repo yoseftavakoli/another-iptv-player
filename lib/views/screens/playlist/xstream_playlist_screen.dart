@@ -479,9 +479,10 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
         var playerInfo = await repository.getPlayerInfo(forceRefresh: true);
 
         if (playerInfo == null) {
-          controller.setError(
-            'Giriş bilgileri hatalı! Lütfen kullanıcı adı, şifre ve URL bilgilerinizi kontrol ediniz.',
-          );
+          // controller.setError(
+          //   'Giriş bilgileri hatalı! Lütfen kullanıcı adı, şifre ve URL bilgilerinizi kontrol ediniz.',
+          // );
+          // todo:::
           return;
         }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/api_response.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
-import 'package:another_iptv_player/repositories/user_prefrences.dart';
+import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/views/screens/home/home_screen.dart';
 import 'package:another_iptv_player/views/screens/playlist/progress_loading_screen.dart';

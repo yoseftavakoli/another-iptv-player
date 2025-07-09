@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/models/watch_history.dart';
-import 'package:another_iptv_player/repositories/user_prefrences.dart';
+import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/services/event_bus.dart';
 import 'package:another_iptv_player/services/watch_history_service.dart';

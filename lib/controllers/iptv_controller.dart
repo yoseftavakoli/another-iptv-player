@@ -7,6 +7,8 @@ import 'package:another_iptv_player/models/progress_step.dart';
 import 'package:another_iptv_player/models/series.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
 
+import '../models/category_type.dart';
+
 class IptvController extends ChangeNotifier {
   final IptvRepository _repository;
   bool refreshAll = false;

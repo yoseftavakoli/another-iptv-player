@@ -10,7 +10,7 @@ import 'package:another_iptv_player/utils/navigate_by_content_type.dart';
 import 'package:another_iptv_player/utils/responsive_helper.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/category_section.dart';
-import '../search/search_screen.dart';
+import '../search_screen.dart';
 import '../watch_history/watch_history_screen.dart';
 import 'category_detail_screen.dart';
 

@@ -4,7 +4,7 @@ import '../../controllers/playlist_controller.dart';
 import '../../models/playlist_model.dart';
 import '../../widgets/playlist_card.dart';
 import '../../widgets/playlist_states.dart';
-import 'playlist/playlist_type_screen.dart';
+import 'playlist_type_screen.dart';
 
 class PlaylistScreen extends StatefulWidget {
   const PlaylistScreen({super.key});

@@ -10,7 +10,7 @@ import 'package:another_iptv_player/models/series_response.dart';
 import 'package:another_iptv_player/models/vod_streams.dart';
 import 'package:another_iptv_player/models/series.dart';
 import 'package:another_iptv_player/utils/type_convertions.dart';
-
+import '../models/category_type.dart';
 import '../services/service_locator.dart';
 
 class IptvRepository {

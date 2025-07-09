@@ -1,4 +1,5 @@
-import 'package:another_iptv_player/models/series.dart';
+import 'package:another_iptv_player/screens/watch_history/watch_history_card.dart';
+import 'package:another_iptv_player/screens/watch_history/watch_history_section.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/database/database.dart';
 import 'package:another_iptv_player/models/content_type.dart';
@@ -9,11 +10,8 @@ import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/services/watch_history_service.dart';
 import 'package:another_iptv_player/utils/navigate_by_content_type.dart';
 import 'package:another_iptv_player/utils/responsive_helper.dart';
-import 'package:another_iptv_player/views/screens/series/episode_screen.dart';
-import 'package:another_iptv_player/views/screens/watch_history/watch_history_card.dart';
-import 'package:another_iptv_player/views/screens/watch_history/watch_history_section.dart';
-
 import '../../../services/service_locator.dart';
+import '../series/episode_screen.dart';
 
 class WatchHistoryScreen extends StatefulWidget {
   final String playlistId;

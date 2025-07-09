@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
-import 'package:another_iptv_player/views/widgets/player_widget.dart';
+
+import '../../../widgets/player_widget.dart';
 
 class MovieScreen extends StatefulWidget {
   final ContentItem contentItem;

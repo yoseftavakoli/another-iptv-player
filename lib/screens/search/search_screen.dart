@@ -6,7 +6,8 @@ import 'package:another_iptv_player/repositories/iptv_repository.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/utils/navigate_by_content_type.dart';
 import 'package:another_iptv_player/utils/responsive_helper.dart';
-import 'package:another_iptv_player/views/widgets/content_card.dart';
+
+import '../../../widgets/content_card.dart';
 
 class SearchAppBar extends StatefulWidget {
   const SearchAppBar({super.key});

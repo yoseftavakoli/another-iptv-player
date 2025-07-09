@@ -5,7 +5,8 @@ import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/models/view_state.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
 import 'package:another_iptv_player/services/app_state.dart';
-import '../views/screens/xtream-codes/xtream_code_data_loader_screen.dart';
+
+import '../screens/xtream-codes/xtream_code_data_loader_screen.dart';
 
 class HomeController extends ChangeNotifier {
   late PageController _pageController;

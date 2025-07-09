@@ -5,9 +5,9 @@ import 'package:another_iptv_player/models/api_configuration_model.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/models/progress_step.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
-import 'package:another_iptv_player/views/screens/playlist_screen.dart';
 import 'package:provider/provider.dart';
 import '../home/iptv_home_screen.dart';
+import '../playlist_screen.dart';
 
 class XtreamCodeDataLoaderScreen extends StatefulWidget {
   final Playlist playlist;

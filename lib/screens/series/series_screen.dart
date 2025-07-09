@@ -5,7 +5,8 @@ import 'package:another_iptv_player/models/content_type.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
-import 'package:another_iptv_player/views/screens/series/episode_screen.dart';
+
+import 'episode_screen.dart';
 
 class SeriesScreen extends StatefulWidget {
   final ContentItem contentItem;

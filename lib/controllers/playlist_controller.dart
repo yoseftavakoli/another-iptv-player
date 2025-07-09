@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
-import 'package:another_iptv_player/views/screens/home/iptv_home_screen.dart';
 import '../models/playlist_model.dart';
+import '../screens/home/iptv_home_screen.dart';
 import '../services/playlist_service.dart';
 
 class PlaylistController extends ChangeNotifier {

@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/services/app_state.dart';
-import 'package:another_iptv_player/views/widgets/player_widget.dart';
 import '../../../models/content_type.dart';
 import '../../../services/event_bus.dart';
 import '../../../utils/responsive_helper.dart';
-import '../../widgets/content_item_card_widget.dart';
-import '../../widgets/loading_widget.dart';
+import '../../../widgets/content_item_card_widget.dart';
+import '../../../widgets/loading_widget.dart';
+import '../../../widgets/player_widget.dart';
 
 class LiveStreamScreen extends StatefulWidget {
   final ContentItem content;

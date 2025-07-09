@@ -5,7 +5,7 @@ import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/services/event_bus.dart';
 import 'package:another_iptv_player/services/watch_history_service.dart';
-import 'package:another_iptv_player/views/widgets/video_widget.dart';
+import 'package:another_iptv_player/widgets/video_widget.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState;

@@ -3,8 +3,7 @@ import 'package:another_iptv_player/models/api_response.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
-import 'package:another_iptv_player/views/screens/playlist_screen.dart';
-
+import '../playlist_screen.dart';
 import '../xtream-codes/xtream_code_data_loader_screen.dart';
 
 class PlaylistSettingsScreen extends StatefulWidget {

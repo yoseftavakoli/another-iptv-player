@@ -1,9 +1,9 @@
-import 'package:another_iptv_player/views/screens/app_initializer_screen.dart';
+import 'package:another_iptv_player/screens/app_initializer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/services/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'controllers/playlist_controller.dart';
-import 'themes/app_themes.dart';
+import 'utils/app_themes.dart';
 
 Future<void> main() async {
   await setupServiceLocator();

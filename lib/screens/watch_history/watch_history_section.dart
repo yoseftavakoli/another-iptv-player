@@ -1,6 +1,6 @@
+import 'package:another_iptv_player/screens/watch_history/watch_history_card.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/watch_history.dart';
-import 'package:another_iptv_player/views/screens/watch_history/watch_history_card.dart';
 
 class WatchHistorySection extends StatelessWidget {
   final String title;

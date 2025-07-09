@@ -1,13 +1,13 @@
 import 'package:drift/drift.dart';
 
-Never _unsupported() {
+import 'connect.dart';
+
+QueryExecutor driftDatabase({
+  required String name,
+  DriftWebOptions? web,
+  DriftNativeOptions? native,
+}) {
   throw UnsupportedError(
-      'No suitable database implementation was found on this platform.');
-}
-
-// Depending on the platform the app is compiled to, the following stubs will
-// be replaced with the methods in native.dart or web.dart
-
-Future<void> validateDatabaseSchema(GeneratedDatabase database) async {
-  _unsupported();
+      'driftDatabase() is not implemented on this platform because neither '
+      '`dart:ffi` nor `dart:js_interop` are available.');
 }

@@ -2,10 +2,10 @@
 /// drift databases on Flutter apps.
 library;
 
-export 'src/connect.dart';
+export 'connection/connect.dart';
 
 import 'package:drift/drift.dart';
-import 'src/connect.dart' as connect;
+import 'connection/connect.dart' as connect;
 
 /// Obtain a [QueryExecutor] to use for drift databases on the current platform.
 ///

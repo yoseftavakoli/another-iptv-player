@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart' hide Category;
-import 'package:another_iptv_player/drift_flutter.dart';
+import 'package:another_iptv_player/database/drift_flutter.dart';
 import 'package:another_iptv_player/models/category.dart';
 import 'package:another_iptv_player/models/content_type.dart';
 import 'package:another_iptv_player/models/live_stream.dart';

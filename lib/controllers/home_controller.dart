@@ -5,7 +5,7 @@ import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/models/view_state.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
 import 'package:another_iptv_player/services/app_state.dart';
-import 'package:another_iptv_player/views/screens/playlist/progress_loading_screen.dart';
+import '../views/screens/xtream-codes/xtream_code_data_loader_screen.dart';
 
 class HomeController extends ChangeNotifier {
   late PageController _pageController;
@@ -16,7 +16,6 @@ class HomeController extends ChangeNotifier {
   int _currentIndex = 0;
   final bool _isLoading = false;
 
-  // Kategoriler
   final List<CategoryViewModel> _liveCategories = [];
   final List<CategoryViewModel> _movieCategories = [];
   final List<CategoryViewModel> _seriesCategories = [];
@@ -80,19 +79,6 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  String getCurrentPageType() {
-    switch (_currentIndex) {
-      case 0:
-        return 'live';
-      case 1:
-        return 'movie';
-      case 2:
-        return 'series';
-      default:
-        return 'live';
-    }
-  }
-
   void _setViewState(ViewState state) {
     _viewState = state;
     if (state != ViewState.error) {
@@ -101,7 +87,6 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Private methods
   Future<void> _loadCategories() async {
     try {
       var liveCategories = await _repository.getLiveCategories();
@@ -189,7 +174,7 @@ class HomeController extends ChangeNotifier {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => ProgressLoadingScreen(
+        builder: (context) => XtreamCodeDataLoaderScreen(
           playlist: AppState.currentPlaylist!,
           refreshAll: true,
         ),

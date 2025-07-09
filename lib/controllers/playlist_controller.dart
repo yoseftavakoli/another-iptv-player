@@ -21,63 +21,16 @@ class PlaylistController extends ChangeNotifier {
 
   int get playlistCount => _playlists.length;
 
-  int get xstreamCount =>
-      _playlists.where((p) => p.type == PlaylistType.xstream).length;
+  int get xtreamCount =>
+      _playlists.where((p) => p.type == PlaylistType.xtream).length;
 
   int get m3uCount =>
       _playlists.where((p) => p.type == PlaylistType.m3u).length;
 
-  List<Playlist> get xstreamPlaylists =>
-      getPlaylistsByType(PlaylistType.xstream);
+  List<Playlist> get xtreamPlaylists =>
+      getPlaylistsByType(PlaylistType.xtream);
 
   List<Playlist> get m3uPlaylists => getPlaylistsByType(PlaylistType.m3u);
-
-  Future<void> initializeApp(BuildContext context) async {
-    if (_hasInitialized) return;
-
-    final lastPlaylistId = await UserPreferences.getLastPlaylist();
-    if (lastPlaylistId != null && context.mounted) {
-      await _navigateToLastPlaylist(context, lastPlaylistId);
-      return;
-    }
-
-    await loadPlaylists(context);
-    _hasInitialized = true;
-  }
-
-  Future<void> _navigateToLastPlaylist(
-    BuildContext context,
-    String playlistId,
-  ) async {
-    _setLoading(true);
-
-    try {
-      final playlists = await PlaylistService.getPlaylists();
-      final playlist = playlists.firstWhere(
-        (x) => x.id == playlistId,
-        orElse: () => throw Exception('Playlist bulunamadı'),
-      );
-
-      AppState.currentPlaylist = playlist;
-
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => IPTVHomeScreen(playlist: playlist),
-          ),
-        );
-      }
-    } catch (e) {
-      await UserPreferences.removeLastPlaylist();
-      if (context.mounted) {
-        await loadPlaylists(context);
-      }
-    } finally {
-      _setLoading(false);
-      _hasInitialized = true;
-    }
-  }
 
   Future<void> loadPlaylists(BuildContext context) async {
     _setLoading(true);
@@ -234,7 +187,7 @@ class PlaylistController extends ChangeNotifier {
 
     return {
       'total': _playlists.length,
-      'xstream': xstreamCount,
+      'xstream': xtreamCount,
       'm3u': m3uCount,
       'createdToday': _playlists.where((p) {
         final playlistDate = DateTime(
@@ -295,7 +248,7 @@ class PlaylistController extends ChangeNotifier {
       return false;
     }
 
-    if (type == PlaylistType.xstream) {
+    if (type == PlaylistType.xtream) {
       if (url?.trim().isEmpty ?? true) {
         _setError('URL gereklidir');
         return false;

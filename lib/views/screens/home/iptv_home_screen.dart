@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/controllers/home_controller.dart';
-import 'package:another_iptv_player/database/database.dart';
 import 'package:another_iptv_player/models/api_configuration_model.dart';
 import 'package:another_iptv_player/models/category_view_model.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
@@ -15,20 +14,17 @@ import 'package:another_iptv_player/views/screens/search/search_screen.dart';
 import 'package:another_iptv_player/views/widgets/category_section.dart';
 import 'package:provider/provider.dart';
 
-import '../../../services/service_locator.dart';
-
 class IPTVHomeScreen extends StatefulWidget {
   final Playlist playlist;
 
   const IPTVHomeScreen({super.key, required this.playlist});
 
   @override
-  _IPTVHomeScreenState createState() => _IPTVHomeScreenState();
+  IPTVHomeScreenState createState() => IPTVHomeScreenState();
 }
 
-class _IPTVHomeScreenState extends State<IPTVHomeScreen> {
+class IPTVHomeScreenState extends State<IPTVHomeScreen> {
   late HomeController _controller;
-  final _database = getIt<AppDatabase>();
 
   @override
   void initState() {

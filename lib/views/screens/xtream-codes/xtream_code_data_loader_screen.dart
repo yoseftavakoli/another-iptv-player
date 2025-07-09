@@ -1,29 +1,29 @@
+import 'package:another_iptv_player/services/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/controllers/iptv_controller.dart';
 import 'package:another_iptv_player/models/api_configuration_model.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/models/progress_step.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
-import 'package:another_iptv_player/views/screens/home/home_screen.dart';
+import 'package:another_iptv_player/views/screens/playlist_screen.dart';
 import 'package:provider/provider.dart';
+import '../home/iptv_home_screen.dart';
 
-class ProgressLoadingScreen extends StatefulWidget {
+class XtreamCodeDataLoaderScreen extends StatefulWidget {
   final Playlist playlist;
   bool refreshAll = false;
 
-  ProgressLoadingScreen({
+  XtreamCodeDataLoaderScreen({
     super.key,
     required this.playlist,
-    bool refreshAll = false,
-  }) {
-    this.refreshAll = refreshAll;
-  }
+    this.refreshAll = false,
+  });
 
   @override
-  _ProgressLoadingScreenState createState() => _ProgressLoadingScreenState();
+  XtreamCodeDataLoaderScreenState createState() => XtreamCodeDataLoaderScreenState();
 }
 
-class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
+class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController _pulseAnimationController;
@@ -114,12 +114,13 @@ class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
       _waveAnimationController.stop();
       await Future.delayed(Duration(milliseconds: 800));
 
+      AppState.currentPlaylist = widget.playlist;
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider.value(
             value: _controller,
-            child: HomeScreen(),
+            child: IPTVHomeScreen(playlist: widget.playlist),
           ),
         ),
         (route) => false,
@@ -419,7 +420,8 @@ class _ProgressLoadingScreenState extends State<ProgressLoadingScreen>
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => HomeScreen(),
+                                          builder: (context) =>
+                                              PlaylistScreen(),
                                         ),
                                         (route) => false,
                                       );

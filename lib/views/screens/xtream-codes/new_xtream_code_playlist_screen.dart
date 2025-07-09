@@ -1,21 +1,19 @@
-// views/screens/playlist/xstream_playlist_screen.dart
+import 'package:another_iptv_player/views/screens/xtream-codes/xtream_code_data_loader_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:another_iptv_player/views/screens/playlist/progress_loading_screen.dart';
 import 'package:provider/provider.dart';
-import '../../../controllers/iptv_controller.dart';
-import '../../../database/playlist_controller.dart';
-import '../../../models/api_configuration_model.dart';
-import '../../../models/playlist_model.dart';
-import '../../../repositories/iptv_repository.dart';
+import '../../../../controllers/playlist_controller.dart';
+import '../../../../models/api_configuration_model.dart';
+import '../../../../models/playlist_model.dart';
+import '../../../../repositories/iptv_repository.dart';
 
-class XStreamPlaylistScreen extends StatefulWidget {
-  const XStreamPlaylistScreen({super.key});
+class NewXtreamCodePlaylistScreen extends StatefulWidget {
+  const NewXtreamCodePlaylistScreen({super.key});
 
   @override
-  _XStreamPlaylistScreenState createState() => _XStreamPlaylistScreenState();
+  NewXtreamCodePlaylistScreenState createState() => NewXtreamCodePlaylistScreenState();
 }
 
-class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
+class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController(text: 'Playlist-1');
   final _urlController = TextEditingController();
@@ -488,18 +486,17 @@ class _XStreamPlaylistScreenState extends State<XStreamPlaylistScreen> {
 
         final playlist = await controller.createPlaylist(
           name: _nameController.text.trim(),
-          type: PlaylistType.xstream,
+          type: PlaylistType.xtream,
           url: _urlController.text.trim(),
           username: _usernameController.text.trim(),
           password: _passwordController.text.trim(),
         );
 
         if (playlist != null) {
-          // Başarı durumunda ana sayfaya dön
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => ProgressLoadingScreen(playlist: playlist),
+              builder: (context) => XtreamCodeDataLoaderScreen(playlist: playlist),
             ),
           );
         }

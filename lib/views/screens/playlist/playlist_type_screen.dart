@@ -1,14 +1,12 @@
-// views/screens/playlist/playlist_type_screen.dart
 import 'package:flutter/material.dart';
-import 'xstream_playlist_screen.dart';
+
+import '../xtream-codes/new_xtream_code_playlist_screen.dart';
 
 class PlaylistTypeScreen extends StatelessWidget {
   const PlaylistTypeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -40,9 +38,7 @@ class PlaylistTypeScreen extends StatelessWidget {
                         SizedBox(height: 8),
                         Text(
                           'Oluşturmak istediğiniz playlist türünü seçin',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
+                          style: TextStyle(fontSize: 16),
                         ),
                         SizedBox(height: 40),
                         _buildPlaylistTypeCard(
@@ -58,7 +54,8 @@ class PlaylistTypeScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => XStreamPlaylistScreen(),
+                                builder: (context) =>
+                                    NewXtreamCodePlaylistScreen(),
                               ),
                             );
                           },
@@ -87,7 +84,8 @@ class PlaylistTypeScreen extends StatelessWidget {
                         //     );
                         //   },
                         // ),
-                        Spacer(), // Bu alan büyük ekranlarda genişleyecek
+                        Spacer(),
+                        // Bu alan büyük ekranlarda genişleyecek
                         Container(
                           padding: EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -175,10 +173,7 @@ class PlaylistTypeScreen extends StatelessWidget {
                     SizedBox(height: 8),
                     Text(
                       description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        height: 1.3,
-                      ),
+                      style: TextStyle(fontSize: 13, height: 1.3),
                     ),
                   ],
                 ),

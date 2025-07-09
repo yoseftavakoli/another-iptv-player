@@ -23,7 +23,7 @@ class PlaylistService {
   }
 
   static Future<List<Playlist>> getXStreamPlaylists() async {
-    return await DatabaseService.getPlaylistsByType(PlaylistType.xstream);
+    return await DatabaseService.getPlaylistsByType(PlaylistType.xtream);
   }
 
   static Future<List<Playlist>> getM3UPlaylists() async {

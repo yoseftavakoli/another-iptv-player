@@ -49,4 +49,4 @@ class Playlist {
   }
 }
 
-enum PlaylistType { xstream, m3u }
+enum PlaylistType { xtream, m3u }

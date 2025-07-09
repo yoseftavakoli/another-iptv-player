@@ -28,7 +28,6 @@ class IptvController extends ChangeNotifier {
 
   // Getters
   ApiResponse? get userInfo => _userInfo;
-  // Getters
   List<Category>? get liveCategories => _liveCategories;
   List<Category>? get vodCategories => _vodCategories;
   List<Category>? get seriesCategories => _seriesCategories;
@@ -72,7 +71,6 @@ class IptvController extends ChangeNotifier {
     }
   }
 
-  // Kategorileri yükle
   Future<bool> loadCategories() async {
     try {
       _setCurrentStep(ProgressStep.categories);
@@ -95,7 +93,6 @@ class IptvController extends ChangeNotifier {
     }
   }
 
-  // Tek tip kategori yükle
   Future<bool> loadCategoriesByType(CategoryType type) async {
     try {
       List<Category>? categories;

@@ -3,8 +3,9 @@ import 'package:another_iptv_player/models/api_response.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
-import 'package:another_iptv_player/views/screens/home/home_screen.dart';
-import 'package:another_iptv_player/views/screens/playlist/progress_loading_screen.dart';
+import 'package:another_iptv_player/views/screens/playlist_screen.dart';
+
+import '../xtream-codes/xtream_code_data_loader_screen.dart';
 
 class PlaylistSettingsScreen extends StatefulWidget {
   final Playlist playlist;
@@ -68,7 +69,7 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ProgressLoadingScreen(
+          builder: (context) => XtreamCodeDataLoaderScreen(
             playlist: AppState.currentPlaylist!,
             refreshAll: true,
           ),
@@ -520,7 +521,7 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
                   if (mounted) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => PlaylistScreen()),
                     );
                   }
                 } catch (e) {

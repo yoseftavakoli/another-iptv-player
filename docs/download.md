@@ -7,8 +7,14 @@ hero:
   tagline: "Get the latest version"
 
 features:
-  - title: App Stores Coming Soon
-    details: App Store, Google Play and Microsoft Store versions are in development and will be available soon.
+  - title: App Store
+    details: Now available on the App Store! Download the official iOS version with automatic updates.
+    link: https://apps.apple.com/us/app/another-iptv-player/id6747290392
+    linkText: Download from App Store
+    target: _blank
+    rel: external
+  - title: Other App Stores Coming Soon
+    details: Google Play and Microsoft Store versions are in development and will be available soon.
   - title: GitHub Releases
     details: Download the latest release for Windows, macOS, Linux, Android, and iOS platforms.
     link: https://github.com/bsogulcan/another-iptv-player/releases/latest
@@ -35,9 +41,9 @@ features:
     link: https://github.com/bsogulcan/another-iptv-player/releases/latest
     linkText: Download APK
     target: _blank
-  - title: iOS (No Codesign)
-    details: Requires developer account for installation. Sideloading tools like AltStore can be used.
+  - title: iOS (Developer)
+    details: For developers and advanced users. Requires developer account or sideloading tools like AltStore.
     link: https://github.com/bsogulcan/another-iptv-player/releases/latest
-    linkText: Download for iOS
+    linkText: Download IPA
     target: _blank
 ---

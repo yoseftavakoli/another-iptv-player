@@ -1,3 +1,12 @@
+# [](https://github.com/bsogulcan/iptv-player/compare/v0.5.5...v) (2025-07-10)
+
+
+### Features
+
+* changelogs ([3ff5297](https://github.com/bsogulcan/iptv-player/commit/3ff5297be1798b155191d0ee46eb5c431681c441))
+
+
+
 # [](https://github.com/bsogulcan/iptv-player/compare/v0.5.5...v) (2025-07-09)
 
 

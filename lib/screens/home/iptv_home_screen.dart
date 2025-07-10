@@ -1,4 +1,4 @@
-import 'package:another_iptv_player/screens/home/playlist_detail.dart';
+import 'package:another_iptv_player/screens/playlist_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/controllers/home_controller.dart';
 import 'package:another_iptv_player/models/api_configuration_model.dart';
@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import '../../../widgets/category_section.dart';
 import '../search_screen.dart';
 import '../watch_history/watch_history_screen.dart';
-import 'category_detail_screen.dart';
+import '../category_detail_screen.dart';
 
 class IPTVHomeScreen extends StatefulWidget {
   final Playlist playlist;

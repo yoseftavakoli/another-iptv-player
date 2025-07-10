@@ -13,16 +13,23 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../models/category_type.dart';
 import '../models/playlist_model.dart';
+
 part 'database.g.dart';
 
 @DataClassName('PlaylistData')
 class Playlists extends Table {
   TextColumn get id => text()();
+
   TextColumn get name => text()();
+
   TextColumn get type => text()();
+
   TextColumn get url => text().nullable()();
+
   TextColumn get username => text().nullable()();
+
   TextColumn get password => text().nullable()();
+
   DateTimeColumn get createdAt => dateTime()();
 
   @override
@@ -32,11 +39,16 @@ class Playlists extends Table {
 @DataClassName('CategoriesData')
 class Categories extends Table {
   TextColumn get categoryId => text()();
+
   TextColumn get categoryName => text()();
+
   IntColumn get parentId => integer().withDefault(const Constant(0))();
+
   TextColumn get playlistId => text()();
+
   TextColumn get type => text()(); // 'live', 'vod', 'series'
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
@@ -46,41 +58,67 @@ class Categories extends Table {
 @DataClassName('UserInfosData')
 class UserInfos extends Table {
   IntColumn get id => integer().autoIncrement()();
+
   TextColumn get playlistId => text()();
+
   TextColumn get username => text()();
+
   TextColumn get password => text()();
+
   TextColumn get message => text()();
+
   IntColumn get auth => integer()();
+
   TextColumn get status => text()();
+
   TextColumn get expDate => text()();
+
   TextColumn get isTrial => text()();
+
   TextColumn get activeCons => text()();
+
   TextColumn get createdAt => text()();
+
   TextColumn get maxConnections => text()();
+
   TextColumn get allowedOutputFormats => text()();
 }
 
 @DataClassName('ServerInfosData')
 class ServerInfos extends Table {
   IntColumn get id => integer().autoIncrement()();
+
   TextColumn get playlistId => text()();
+
   TextColumn get url => text()();
+
   TextColumn get port => text()();
+
   TextColumn get httpsPort => text()();
+
   TextColumn get serverProtocol => text()();
+
   TextColumn get rtmpPort => text()();
+
   TextColumn get timezone => text()();
+
   IntColumn get timestampNow => integer()();
+
   TextColumn get timeNow => text()();
 }
 
 @DataClassName('LiveStreamsData')
 class LiveStreams extends Table {
   TextColumn get streamId => text()();
+
   TextColumn get name => text()();
+
   TextColumn get streamIcon => text()();
+
   TextColumn get categoryId => text()();
+
   TextColumn get epgChannelId => text()();
+
   TextColumn get playlistId => text()(); // Ekstra property
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 
@@ -91,12 +129,19 @@ class LiveStreams extends Table {
 @DataClassName('VodStreamsData')
 class VodStreams extends Table {
   TextColumn get streamId => text()();
+
   TextColumn get name => text()();
+
   TextColumn get streamIcon => text()();
+
   TextColumn get categoryId => text()();
+
   TextColumn get rating => text()();
+
   RealColumn get rating5based => real()();
+
   TextColumn get containerExtension => text()();
+
   TextColumn get playlistId => text()(); // Ekstra property
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 
@@ -107,21 +152,36 @@ class VodStreams extends Table {
 @DataClassName('SeriesStreamsData')
 class SeriesStreams extends Table {
   TextColumn get seriesId => text()();
+
   TextColumn get name => text()();
+
   TextColumn get cover => text()();
+
   TextColumn get plot => text()();
+
   TextColumn get cast => text()();
+
   TextColumn get director => text()();
+
   TextColumn get genre => text()();
+
   TextColumn get releaseDate => text()();
+
   TextColumn get rating => text()();
+
   RealColumn get rating5based => real()();
+
   TextColumn get youtubeTrailer => text()();
+
   TextColumn get episodeRunTime => text()();
+
   TextColumn get categoryId => text()();
+
   TextColumn get playlistId => text()(); // Ekstra property
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
   TextColumn get lastModified => text()();
+
   TextColumn get backdropPath => text()(); // JSON string olarak saklanacak
 
   @override
@@ -131,75 +191,127 @@ class SeriesStreams extends Table {
 @DataClassName('SeriesInfosData')
 class SeriesInfos extends Table {
   IntColumn get id => integer().autoIncrement()();
+
   TextColumn get seriesId => text()();
+
   TextColumn get name => text()();
+
   TextColumn get cover => text().nullable()();
+
   TextColumn get plot => text().nullable()();
+
   TextColumn get cast => text().nullable()();
+
   TextColumn get director => text().nullable()();
+
   TextColumn get genre => text().nullable()();
+
   TextColumn get releaseDate => text().nullable()();
+
   TextColumn get lastModified => text().nullable()();
+
   TextColumn get rating => text().nullable()();
+
   IntColumn get rating5based => integer().nullable()();
+
   TextColumn get backdropPath => text().nullable()();
+
   TextColumn get youtubeTrailer => text().nullable()();
+
   TextColumn get episodeRunTime => text().nullable()();
+
   TextColumn get categoryId => text().nullable()();
+
   TextColumn get playlistId => text()();
 }
 
 @DataClassName('SeasonsData')
 class Seasons extends Table {
   IntColumn get id => integer().autoIncrement()();
+
   TextColumn get seriesId => text()();
+
   TextColumn get airDate => text().nullable()();
+
   IntColumn get episodeCount => integer().nullable()();
+
   IntColumn get seasonId => integer()();
+
   TextColumn get name => text()();
+
   TextColumn get overview => text().nullable()();
+
   IntColumn get seasonNumber => integer()();
+
   IntColumn get voteAverage => integer().nullable()();
+
   TextColumn get cover => text().nullable()();
+
   TextColumn get coverBig => text().nullable()();
+
   TextColumn get playlistId => text()();
 }
 
 @DataClassName('EpisodesData')
 class Episodes extends Table {
   IntColumn get id => integer().autoIncrement()();
+
   TextColumn get seriesId => text()();
+
   TextColumn get episodeId => text()();
+
   IntColumn get episodeNum => integer()();
+
   TextColumn get title => text()();
+
   TextColumn get containerExtension => text().nullable()();
+
   IntColumn get season => integer()();
+
   TextColumn get customSid => text().nullable()();
+
   TextColumn get added => text().nullable()();
+
   TextColumn get directSource => text().nullable()();
+
   TextColumn get playlistId => text()();
 
   // Episode Info
   IntColumn get tmdbId => integer().nullable()();
+
   TextColumn get releasedate => text().nullable()();
+
   TextColumn get plot => text().nullable()();
+
   IntColumn get durationSecs => integer().nullable()();
+
   TextColumn get duration => text().nullable()();
+
   TextColumn get movieImage => text().nullable()();
+
   IntColumn get bitrate => integer().nullable()();
+
   RealColumn get rating => real().nullable()();
 }
 
 @DataClassName('WatchHistoriesData')
 class WatchHistories extends Table {
   TextColumn get playlistId => text()();
+
   IntColumn get contentType => intEnum<ContentType>()();
+
   TextColumn get streamId => text()();
+
   TextColumn get seriesId => text().nullable()();
+
   IntColumn get watchDuration => integer().nullable()();
+
   IntColumn get totalDuration => integer().nullable()();
+
   DateTimeColumn get lastWatched => dateTime()();
+
   TextColumn get imagePath => text().nullable()();
+
   TextColumn get title => text()();
 
   @override
@@ -244,8 +356,10 @@ class AppDatabase extends _$AppDatabase {
               ),
             ),
       );
+
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
   // === PLAYLIST İŞLEMLERİ ===
 
   // Playlist oluştur
@@ -1013,25 +1127,34 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<VodStream?> findMovieById(String streamId, String playlistId) async {
-    var vodStreamData = await (select(vodStreams)..where(
-          (tbl) =>
-      tbl.playlistId.equals(playlistId) &
-      tbl.streamId.equals(streamId),
-    ))
-        .getSingleOrNull();
+    var vodStreamData =
+        await (select(vodStreams)..where(
+              (tbl) =>
+                  tbl.playlistId.equals(playlistId) &
+                  tbl.streamId.equals(streamId),
+            ))
+            .getSingleOrNull();
 
-    return vodStreamData != null ? VodStream.fromDriftVodStream(vodStreamData) : null;
+    return vodStreamData != null
+        ? VodStream.fromDriftVodStream(vodStreamData)
+        : null;
   }
 
-  Future<LiveStream?> findLiveStreamById(String streamId, String playlistId) async {
-    var liveStreamData = await (select(liveStreams)..where(
-          (tbl) =>
-      tbl.playlistId.equals(playlistId) &
-      tbl.streamId.equals(streamId),
-    ))
-        .getSingleOrNull();
+  Future<LiveStream?> findLiveStreamById(
+    String streamId,
+    String playlistId,
+  ) async {
+    var liveStreamData =
+        await (select(liveStreams)..where(
+              (tbl) =>
+                  tbl.playlistId.equals(playlistId) &
+                  tbl.streamId.equals(streamId),
+            ))
+            .getSingleOrNull();
 
-    return liveStreamData != null ? LiveStream.fromDriftLiveStream(liveStreamData) : null;
+    return liveStreamData != null
+        ? LiveStream.fromDriftLiveStream(liveStreamData)
+        : null;
   }
 
   // Clear operations
@@ -1108,7 +1231,6 @@ class AppDatabase extends _$AppDatabase {
         .toList();
   }
 
-  // Database migration
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (Migrator m) async {
@@ -1116,15 +1238,14 @@ class AppDatabase extends _$AppDatabase {
     },
     onUpgrade: (Migrator m, int from, int to) async {
       if (from <= 2) {
-        // Kategori tablosunu ekle
         await m.createTable(categories);
         await m.createTable(userInfos);
         await m.createTable(serverInfos);
         await m.createTable(liveStreams);
         await m.createTable(vodStreams);
         await m.createTable(seriesStreams);
-        await m.addColumn(seriesStreams, seriesStreams.lastModified);
-        await m.addColumn(seriesStreams, seriesStreams.backdropPath);
+        // await m.addColumn(seriesStreams, seriesStreams.lastModified);
+        // await m.addColumn(seriesStreams, seriesStreams.backdropPath);
         await customStatement('''
         UPDATE series_streams 
         SET last_modified = '0', backdrop_path = '[]' 
@@ -1134,6 +1255,14 @@ class AppDatabase extends _$AppDatabase {
         await m.createTable(seasons);
         await m.createTable(episodes);
         await m.createTable(watchHistories);
+      }
+
+      if (from <= 3) {
+        await customStatement('''
+          UPDATE playlists 
+          SET type = 'PlaylistType.xtream' 
+          WHERE type = 'PlaylistType.xstream'
+        ''');
       }
     },
   );

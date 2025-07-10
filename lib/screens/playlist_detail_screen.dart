@@ -3,8 +3,8 @@ import 'package:another_iptv_player/models/api_response.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
-import '../playlist_screen.dart';
-import '../xtream-codes/xtream_code_data_loader_screen.dart';
+import 'playlist_screen.dart';
+import 'xtream-codes/xtream_code_data_loader_screen.dart';
 
 class PlaylistSettingsScreen extends StatefulWidget {
   final Playlist playlist;
@@ -122,7 +122,7 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -155,7 +155,7 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
               ),
             ),
           ),
-          
+
           // Content
           SliverToBoxAdapter(
             child: FadeTransition(
@@ -166,9 +166,9 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
                   children: [
                     // Status Overview Card
                     _buildStatusOverviewCard(),
-                    
+
                     const SizedBox(height: 20),
-                    
+
                     // Playlist Info
                     _buildModernSectionCard(
                       title: 'Playlist Bilgileri',
@@ -289,7 +289,7 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
       child: Column(
         children: [
           Icon(
-            _getStatusColor() == Colors.green 
+            _getStatusColor() == Colors.green
                 ? Icons.check_circle_rounded
                 : _getStatusColor() == Colors.orange
                     ? Icons.warning_rounded
@@ -420,7 +420,7 @@ class _PlaylistSettingsScreenState extends State<PlaylistSettingsScreen>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  isUrl && value.length > 30 
+                  isUrl && value.length > 30
                       ? '${value.substring(0, 30)}...'
                       : value,
                   style: TextStyle(

@@ -56,7 +56,7 @@ class ContentCard extends StatelessWidget {
       ),
     );
 
-    return Hero(tag: content.id, child: cardWidget);
+    return cardWidget;
   }
 
   Widget _buildTitleCard(BuildContext context) {

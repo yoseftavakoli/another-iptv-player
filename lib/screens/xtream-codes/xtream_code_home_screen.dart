@@ -7,13 +7,12 @@ import 'package:another_iptv_player/models/category_view_model.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
 import 'package:another_iptv_player/screens/category_detail_screen.dart';
-import 'package:another_iptv_player/screens/playlist_detail_screen.dart';
+import 'package:another_iptv_player/screens/xtream-codes/xtream_code_playlist_detail_screen.dart';
 import 'package:another_iptv_player/screens/watch_history/watch_history_screen.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/utils/navigate_by_content_type.dart';
 import 'package:another_iptv_player/utils/responsive_helper.dart';
 import 'package:another_iptv_player/widgets/category_section.dart';
-
 import '../../models/content_type.dart';
 
 class XtreamCodeHomeScreen extends StatefulWidget {
@@ -116,7 +115,7 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
         ContentType.series,
         controller,
       ),
-      PlaylistSettingsScreen(playlist: widget.playlist),
+      XtreamCodePlaylistSettingsScreen(playlist: widget.playlist),
     ];
   }
 

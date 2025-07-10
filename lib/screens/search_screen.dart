@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/content_type.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
@@ -6,17 +5,18 @@ import 'package:another_iptv_player/repositories/iptv_repository.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/utils/navigate_by_content_type.dart';
 import 'package:another_iptv_player/utils/responsive_helper.dart';
-
 import '../../widgets/content_card.dart';
 
-class SearchAppBar extends StatefulWidget {
-  const SearchAppBar({super.key});
+class SearchScreen extends StatefulWidget {
+  final ContentType contentType;
+
+  const SearchScreen({super.key, required this.contentType});
 
   @override
-  _SearchAppBarState createState() => _SearchAppBarState();
+  SearchScreenState createState() => SearchScreenState();
 }
 
-class _SearchAppBarState extends State<SearchAppBar> {
+class SearchScreenState extends State<SearchScreen> {
   bool isSearching = false;
   bool isLoading = false;
   String? errorMessage;
@@ -29,7 +29,6 @@ class _SearchAppBarState extends State<SearchAppBar> {
   @override
   void initState() {
     super.initState();
-    // Ekran açıldığında otomatik olarak arama modunu başlat
     WidgetsBinding.instance.addPostFrameCallback((_) {
       startSearch();
     });
@@ -42,12 +41,33 @@ class _SearchAppBarState extends State<SearchAppBar> {
     super.dispose();
   }
 
+  String get _getSearchHint {
+    switch (widget.contentType) {
+      case ContentType.liveStream:
+        return 'Canlı yayın ara...';
+      case ContentType.vod:
+        return 'Film ara...';
+      case ContentType.series:
+        return 'Dizi ara...';
+    }
+  }
+
+  String get _getScreenTitle {
+    switch (widget.contentType) {
+      case ContentType.liveStream:
+        return 'Canlı Yayın Arama';
+      case ContentType.vod:
+        return 'Film Arama';
+      case ContentType.series:
+        return 'Dizi Arama';
+    }
+  }
+
   void startSearch() {
     setState(() {
       isSearching = true;
       isSearched = true;
     });
-    // Focus'u arama alanına yönlendir
     Future.delayed(Duration(milliseconds: 100), () {
       searchFocusNode.requestFocus();
     });
@@ -57,8 +77,86 @@ class _SearchAppBarState extends State<SearchAppBar> {
     setState(() {
       isSearching = false;
       searchController.clear();
+      contentItems = [];
     });
     searchFocusNode.unfocus();
+  }
+
+  Future<void> _performSearch(String value) async {
+    if (value.isEmpty || value.trim().isEmpty) {
+      setState(() {
+        contentItems = [];
+      });
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+      contentItems = [];
+    });
+
+    try {
+      List<ContentItem> searchResults = [];
+
+      switch (widget.contentType) {
+        case ContentType.liveStream:
+          var liveStreams = await repository.searchLiveStreams(value);
+          searchResults = liveStreams
+              .map(
+                (x) => ContentItem(
+                  x.streamId,
+                  x.name,
+                  x.streamIcon,
+                  ContentType.liveStream,
+                  liveStream: x,
+                ),
+              )
+              .toList();
+          break;
+
+        case ContentType.vod:
+          var vodStreams = await repository.searchMovies(value);
+          searchResults = vodStreams
+              .map(
+                (x) => ContentItem(
+                  x.streamId,
+                  x.name,
+                  x.streamIcon,
+                  ContentType.vod,
+                  containerExtension: x.containerExtension,
+                  vodStream: x,
+                ),
+              )
+              .toList();
+          break;
+
+        case ContentType.series:
+          var series = await repository.searchSeries(value);
+          searchResults = series
+              .map(
+                (x) => ContentItem(
+                  x.seriesId,
+                  x.name,
+                  x.cover,
+                  ContentType.series,
+                  seriesStream: x,
+                ),
+              )
+              .toList();
+          break;
+      }
+
+      setState(() {
+        contentItems = searchResults;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = e.toString();
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -67,67 +165,16 @@ class _SearchAppBarState extends State<SearchAppBar> {
       appBar: AppBar(
         title: isSearching
             ? TextField(
-          controller: searchController,
-          focusNode: searchFocusNode,
-          decoration: InputDecoration(
-            hintText: 'Ara...',
-            border: InputBorder.none,
-          ),
-          autofocus: true,
-          onChanged: (value) async {
-            if (value.isEmpty || value.trim().isEmpty) {
-              setState(() {
-                contentItems = [];
-              });
-            } else {
-              setState(() {
-                isLoading = true;
-                errorMessage = null;
-                contentItems = [];
-              });
-
-              var liveStreams = await repository.searchLiveStreams(value);
-              var vodStreams = await repository.searchMovies(value);
-              var series = await repository.searchSeries(value);
-
-              setState(() {
-                contentItems = [
-                  ...contentItems,
-                  ...liveStreams.map(
-                        (x) => ContentItem(
-                      x.streamId,
-                      x.name,
-                      x.streamIcon,
-                      ContentType.liveStream,
-                    ),
-                  ),
-                  ...vodStreams.map(
-                        (x) => ContentItem(
-                      x.streamId,
-                      x.name,
-                      x.streamIcon,
-                      ContentType.vod,
-                      containerExtension: x.containerExtension,
-                      vodStream: x,
-                    ),
-                  ),
-                  ...series.map(
-                        (x) => ContentItem(
-                      x.seriesId,
-                      x.name,
-                      x.cover,
-                      ContentType.series,
-                      seriesStream: x,
-                    ),
-                  ),
-                ];
-
-                isLoading = false;
-              });
-            }
-          },
-        )
-            : Text('Arama'),
+                controller: searchController,
+                focusNode: searchFocusNode,
+                decoration: InputDecoration(
+                  hintText: _getSearchHint,
+                  border: InputBorder.none,
+                ),
+                autofocus: true,
+                onChanged: _performSearch,
+              )
+            : Text(_getScreenTitle),
         actions: [
           if (isSearching)
             IconButton(icon: Icon(Icons.clear), onPressed: stopSearch)
@@ -152,8 +199,14 @@ class _SearchAppBarState extends State<SearchAppBar> {
   }
 
   Widget _buildContentGrid(BuildContext context) {
-    if (contentItems.isEmpty && isSearched) {
+    if (contentItems.isEmpty &&
+        isSearched &&
+        searchController.text.isNotEmpty) {
       return _buildEmptyState();
+    }
+
+    if (contentItems.isEmpty) {
+      return _buildInitialState();
     }
 
     return GridView.builder(
@@ -166,8 +219,8 @@ class _SearchAppBarState extends State<SearchAppBar> {
   }
 
   SliverGridDelegateWithFixedCrossAxisCount _buildGridDelegate(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: ResponsiveHelper.getCrossAxisCount(context),
       childAspectRatio: 0.65,
@@ -177,10 +230,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
   }
 
   Widget _buildContentItem(
-      BuildContext context,
-      int index,
-      List<ContentItem> contentItems,
-      ) {
+    BuildContext context,
+    int index,
+    List<ContentItem> contentItems,
+  ) {
     final contentItem = contentItems[index];
 
     return ContentCard(
@@ -190,20 +243,60 @@ class _SearchAppBarState extends State<SearchAppBar> {
     );
   }
 
-  Widget _buildEmptyState() {
-    return const Center(
+  Widget _buildInitialState() {
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.video_library_outlined, size: 64, color: Colors.grey),
+          Icon(Icons.search, size: 64, color: Colors.grey),
           SizedBox(height: 16),
           Text(
-            'İçerik bulunamadı',
+            'Aramaya başlamak için yukarıdaki arama butonuna tıklayın',
             style: TextStyle(fontSize: 16, color: Colors.grey),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(_getEmptyStateIcon(), size: 64, color: Colors.grey),
+          SizedBox(height: 16),
+          Text(
+            _getEmptyStateMessage(),
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconData _getEmptyStateIcon() {
+    switch (widget.contentType) {
+      case ContentType.liveStream:
+        return Icons.live_tv_outlined;
+      case ContentType.vod:
+        return Icons.movie_outlined;
+      case ContentType.series:
+        return Icons.tv_outlined;
+    }
+  }
+
+  String _getEmptyStateMessage() {
+    switch (widget.contentType) {
+      case ContentType.liveStream:
+        return 'Canlı yayın bulunamadı';
+      case ContentType.vod:
+        return 'Film bulunamadı';
+      case ContentType.series:
+        return 'Dizi bulunamadı';
+    }
   }
 
   Widget _buildErrorState() {

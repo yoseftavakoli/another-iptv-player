@@ -6,7 +6,7 @@ import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/models/progress_step.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
 import 'package:provider/provider.dart';
-import '../home/iptv_home_screen.dart';
+import 'xtream_code_home_screen.dart';
 import '../playlist_screen.dart';
 
 class XtreamCodeDataLoaderScreen extends StatefulWidget {
@@ -120,7 +120,7 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
         MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider.value(
             value: _controller,
-            child: IPTVHomeScreen(playlist: widget.playlist),
+            child: XtreamCodeHomeScreen(playlist: widget.playlist),
           ),
         ),
         (route) => false,

@@ -6,7 +6,6 @@ import 'content_item_card_widget.dart';
 
 class CategorySection extends StatelessWidget {
   final CategoryViewModel category;
-  final String type;
   final double cardWidth;
   final double cardHeight;
   final VoidCallback? onSeeAllTap;
@@ -14,7 +13,6 @@ class CategorySection extends StatelessWidget {
   const CategorySection({
     super.key,
     required this.category,
-    required this.type,
     required this.cardWidth,
     required this.cardHeight,
     this.onSeeAllTap,

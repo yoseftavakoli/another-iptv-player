@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import '../models/playlist_model.dart';
-import '../screens/home/iptv_home_screen.dart';
+import '../screens/xtream-codes/xtream_code_home_screen.dart';
 import '../services/playlist_service.dart';
 
 class PlaylistController extends ChangeNotifier {
@@ -54,7 +54,7 @@ class PlaylistController extends ChangeNotifier {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => IPTVHomeScreen(playlist: playlist),
+          builder: (context) => XtreamCodeHomeScreen(playlist: playlist),
         ),
       );
     }

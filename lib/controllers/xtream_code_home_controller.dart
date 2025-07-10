@@ -8,7 +8,7 @@ import 'package:another_iptv_player/services/app_state.dart';
 
 import '../screens/xtream-codes/xtream_code_data_loader_screen.dart';
 
-class HomeController extends ChangeNotifier {
+class XtreamCodeHomeController extends ChangeNotifier {
   late PageController _pageController;
   final IptvRepository _repository = AppState.repository!;
   String? _errorMessage;
@@ -34,7 +34,7 @@ class HomeController extends ChangeNotifier {
 
   List<CategoryViewModel>? get seriesCategories => _seriesCategories;
 
-  HomeController() {
+  XtreamCodeHomeController() {
     _pageController = PageController();
     _loadCategories();
   }
@@ -72,8 +72,6 @@ class HomeController extends ChangeNotifier {
       case 3:
         return 'Diziler';
       case 4:
-        return 'Arama';
-      case 5:
         return 'Ayarlar';
       default:
         return 'IPTV Player';

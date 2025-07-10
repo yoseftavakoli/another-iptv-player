@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../repositories/user_preferences.dart';
 import '../../services/app_state.dart';
 import '../../services/playlist_service.dart';
-import 'home/iptv_home_screen.dart';
+import 'xtream-codes/xtream_code_home_screen.dart';
 
 class AppInitializerScreen extends StatefulWidget {
   const AppInitializerScreen({super.key});
@@ -47,6 +47,6 @@ class _AppInitializerScreenState extends State<AppInitializerScreen> {
 
     return _lastPlaylist == null
         ? const PlaylistScreen()
-        : IPTVHomeScreen(playlist: _lastPlaylist!);
+        : XtreamCodeHomeScreen(playlist: _lastPlaylist!);
   }
 }

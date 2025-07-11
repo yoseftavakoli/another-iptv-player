@@ -50,6 +50,7 @@ Official documentation: [https://bsogulcan.github.io/another-iptv-player](https:
 
 - The project name "Another IPTV Player" is inspired by [Another Redis Desktop Manager](https://github.com/qishibo/AnotherRedisDesktopManager).
 - This project uses [media_kit](https://github.com/media-kit/media-kit) as the cross-platform video & audio player for Flutter & Dart.
+- Special thanks to [JUL1EN094](https://github.com/JUL1EN094) for documenting and sharing detailed information about Xtream Code API implementation. See the [discussion](https://github.com/AndreyPavlenko/Fermata/discussions/434) for more details.
 
 ## Contributing
 

@@ -1,4 +1,4 @@
-import 'package:another_iptv_player/screens/watch_history/watch_history_card.dart';
+import 'package:another_iptv_player/widgets/watch_history/watch_history_card.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/watch_history.dart';
 

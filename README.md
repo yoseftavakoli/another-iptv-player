@@ -39,7 +39,7 @@ Official documentation: [https://bsogulcan.github.io/another-iptv-player](https:
 - [x] Global Search
 - [x] Video, Audio, and Subtitle Track Selection
 - [x] Track Selection Memory
-- [ ] Subtitle Customization
+- [x] Subtitle Customization
 - [ ] Localization (Multi-language Support)
 - [ ] M3U & M3U8 Playlist Support
 - [ ] EPG (Electronic Program Guide) Support

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
@@ -6,6 +8,7 @@ class UserPreferences {
   static const String _keyAudioTrack = 'audio_track';
   static const String _keySubtitleTrack = 'subtitle_track';
   static const String _keyVideoQuality = 'video_quality';
+  static const String _keyBackgroundPlay = 'background_play';
 
   static Future<void> setLastPlaylist(String playlistId) async {
     final prefs = await SharedPreferences.getInstance();
@@ -39,7 +42,7 @@ class UserPreferences {
 
   static Future<String> getAudioTrack() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyAudioTrack) ?? 'auto'; // Varsayılan: ilk track
+    return prefs.getString(_keyAudioTrack) ?? 'auto';
   }
 
   static Future<void> setSubtitleTrack(String language) async {
@@ -49,7 +52,7 @@ class UserPreferences {
 
   static Future<String> getSubtitleTrack() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keySubtitleTrack) ?? 'auto'; // Varsayılan: kapalı
+    return prefs.getString(_keySubtitleTrack) ?? 'auto';
   }
 
   static Future<void> setVideoTrack(String id) async {
@@ -60,5 +63,15 @@ class UserPreferences {
   static Future<String> getVideoTrack() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_keyVideoQuality) ?? 'auto';
+  }
+
+  static Future<void> setBackgroundPlay(bool backgroundPlay) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyBackgroundPlay, backgroundPlay);
+  }
+
+  static Future<bool> getBackgroundPlay() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyBackgroundPlay) ?? true;
   }
 }

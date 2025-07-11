@@ -25,28 +25,25 @@ class _GeneralSettingsWidgetState extends State<GeneralSettingsWidget> {
 
   Future<void> _loadSettings() async {
     try {
-      final backgroundPlay =
-          false; //await UserPreferences.getBackgroundPlayEnabled();
+      final backgroundPlay = await UserPreferences.getBackgroundPlay();
       setState(() {
-        _backgroundPlayEnabled = backgroundPlay ?? false;
+        _backgroundPlayEnabled = backgroundPlay;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
-      debugPrint('Genel ayarlar yüklenirken hata: $e');
     }
   }
 
   Future<void> _saveBackgroundPlaySetting(bool value) async {
     try {
-      //await UserPreferences.setBackgroundPlayEnabled(value);
+      await UserPreferences.setBackgroundPlay(value);
       setState(() {
         _backgroundPlayEnabled = value;
       });
     } catch (e) {
-      debugPrint('Arkaplan çalma ayarı kaydedilirken hata: $e');
       setState(() {
         _backgroundPlayEnabled = !value;
       });
@@ -118,7 +115,6 @@ class _GeneralSettingsWidgetState extends State<GeneralSettingsWidget> {
                   );
                 },
               ),
-
             ],
           ),
         ),

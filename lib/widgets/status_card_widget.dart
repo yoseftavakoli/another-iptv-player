@@ -43,7 +43,6 @@ class StatusCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: _getStatusColor().withOpacity(0.1),
       child: ListTile(
         leading: Icon(
           _getStatusColor() == Colors.green

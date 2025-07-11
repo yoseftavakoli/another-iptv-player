@@ -38,7 +38,8 @@ class PlayerWidget extends StatefulWidget {
   State<PlayerWidget> createState() => _PlayerWidgetState();
 }
 
-class _PlayerWidgetState extends State<PlayerWidget> with WidgetsBindingObserver {
+class _PlayerWidgetState extends State<PlayerWidget>
+    with WidgetsBindingObserver {
   late StreamSubscription videoTrackSubscription;
   late StreamSubscription audioTrackSubscription;
   late StreamSubscription subtitleTrackSubscription;
@@ -86,7 +87,7 @@ class _PlayerWidgetState extends State<PlayerWidget> with WidgetsBindingObserver
           await UserPreferences.setSubtitleTrack(data.language ?? 'null');
         });
 
-    _initializeAudioService();
+    _initializePlayer();
   }
 
   @override
@@ -101,9 +102,10 @@ class _PlayerWidgetState extends State<PlayerWidget> with WidgetsBindingObserver
     super.dispose();
   }
 
-  Future<void> _initializeAudioService() async {
+  Future<void> _initializePlayer() async {
     if (!mounted) return;
 
+    PlayerState.backgroundPlay = await UserPreferences.getBackgroundPlay();
     _audioHandler.setPlayer(_player);
     _videoController = VideoController(_player);
 
@@ -134,7 +136,8 @@ class _PlayerWidgetState extends State<PlayerWidget> with WidgetsBindingObserver
             playable: true,
             extras: {
               'url': buildMediaUrl(item),
-              'startPosition': itemWatchHistory?.watchDuration?.inMilliseconds ?? 0,
+              'startPosition':
+                  itemWatchHistory?.watchDuration?.inMilliseconds ?? 0,
             },
           ),
         );

@@ -11,4 +11,5 @@ abstract class PlayerState {
   static SubtitleTrack selectedSubtitle = SubtitleTrack.auto();
 
   static String title = '';
+  static bool backgroundPlay = true;
 }

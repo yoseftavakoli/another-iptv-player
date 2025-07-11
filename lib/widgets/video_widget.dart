@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/services/player_state.dart';
 import 'package:another_iptv_player/widgets/player-buttons/back_button_widget.dart';
 import 'package:another_iptv_player/widgets/player-buttons/video_settings_widget.dart';
 import 'package:another_iptv_player/widgets/player-buttons/video_title_widget.dart';
@@ -38,7 +39,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           body: Video(
             controller: controller,
             resumeUponEnteringForegroundMode: true,
-            pauseUponEnteringBackgroundMode: false,
+            pauseUponEnteringBackgroundMode: !PlayerState.backgroundPlay,
           ),
         ),
       );
@@ -68,7 +69,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
           body: Video(
             controller: controller,
             resumeUponEnteringForegroundMode: true,
-            pauseUponEnteringBackgroundMode: false,
+            pauseUponEnteringBackgroundMode: !PlayerState.backgroundPlay,
           ),
         ),
       );
@@ -77,7 +78,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
         controller: controller,
         controls: NoVideoControls,
         resumeUponEnteringForegroundMode: true,
-        pauseUponEnteringBackgroundMode: false,
+        pauseUponEnteringBackgroundMode: !PlayerState.backgroundPlay,
       );
   }
 }

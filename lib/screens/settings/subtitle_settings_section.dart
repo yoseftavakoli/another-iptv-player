@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/color_picker_tile_widget.dart';
 import '../../widgets/dropdown_tile_widget.dart';
@@ -11,7 +12,8 @@ class SubtitleSettingsScreen extends StatefulWidget {
 }
 
 class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
-  // Settings variables
+  bool _isLoading = true;
+
   double _fontSize = 32.0;
   double _height = 1.4;
   double _letterSpacing = 0.0;
@@ -29,16 +31,36 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    // UserPreferences'dan ayarları yükle
+    _fontSize = await UserPreferences.getSubtitleFontSize();
+    _height = await UserPreferences.getSubtitleHeight();
+    _letterSpacing = await UserPreferences.getSubtitleLetterSpacing();
+    _wordSpacing = await UserPreferences.getSubtitleWordSpacing();
+    _textColor = await UserPreferences.getSubtitleTextColor();
+    _backgroundColor = await UserPreferences.getSubtitleBackgroundColor();
+    _fontWeight = await UserPreferences.getSubtitleFontWeight();
+    _textAlign = await UserPreferences.getSubtitleTextAlign();
+    _padding = await UserPreferences.getSubtitlePadding();
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   Future<void> _saveSettings() async {
-    // UserPreferences'a ayarları kaydet
+    await UserPreferences.setSubtitleFontSize(_fontSize);
+    await UserPreferences.setSubtitleHeight(_height);
+    await UserPreferences.setSubtitleLetterSpacing(_letterSpacing);
+    await UserPreferences.setSubtitleWordSpacing(_wordSpacing);
+    await UserPreferences.setSubtitleTextColor(_textColor);
+    await UserPreferences.setSubtitleBackgroundColor(_backgroundColor);
+    await UserPreferences.setSubtitleFontWeight(_fontWeight);
+    await UserPreferences.setSubtitleTextAlign(_textAlign);
+    await UserPreferences.setSubtitlePadding(_padding);
   }
 
-  void _updateFontSize(double value) {
+  Future<void> _updateFontSize(double value) async {
     setState(() => _fontSize = value);
-    _saveSettings();
+    await _saveSettings();
   }
 
   void _updateHeight(double value) {
@@ -134,6 +156,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                 child: Text(
                   'Örnek altyazı metni\nBu şekilde görünecek',
                   textAlign: _textAlign,
+                  textScaler: TextScaler.linear(.38),
                   style: TextStyle(
                     fontSize: _fontSize,
                     height: _height,
@@ -158,202 +181,244 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
       appBar: AppBar(
         title: const Text('Altyazı Ayarları'),
         actions: [
-          TextButton(
-            onPressed: _resetToDefaults,
-            child: const Text('Sıfırla'),
-          ),
+          if (!_isLoading)
+            TextButton(
+              onPressed: _resetToDefaults,
+              child: const Text('Sıfırla'),
+            ),
         ],
       ),
-      body: Column(
-        children: [
-          // Sabit önizleme
-          _buildPreviewCard(),
-
-          // Kaydırılabilir ayarlar listesi
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.only(bottom: 16),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
               children: [
-                // Font ayarları
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  child: Column(
+                _buildPreviewCard(),
+
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.only(bottom: 16),
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                        child: Row(
+                      Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        child: Column(
                           children: [
-                            Icon(
-                              Icons.text_fields,
-                              size: 18,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Font Ayarları',
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w600,
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.text_fields,
+                                    size: 18,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Font Ayarları',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               ),
+                            ),
+                            SliderTileWidget(
+                              icon: Icons.format_size,
+                              label: 'Font Boyutu',
+                              value: _fontSize,
+                              min: 24,
+                              max: 96,
+                              divisions: 18,
+                              onChanged: _updateFontSize,
+                            ),
+                            const Divider(height: 1),
+                            SliderTileWidget(
+                              icon: Icons.format_line_spacing,
+                              label: 'Satır Yüksekliği',
+                              value: _height,
+                              min: 1.0,
+                              max: 2.5,
+                              divisions: 15,
+                              onChanged: _updateHeight,
+                            ),
+                            const Divider(height: 1),
+                            SliderTileWidget(
+                              icon: Icons.space_bar,
+                              label: 'Harf Aralığı',
+                              value: _letterSpacing,
+                              min: -2.0,
+                              max: 5.0,
+                              divisions: 70,
+                              onChanged: _updateLetterSpacing,
+                            ),
+                            const Divider(height: 1),
+                            SliderTileWidget(
+                              icon: Icons.format_textdirection_l_to_r,
+                              label: 'Kelime Aralığı',
+                              value: _wordSpacing,
+                              min: -2.0,
+                              max: 10.0,
+                              divisions: 120,
+                              onChanged: _updateWordSpacing,
+                            ),
+                            const Divider(height: 1),
+                            SliderTileWidget(
+                              icon: Icons.padding,
+                              label: 'İç Boşluk',
+                              value: _padding,
+                              min: 8.0,
+                              max: 48.0,
+                              divisions: 40,
+                              onChanged: _updatePadding,
                             ),
                           ],
                         ),
                       ),
-                      SliderTileWidget(
-                        icon: Icons.format_size,
-                        label: 'Font Boyutu',
-                        value: _fontSize,
-                        min: 12,
-                        max: 48,
-                        divisions: 36,
-                        onChanged: _updateFontSize,
-                      ),
-                      const Divider(height: 1),
-                      SliderTileWidget(
-                        icon: Icons.format_line_spacing,
-                        label: 'Satır Yüksekliği',
-                        value: _height,
-                        min: 1.0,
-                        max: 2.5,
-                        divisions: 15,
-                        onChanged: _updateHeight,
-                      ),
-                      const Divider(height: 1),
-                      SliderTileWidget(
-                        icon: Icons.space_bar,
-                        label: 'Harf Aralığı',
-                        value: _letterSpacing,
-                        min: -2.0,
-                        max: 5.0,
-                        divisions: 70,
-                        onChanged: _updateLetterSpacing,
-                      ),
-                      const Divider(height: 1),
-                      SliderTileWidget(
-                        icon: Icons.format_textdirection_l_to_r,
-                        label: 'Kelime Aralığı',
-                        value: _wordSpacing,
-                        min: -2.0,
-                        max: 10.0,
-                        divisions: 120,
-                        onChanged: _updateWordSpacing,
-                      ),
-                      const Divider(height: 1),
-                      SliderTileWidget(
-                        icon: Icons.padding,
-                        label: 'İç Boşluk',
-                        value: _padding,
-                        min: 8.0,
-                        max: 48.0,
-                        divisions: 40,
-                        onChanged: _updatePadding,
-                      ),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 8),
+                      const SizedBox(height: 8),
 
-                // Renk ayarları
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                        child: Row(
+                      Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        child: Column(
                           children: [
-                            Icon(
-                              Icons.palette,
-                              size: 18,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Renk Ayarları',
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w600,
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.palette,
+                                    size: 18,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Renk Ayarları',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               ),
+                            ),
+                            ColorPickerTileWidget(
+                              title: 'Metin Rengi',
+                              icon: Icons.format_color_text,
+                              color: _textColor,
+                              onChanged: _updateTextColor,
+                            ),
+                            const Divider(height: 1),
+                            ColorPickerTileWidget(
+                              title: 'Arka Plan Rengi',
+                              icon: Icons.format_color_fill,
+                              color: _backgroundColor,
+                              onChanged: _updateBackgroundColor,
                             ),
                           ],
                         ),
                       ),
-                      ColorPickerTileWidget(
-                        title: 'Metin Rengi',
-                        icon: Icons.format_color_text,
-                        color: _textColor,
-                        onChanged: _updateTextColor,
-                      ),
-                      const Divider(height: 1),
-                      ColorPickerTileWidget(
-                        title: 'Arka Plan Rengi',
-                        icon: Icons.format_color_fill,
-                        color: _backgroundColor,
-                        onChanged: _updateBackgroundColor,
-                      ),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 8),
-
-                // Stil ayarları
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                        child: Row(
+                      const SizedBox(height: 8),
+                      Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        child: Column(
                           children: [
-                            Icon(
-                              Icons.style,
-                              size: 18,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Stil Ayarları',
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w600,
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.style,
+                                    size: 18,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Stil Ayarları',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               ),
+                            ),
+                            DropdownTileWidget<FontWeight>(
+                              icon: Icons.format_bold,
+                              label: 'Font Kalınlığı',
+                              value: _fontWeight,
+                              items: const [
+                                DropdownMenuItem(
+                                  value: FontWeight.w300,
+                                  child: Text('İnce'),
+                                ),
+                                DropdownMenuItem(
+                                  value: FontWeight.normal,
+                                  child: Text('Normal'),
+                                ),
+                                DropdownMenuItem(
+                                  value: FontWeight.w500,
+                                  child: Text('Orta'),
+                                ),
+                                DropdownMenuItem(
+                                  value: FontWeight.bold,
+                                  child: Text('Kalın'),
+                                ),
+                                DropdownMenuItem(
+                                  value: FontWeight.w900,
+                                  child: Text('Çok Kalın'),
+                                ),
+                              ],
+                              onChanged: (v) => _updateFontWeight(v!),
+                            ),
+                            const Divider(height: 1),
+                            DropdownTileWidget<TextAlign>(
+                              icon: Icons.format_align_center,
+                              label: 'Metin Hizalama',
+                              value: _textAlign,
+                              items: const [
+                                DropdownMenuItem(
+                                  value: TextAlign.left,
+                                  child: Text('Sol'),
+                                ),
+                                DropdownMenuItem(
+                                  value: TextAlign.center,
+                                  child: Text('Merkez'),
+                                ),
+                                DropdownMenuItem(
+                                  value: TextAlign.right,
+                                  child: Text('Sağ'),
+                                ),
+                                DropdownMenuItem(
+                                  value: TextAlign.justify,
+                                  child: Text('İki Yana'),
+                                ),
+                              ],
+                              onChanged: (v) => _updateTextAlign(v!),
                             ),
                           ],
                         ),
-                      ),
-                      DropdownTileWidget<FontWeight>(
-                        icon: Icons.format_bold,
-                        label: 'Font Kalınlığı',
-                        value: _fontWeight,
-                        items: const [
-                          DropdownMenuItem(value: FontWeight.w300, child: Text('İnce')),
-                          DropdownMenuItem(value: FontWeight.normal, child: Text('Normal')),
-                          DropdownMenuItem(value: FontWeight.w500, child: Text('Orta')),
-                          DropdownMenuItem(value: FontWeight.bold, child: Text('Kalın')),
-                          DropdownMenuItem(value: FontWeight.w900, child: Text('Çok Kalın')),
-                        ],
-                        onChanged: (v) => _updateFontWeight(v!),
-                      ),
-                      const Divider(height: 1),
-                      DropdownTileWidget<TextAlign>(
-                        icon: Icons.format_align_center,
-                        label: 'Metin Hizalama',
-                        value: _textAlign,
-                        items: const [
-                          DropdownMenuItem(value: TextAlign.left, child: Text('Sol')),
-                          DropdownMenuItem(value: TextAlign.center, child: Text('Merkez')),
-                          DropdownMenuItem(value: TextAlign.right, child: Text('Sağ')),
-                          DropdownMenuItem(value: TextAlign.justify, child: Text('İki Yana')),
-                        ],
-                        onChanged: (v) => _updateTextAlign(v!),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

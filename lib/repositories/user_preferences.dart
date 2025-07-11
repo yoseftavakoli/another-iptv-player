@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
@@ -9,6 +8,15 @@ class UserPreferences {
   static const String _keySubtitleTrack = 'subtitle_track';
   static const String _keyVideoQuality = 'video_quality';
   static const String _keyBackgroundPlay = 'background_play';
+  static const String _keySubtitleFontSize = 'subtitle_font_size';
+  static const String _keySubtitleHeight = 'subtitle_height';
+  static const String _keySubtitleLetterSpacing = 'subtitle_letter_spacing';
+  static const String _keySubtitleWordSpacing = 'subtitle_word_spacing';
+  static const String _keySubtitleTextColor = 'subtitle_text_color';
+  static const String _keySubtitleBackgroundColor = 'subtitle_background_color';
+  static const String _keySubtitleFontWeight = 'subtitle_font_weight';
+  static const String _keySubtitleTextAlign = 'subtitle_text_align';
+  static const String _keySubtitlePadding = 'subtitle_padding';
 
   static Future<void> setLastPlaylist(String playlistId) async {
     final prefs = await SharedPreferences.getInstance();
@@ -32,7 +40,7 @@ class UserPreferences {
 
   static Future<double> getVolume() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getDouble(_keyVolume) ?? 100; // Varsayılan: max ses
+    return prefs.getDouble(_keyVolume) ?? 100;
   }
 
   static Future<void> setAudioTrack(String language) async {
@@ -73,5 +81,101 @@ class UserPreferences {
   static Future<bool> getBackgroundPlay() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_keyBackgroundPlay) ?? true;
+  }
+
+  static Future<double> getSubtitleFontSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_keySubtitleFontSize) ?? 32.0;
+  }
+
+  static Future<void> setSubtitleFontSize(double fontSize) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_keySubtitleFontSize, fontSize);
+  }
+
+  static Future<double> getSubtitleHeight() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_keySubtitleHeight) ?? 1.4;
+  }
+
+  static Future<void> setSubtitleHeight(double height) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_keySubtitleHeight, height);
+  }
+
+  static Future<double> getSubtitleLetterSpacing() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_keySubtitleLetterSpacing) ?? 0.0;
+  }
+
+  static Future<void> setSubtitleLetterSpacing(double letterSpacing) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_keySubtitleLetterSpacing, letterSpacing);
+  }
+
+  static Future<double> getSubtitleWordSpacing() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_keySubtitleWordSpacing) ?? 0.0;
+  }
+
+  static Future<void> setSubtitleWordSpacing(double wordSpacing) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_keySubtitleWordSpacing, wordSpacing);
+  }
+
+  static Future<Color> getSubtitleTextColor() async {
+    final prefs = await SharedPreferences.getInstance();
+    final colorValue = prefs.getInt(_keySubtitleTextColor) ?? 0xffffffff;
+    return Color(colorValue);
+  }
+
+  static Future<void> setSubtitleTextColor(Color textColor) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keySubtitleTextColor, textColor.toARGB32());
+  }
+
+  static Future<Color> getSubtitleBackgroundColor() async {
+    final prefs = await SharedPreferences.getInstance();
+    final colorValue = prefs.getInt(_keySubtitleBackgroundColor) ?? 0xaa000000;
+    return Color(colorValue);
+  }
+
+  static Future<void> setSubtitleBackgroundColor(Color backgroundColor) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keySubtitleBackgroundColor, backgroundColor.toARGB32());
+  }
+
+  static Future<FontWeight> getSubtitleFontWeight() async {
+    final prefs = await SharedPreferences.getInstance();
+    final weightIndex =
+        prefs.getInt(_keySubtitleFontWeight) ?? FontWeight.normal.index;
+    return FontWeight.values[weightIndex];
+  }
+
+  static Future<void> setSubtitleFontWeight(FontWeight fontWeight) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keySubtitleFontWeight, fontWeight.index);
+  }
+
+  static Future<TextAlign> getSubtitleTextAlign() async {
+    final prefs = await SharedPreferences.getInstance();
+    final alignIndex =
+        prefs.getInt(_keySubtitleTextAlign) ?? TextAlign.center.index;
+    return TextAlign.values[alignIndex];
+  }
+
+  static Future<void> setSubtitleTextAlign(TextAlign textAlign) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keySubtitleTextAlign, textAlign.index);
+  }
+
+  static Future<double> getSubtitlePadding() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_keySubtitlePadding) ?? 24.0;
+  }
+
+  static Future<void> setSubtitlePadding(double padding) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_keySubtitlePadding, padding);
   }
 }

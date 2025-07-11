@@ -5,7 +5,11 @@ import 'package:another_iptv_player/widgets/player-buttons/video_title_widget.da
 import 'package:flutter/material.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
-Widget getVideo(BuildContext context, VideoController controller) {
+Widget getVideo(
+  BuildContext context,
+  VideoController controller,
+  SubtitleViewConfiguration subtitleViewConfiguration,
+) {
   switch (Theme.of(context).platform) {
     case TargetPlatform.android:
     case TargetPlatform.iOS:
@@ -33,13 +37,14 @@ Widget getVideo(BuildContext context, VideoController controller) {
             Expanded(child: VideoTitleWidget()),
             VideoSettingsWidget(),
           ],
-          seekBarMargin: EdgeInsets.fromLTRB(0, 0, 0, 10)
+          seekBarMargin: EdgeInsets.fromLTRB(0, 0, 0, 10),
         ),
         child: Scaffold(
           body: Video(
             controller: controller,
             resumeUponEnteringForegroundMode: true,
             pauseUponEnteringBackgroundMode: !PlayerState.backgroundPlay,
+            subtitleViewConfiguration: subtitleViewConfiguration,
           ),
         ),
       );
@@ -70,6 +75,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
             controller: controller,
             resumeUponEnteringForegroundMode: true,
             pauseUponEnteringBackgroundMode: !PlayerState.backgroundPlay,
+            subtitleViewConfiguration: subtitleViewConfiguration,
           ),
         ),
       );
@@ -79,6 +85,7 @@ Widget getVideo(BuildContext context, VideoController controller) {
         controls: NoVideoControls,
         resumeUponEnteringForegroundMode: true,
         pauseUponEnteringBackgroundMode: !PlayerState.backgroundPlay,
+        subtitleViewConfiguration: subtitleViewConfiguration,
       );
   }
 }

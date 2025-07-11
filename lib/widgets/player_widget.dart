@@ -5,11 +5,13 @@ import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/services/event_bus.dart';
 import 'package:another_iptv_player/services/watch_history_service.dart';
+import 'package:another_iptv_player/utils/subtitle_configuration.dart';
 import 'package:another_iptv_player/widgets/video_widget.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 import '../../models/content_type.dart';
 import '../../services/player_state.dart';
 import '../../services/service_locator.dart';
@@ -104,6 +106,8 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
   Future<void> _initializePlayer() async {
     if (!mounted) return;
+
+    PlayerState.subtitleConfiguration = await getSubtitleConfiguration();
 
     PlayerState.backgroundPlay = await UserPreferences.getBackgroundPlay();
     _audioHandler.setPlayer(_player);
@@ -375,7 +379,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
     return Stack(
       children: [
-        getVideo(context, _videoController!),
+        getVideo(context, _videoController!, PlayerState.subtitleConfiguration),
 
         if (widget.onFullscreen != null)
           Positioned(

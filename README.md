@@ -16,7 +16,7 @@
 Another IPTV Player is a lightweight, multi-platform, and feature-rich IPTV player built with Flutter.  
 Our goal is to provide all the premium features of paid IPTV players for free and with full transparency.
 
-Official documentation: [https://bsogulcan.github.io/another-iptv-player](https://bsogulcan.github.io/another-iptv-player/)
+Official documentation: [https://www.another-iptv-player.com](https://www.another-iptv-player.com)
 
 > **Note:**  
 > We are **not** an IPTV provider and do **not** offer or sell any IPTV subscriptions or content.  

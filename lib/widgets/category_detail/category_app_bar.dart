@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 
 class CategoryAppBar extends StatelessWidget {
@@ -23,7 +24,7 @@ class CategoryAppBar extends StatelessWidget {
     return SliverAppBar(
       floating: true,
       snap: true,
-      title: isSearching ? _buildSearchField() : Text(title),
+      title: isSearching ? _buildSearchField(context) : Text(title),
       actions: [
         IconButton(
           icon: Icon(isSearching ? Icons.clear : Icons.search),
@@ -33,11 +34,11 @@ class CategoryAppBar extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchField() {
+  Widget _buildSearchField(BuildContext context) {
     return TextField(
       controller: searchController,
-      decoration: const InputDecoration(
-        hintText: 'Ara...',
+      decoration: InputDecoration(
+        hintText: context.loc.search,
         border: InputBorder.none,
       ),
       autofocus: true,

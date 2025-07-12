@@ -5,6 +5,7 @@ import 'package:another_iptv_player/models/content_type.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 
 import 'episode_screen.dart';
 
@@ -63,13 +64,13 @@ class _SeriesScreenState extends State<SeriesScreen> {
         });
       } else {
         setState(() {
-          error = 'Dizi detayları yüklenemedi';
+          error = context.loc.preparing_series_exception_1;
           isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        error = 'Bir hata oluştu: $e';
+        error = context.loc.preparing_series_exception_2(e.toString());
         isLoading = false;
       });
     }
@@ -99,11 +100,6 @@ class _SeriesScreenState extends State<SeriesScreen> {
                         child: _buildCoverImage(),
                       ),
                     ),
-                    // SizedBox(
-                    //   width: double.infinity,
-                    //   height: double.infinity,
-                    //   child: _buildCoverImage(),
-                    // ),
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -194,13 +190,13 @@ class _SeriesScreenState extends State<SeriesScreen> {
 
   Widget _buildBody() {
     if (isLoading) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Dizi detayları yükleniyor...'),
+            const CircularProgressIndicator(),
+            const SizedBox(height: 16),
+            Text(context.loc.preparing_series),
           ],
         ),
       );
@@ -221,7 +217,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadSeriesDetails,
-              child: const Text('Tekrar Dene'),
+              child: Text(context.loc.try_again),
             ),
           ],
         ),
@@ -295,7 +291,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Sezonlar',
+          context.loc.season,
           style: Theme.of(
             context,
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -313,13 +309,13 @@ class _SeriesScreenState extends State<SeriesScreen> {
               children: [
                 Icon(Icons.info_outline, color: Colors.grey.shade600),
                 const SizedBox(width: 12),
-                const Text('Henüz sezon bilgisi bulunmuyor'),
+                Text(context.loc.not_found_in_category),
               ],
             ),
           )
         else
           SizedBox(
-            height: 130, // 120'den 130'a çıkardık
+            height: 130,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: seasons.length,
@@ -383,7 +379,9 @@ class _SeriesScreenState extends State<SeriesScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '${season.episodeCount ?? 0} Bölüm',
+                  context.loc.episode_count(
+                    (season.episodeCount ?? 0).toString(),
+                  ),
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 ),
                 if (season.airDate != null) ...[
@@ -409,7 +407,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
     if (plot != null && plot.isNotEmpty) {
       details.add({
         'icon': Icons.description,
-        'title': 'Açıklama',
+        'title': context.loc.description,
         'value': plot,
       });
     }
@@ -419,20 +417,28 @@ class _SeriesScreenState extends State<SeriesScreen> {
         seriesInfo?.releaseDate ?? widget.contentItem.seriesStream?.releaseDate;
     details.add({
       'icon': Icons.calendar_today,
-      'title': 'Çıkış Tarihi',
-      'value': releaseDate ?? 'Bilinmiyor',
+      'title': context.loc.release_date,
+      'value': releaseDate ?? context.loc.not_found_in_category,
     });
 
     // Tür
     final genre = seriesInfo?.genre ?? widget.contentItem.seriesStream?.genre;
     if (genre != null && genre.isNotEmpty) {
-      details.add({'icon': Icons.movie, 'title': 'Tür', 'value': genre});
+      details.add({
+        'icon': Icons.movie,
+        'title': context.loc.genre,
+        'value': genre,
+      });
     }
 
     // Oyuncular
     final cast = seriesInfo?.cast ?? widget.contentItem.seriesStream?.cast;
     if (cast != null && cast.isNotEmpty) {
-      details.add({'icon': Icons.people, 'title': 'Oyuncular', 'value': cast});
+      details.add({
+        'icon': Icons.people,
+        'title': context.loc.cast,
+        'value': cast,
+      });
     }
 
     // Bölüm Süresi
@@ -442,7 +448,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
     if (episodeRunTime != null && episodeRunTime.isNotEmpty) {
       details.add({
         'icon': Icons.access_time,
-        'title': 'Bölüm Süresi',
+        'title': context.loc.episode_duration,
         'value': '$episodeRunTime dakika',
       });
     }
@@ -452,8 +458,8 @@ class _SeriesScreenState extends State<SeriesScreen> {
         seriesInfo?.categoryId ?? widget.contentItem.seriesStream?.categoryId;
     details.add({
       'icon': Icons.category,
-      'title': 'Kategori ID',
-      'value': categoryId ?? 'Belirtilmemiş',
+      'title': context.loc.category_id,
+      'value': categoryId ?? context.loc.not_found_in_category,
     });
 
     // Dizi ID
@@ -463,7 +469,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
         widget.contentItem.id.toString();
     details.add({
       'icon': Icons.tag,
-      'title': 'Dizi ID',
+      'title': context.loc.series_id,
       'value': seriesIdValue,
     });
 
@@ -484,7 +490,6 @@ class _SeriesScreenState extends State<SeriesScreen> {
   }
 
   void _showSeasonEpisodes(SeasonsData season) async {
-    // Sezon bölümlerini göster
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -524,7 +529,9 @@ class _SeriesScreenState extends State<SeriesScreen> {
                         ),
                       ),
                       Text(
-                        '${season.episodeCount ?? 0} Bölüm',
+                        context.loc.episode_count(
+                          (season.episodeCount ?? 0).toString(),
+                        ),
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 14,
@@ -546,8 +553,8 @@ class _SeriesScreenState extends State<SeriesScreen> {
 
                       final episodes = snapshot.data ?? [];
                       if (episodes.isEmpty) {
-                        return const Center(
-                          child: Text('Bu sezona ait bölüm bulunamadı'),
+                        return Center(
+                          child: Text(context.loc.not_found_in_category),
                         );
                       }
 
@@ -596,7 +603,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                   episode.movieImage ?? "",
                   ContentType.series,
                   containerExtension: episode.containerExtension,
-                  season: episode.season
+                  season: episode.season,
                 ),
               ),
             ),
@@ -605,12 +612,11 @@ class _SeriesScreenState extends State<SeriesScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start, // Bu önemli
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Episode numarası/resmi
               Container(
                 width: 60,
-                height: 60, // Sabit yükseklik
+                height: 60,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -649,13 +655,11 @@ class _SeriesScreenState extends State<SeriesScreen> {
               ),
               const SizedBox(width: 12),
 
-              // Episode bilgileri
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, // Bu önemli
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Başlık
                     Text(
                       episode.title,
                       maxLines: 2,
@@ -671,7 +675,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                         episode.duration!.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Text(
-                        'Süre: ${episode.duration}',
+                        context.loc.duration(episode.duration!),
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey.shade600,
@@ -696,7 +700,6 @@ class _SeriesScreenState extends State<SeriesScreen> {
                 ),
               ),
 
-              // Rating ve play icon
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -713,7 +716,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.star, color: Colors.amber, size: 12),
+                          const Icon(Icons.star, color: Colors.amber, size: 12),
                           const SizedBox(width: 2),
                           Text(
                             episode.rating!.toStringAsFixed(1),
@@ -743,11 +746,9 @@ class _SeriesScreenState extends State<SeriesScreen> {
   }
 
   Widget _buildCoverImage() {
-    // API'den gelen cover öncelikli
     final apiCover = seriesInfo?.cover;
     final apiBackdrop = seriesInfo?.backdropPath;
 
-    // Fallback olarak contentItem'dan al
     final hasBackdrop =
         (apiBackdrop?.isNotEmpty == true) ||
         (widget.contentItem.seriesStream?.backdropPath.isNotEmpty == true);
@@ -794,6 +795,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                     const SizedBox(height: 16),
                     Text(
                       'Görsel yükleniyor...',
+                      // Bu string için de localization ekleyebiliriz
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 14,
@@ -832,6 +834,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
             const SizedBox(height: 16),
             Text(
               'Görsel Bulunamadı',
+              // Bu string için de localization ekleyebiliriz
               style: TextStyle(
                 color: Colors.grey.shade600,
                 fontSize: 16,

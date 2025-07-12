@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:another_iptv_player/screens/xtream-codes/xtream_code_data_loader_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +11,12 @@ class NewXtreamCodePlaylistScreen extends StatefulWidget {
   const NewXtreamCodePlaylistScreen({super.key});
 
   @override
-  NewXtreamCodePlaylistScreenState createState() => NewXtreamCodePlaylistScreenState();
+  NewXtreamCodePlaylistScreenState createState() =>
+      NewXtreamCodePlaylistScreenState();
 }
 
-class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen> {
+class NewXtreamCodePlaylistScreenState
+    extends State<NewXtreamCodePlaylistScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController(text: 'Playlist-1');
   final _urlController = TextEditingController();
@@ -117,7 +120,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
         ),
         SizedBox(height: 8),
         Text(
-          'IPTV sağlayıcınızdan aldığınız bilgileri girin',
+          context.loc.xtream_code_description,
           style: TextStyle(
             fontSize: 16,
             color: colorScheme.onSurface.withOpacity(0.7),
@@ -132,7 +135,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Playlist Adı',
+          context.loc.playlist_name,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -143,7 +146,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
         TextFormField(
           controller: _nameController,
           decoration: InputDecoration(
-            hintText: 'Playlist için bir isim girin',
+            hintText: context.loc.playlist_name_placeholder,
             prefixIcon: Icon(Icons.playlist_add, color: colorScheme.primary),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -158,10 +161,10 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'Playlist adı gerekli';
+              return context.loc.playlist_name_required;
             }
             if (value.trim().length < 2) {
-              return 'Playlist adı en az 2 karakter olmalı';
+              return context.loc.playlist_name_min_2;
             }
             return null;
           },
@@ -175,7 +178,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'API URL',
+          context.loc.api_url,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -202,17 +205,16 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'API URL gerekli';
+              return context.loc.api_url_required;
             }
 
-            // Basit URL validation
             final uri = Uri.tryParse(value.trim());
             if (uri == null || !uri.hasScheme || !uri.hasAuthority) {
-              return 'Geçerli bir URL giriniz (http:// veya https://)';
+              return context.loc.url_format_validate_error;
             }
 
             if (!['http', 'https'].contains(uri.scheme)) {
-              return 'URL http:// veya https:// ile başlamalı';
+              return context.loc.url_format_validate_error;
             }
 
             return null;
@@ -227,7 +229,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Kullanıcı Adı',
+          context.loc.username,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -238,7 +240,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
         TextFormField(
           controller: _usernameController,
           decoration: InputDecoration(
-            hintText: 'Kullanıcı adınızı girin',
+            hintText: context.loc.username_placeholder,
             prefixIcon: Icon(Icons.person, color: colorScheme.primary),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -253,10 +255,10 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'Kullanıcı adı gerekli';
+              return context.loc.username_required;
             }
             if (value.trim().length < 3) {
-              return 'Kullanıcı adı en az 3 karakter olmalı';
+              return context.loc.username_min_3;
             }
             return null;
           },
@@ -270,7 +272,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Şifre',
+          context.loc.password,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -282,7 +284,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
           controller: _passwordController,
           obscureText: _obscurePassword,
           decoration: InputDecoration(
-            hintText: 'Şifrenizi girin',
+            hintText: context.loc.password_placeholder,
             prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
             suffixIcon: IconButton(
               icon: Icon(
@@ -308,10 +310,10 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'Şifre gerekli';
+              return context.loc.password_required;
             }
             if (value.length < 3) {
-              return 'Şifre en az 3 karakter olmalı';
+              return context.loc.password_min_3;
             }
             return null;
           },
@@ -355,7 +357,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
                   ),
                   SizedBox(width: 12),
                   Text(
-                    'Kaydediliyor...',
+                    context.loc.submitting,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -366,7 +368,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
                   Icon(Icons.save, size: 20),
                   SizedBox(width: 8),
                   Text(
-                    'Playlist\'i Kaydet',
+                    context.loc.submit_create_playlist,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -392,7 +394,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hata Oluştu',
+                  context.loc.error_occurred,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onErrorContainer,
@@ -430,7 +432,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
               Icon(Icons.info_outline, color: colorScheme.primary, size: 20),
               SizedBox(width: 8),
               Text(
-                'Bilgi',
+                context.loc.info,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.onPrimaryContainer,
@@ -440,10 +442,7 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
           ),
           SizedBox(height: 8),
           Text(
-            '• Tüm bilgiler güvenli bir şekilde cihazınızda saklanır\n'
-            '• Şifre bilgileri şifrelenmiş olarak korunur\n'
-            '• URL formatı: http://sunucu:port şeklinde olmalıdır\n'
-            '• IPTV sağlayıcınızdan aldığınız bilgileri doğru giriniz',
+            '${context.loc.all_datas_are_stored_in_device}\n${context.loc.url_format_validate_message}',
             style: TextStyle(
               color: colorScheme.onPrimaryContainer,
               fontSize: 13,
@@ -473,55 +472,30 @@ class NewXtreamCodePlaylistScreenState extends State<NewXtreamCodePlaylistScreen
         _nameController.text.trim(),
       );
 
-      try {
-        var playerInfo = await repository.getPlayerInfo(forceRefresh: true);
+      var playerInfo = await repository.getPlayerInfo(forceRefresh: true);
 
-        if (playerInfo == null) {
-          // controller.setError(
-          //   'Giriş bilgileri hatalı! Lütfen kullanıcı adı, şifre ve URL bilgilerinizi kontrol ediniz.',
-          // );
-          // todo:::
-          return;
-        }
+      if (playerInfo == null) {
+        controller.setError(context.loc.invalid_credentials);
+        return;
+      }
 
-        final playlist = await controller.createPlaylist(
-          name: _nameController.text.trim(),
-          type: PlaylistType.xtream,
-          url: _urlController.text.trim(),
-          username: _usernameController.text.trim(),
-          password: _passwordController.text.trim(),
+      final playlist = await controller.createPlaylist(
+        name: _nameController.text.trim(),
+        type: PlaylistType.xtream,
+        url: _urlController.text.trim(),
+        username: _usernameController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      if (playlist != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                XtreamCodeDataLoaderScreen(playlist: playlist),
+          ),
         );
-
-        if (playlist != null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => XtreamCodeDataLoaderScreen(playlist: playlist),
-            ),
-          );
-        }
-      } catch (ex) {}
-
-      // Navigator.of(context).popUntil((route) => route.isFirst);
-
-      // // Başarı mesajı göster
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Row(
-      //       children: [
-      //         Icon(Icons.check_circle, color: Colors.white),
-      //         SizedBox(width: 8),
-      //         Expanded(
-      //           child: Text(
-      //             'Playlist "${_nameController.text.trim()}" başarıyla oluşturuldu!',
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //     backgroundColor: Colors.green,
-      //     duration: Duration(seconds: 3),
-      //   ),
-      // );
+      }
     }
   }
 }

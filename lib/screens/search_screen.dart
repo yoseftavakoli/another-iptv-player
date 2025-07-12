@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/content_type.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
@@ -41,25 +42,25 @@ class SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  String get _getSearchHint {
+  String _getSearchHint(BuildContext context) {
     switch (widget.contentType) {
       case ContentType.liveStream:
-        return 'Canlı yayın ara...';
+        return context.loc.search_live_stream;
       case ContentType.vod:
-        return 'Film ara...';
+        return context.loc.search_movie;
       case ContentType.series:
-        return 'Dizi ara...';
+        return context.loc.search_series;
     }
   }
 
-  String get _getScreenTitle {
+  String _getScreenTitle(BuildContext context) {
     switch (widget.contentType) {
       case ContentType.liveStream:
-        return 'Canlı Yayın Arama';
+        return context.loc.search_live_stream;
       case ContentType.vod:
-        return 'Film Arama';
+        return context.loc.search_movie;
       case ContentType.series:
-        return 'Dizi Arama';
+        return context.loc.search_series;
     }
   }
 
@@ -168,13 +169,13 @@ class SearchScreenState extends State<SearchScreen> {
                 controller: searchController,
                 focusNode: searchFocusNode,
                 decoration: InputDecoration(
-                  hintText: _getSearchHint,
+                  hintText: _getSearchHint(context),
                   border: InputBorder.none,
                 ),
                 autofocus: true,
                 onChanged: _performSearch,
               )
-            : Text(_getScreenTitle),
+            : Text(_getScreenTitle(context)),
         actions: [
           if (isSearching)
             IconButton(icon: Icon(Icons.clear), onPressed: stopSearch)
@@ -250,11 +251,7 @@ class SearchScreenState extends State<SearchScreen> {
         children: [
           Icon(Icons.search, size: 64, color: Colors.grey),
           SizedBox(height: 16),
-          Text(
-            'Aramaya başlamak için yukarıdaki arama butonuna tıklayın',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-            textAlign: TextAlign.center,
-          ),
+          // Burası zaten yorum satırında
         ],
       ),
     );
@@ -291,11 +288,11 @@ class SearchScreenState extends State<SearchScreen> {
   String _getEmptyStateMessage() {
     switch (widget.contentType) {
       case ContentType.liveStream:
-        return 'Canlı yayın bulunamadı';
+        return context.loc.live_stream_not_found;
       case ContentType.vod:
-        return 'Film bulunamadı';
+        return context.loc.movie_not_found;
       case ContentType.series:
-        return 'Dizi bulunamadı';
+        return 'Dizi bulunamadı'; // Bu için localization key'ine ihtiyaç var
     }
   }
 
@@ -307,7 +304,7 @@ class SearchScreenState extends State<SearchScreen> {
           const Icon(Icons.error_outline, size: 64, color: Colors.red),
           const SizedBox(height: 16),
           Text(
-            'Hata: $errorMessage',
+            '${context.loc.error_occurred}: $errorMessage',
             style: const TextStyle(fontSize: 16, color: Colors.red),
             textAlign: TextAlign.center,
           ),

@@ -40,7 +40,7 @@ class PlaylistController extends ChangeNotifier {
       _playlists = await PlaylistService.getPlaylists();
       _sortPlaylists();
     } catch (e) {
-      _setError('Playlistler yüklenemedi: ${e.toString()}');
+      setError('Playlistler yüklenemedi: ${e.toString()}');
     } finally {
       _setLoading(false);
     }
@@ -91,7 +91,7 @@ class PlaylistController extends ChangeNotifier {
 
       return playlist;
     } catch (e) {
-      _setError('Playlist kaydedilemedi: ${e.toString()}');
+      setError('Playlist kaydedilemedi: ${e.toString()}');
       return null;
     } finally {
       _setLoading(false);
@@ -105,7 +105,7 @@ class PlaylistController extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _setError('Playlist silinemedi: ${e.toString()}');
+      setError('Playlist silinemedi: ${e.toString()}');
       return false;
     }
   }
@@ -122,7 +122,7 @@ class PlaylistController extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _setError('Playlistler silinemedi: ${e.toString()}');
+      setError('Playlistler silinemedi: ${e.toString()}');
       return false;
     } finally {
       _setLoading(false);
@@ -135,7 +135,7 @@ class PlaylistController extends ChangeNotifier {
 
     try {
       if (_isDuplicateName(updatedPlaylist)) {
-        _setError('Bu isimde bir playlist zaten mevcut');
+        setError('Bu isimde bir playlist zaten mevcut');
         return false;
       }
 
@@ -149,7 +149,7 @@ class PlaylistController extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      _setError('Playlist güncellenemedi: ${e.toString()}');
+      setError('Playlist güncellenemedi: ${e.toString()}');
       return false;
     } finally {
       _setLoading(false);
@@ -239,32 +239,32 @@ class PlaylistController extends ChangeNotifier {
     String? password,
   ) {
     if (name.trim().isEmpty || name.trim().length < 2) {
-      _setError('Playlist adı en az 2 karakter olmalıdır');
+      setError('Playlist adı en az 2 karakter olmalıdır');
       return false;
     }
 
     if (_playlists.any((p) => p.name.toLowerCase() == name.toLowerCase())) {
-      _setError('Bu isimde bir playlist zaten mevcut');
+      setError('Bu isimde bir playlist zaten mevcut');
       return false;
     }
 
     if (type == PlaylistType.xtream) {
       if (url?.trim().isEmpty ?? true) {
-        _setError('URL gereklidir');
+        setError('URL gereklidir');
         return false;
       }
       if (username?.trim().isEmpty ?? true) {
-        _setError('Kullanıcı adı gereklidir');
+        setError('Kullanıcı adı gereklidir');
         return false;
       }
       if (password?.trim().isEmpty ?? true) {
-        _setError('Şifre gereklidir');
+        setError('Şifre gereklidir');
         return false;
       }
 
       final uri = Uri.tryParse(url!.trim());
       if (uri == null || !uri.hasScheme || !uri.hasAuthority) {
-        _setError('Geçerli bir URL giriniz');
+        setError('Geçerli bir URL giriniz');
         return false;
       }
     }
@@ -291,7 +291,7 @@ class PlaylistController extends ChangeNotifier {
     }
   }
 
-  void _setError(String errorMessage) {
+  void setError(String errorMessage) {
     _error = errorMessage;
     _isLoading = false;
     notifyListeners();

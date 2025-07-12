@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 import '../../../../models/playlist_model.dart';
 import '../../utils/playlist_utils.dart';
@@ -139,13 +140,13 @@ class _PlaylistMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       itemBuilder: (context) => [
-        const PopupMenuItem(
+        PopupMenuItem(
           value: 'delete',
           child: Row(
             children: [
               Icon(Icons.delete, color: Colors.red, size: 20),
               SizedBox(width: 8),
-              Text('Sil', style: TextStyle(color: Colors.red)),
+              Text(context.loc.delete, style: TextStyle(color: Colors.red)),
             ],
           ),
         ),

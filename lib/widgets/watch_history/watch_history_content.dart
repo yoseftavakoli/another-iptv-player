@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:another_iptv_player/models/watch_history.dart';
 import 'package:another_iptv_player/widgets/watch_history/watch_history_app_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -38,33 +39,40 @@ class WatchHistoryContent extends StatelessWidget {
             child: Column(
               children: [
                 WatchHistorySection(
-                  title: 'Canlı Yayınlar',
+                  title: context.loc.live_streams,
                   histories: controller.liveHistory,
                   cardWidth: cardWidth,
                   cardHeight: cardHeight,
                   onHistoryTap: onHistoryTap,
                   onHistoryRemove: onHistoryRemove,
-                  onSeeAllTap: () => onSeeAllTap('Canlı Yayınlar', controller.liveHistory),
+                  onSeeAllTap: () => onSeeAllTap(
+                    context.loc.live_streams,
+                    controller.liveHistory,
+                  ),
                 ),
                 WatchHistorySection(
-                  title: 'Filmler',
+                  title: context.loc.movies,
                   histories: controller.movieHistory,
                   cardWidth: cardWidth,
                   cardHeight: cardHeight,
                   showProgress: true,
                   onHistoryTap: onHistoryTap,
                   onHistoryRemove: onHistoryRemove,
-                  onSeeAllTap: () => onSeeAllTap('Filmler', controller.movieHistory),
+                  onSeeAllTap: () =>
+                      onSeeAllTap(context.loc.movies, controller.movieHistory),
                 ),
                 WatchHistorySection(
-                  title: 'Diziler',
+                  title: context.loc.series_plural,
                   histories: controller.seriesHistory,
                   cardWidth: cardWidth,
                   cardHeight: cardHeight,
                   showProgress: true,
                   onHistoryTap: onHistoryTap,
                   onHistoryRemove: onHistoryRemove,
-                  onSeeAllTap: () => onSeeAllTap('Diziler', controller.seriesHistory),
+                  onSeeAllTap: () => onSeeAllTap(
+                    context.loc.series_plural,
+                    controller.seriesHistory,
+                  ),
                 ),
                 const SizedBox(height: 32),
               ],

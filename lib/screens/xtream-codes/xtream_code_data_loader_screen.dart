@@ -5,6 +5,7 @@ import 'package:another_iptv_player/models/api_configuration_model.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/models/progress_step.dart';
 import 'package:another_iptv_player/repositories/iptv_repository.dart';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:provider/provider.dart';
 import 'xtream_code_home_screen.dart';
 import '../playlist_screen.dart';
@@ -20,7 +21,8 @@ class XtreamCodeDataLoaderScreen extends StatefulWidget {
   });
 
   @override
-  XtreamCodeDataLoaderScreenState createState() => XtreamCodeDataLoaderScreenState();
+  XtreamCodeDataLoaderScreenState createState() =>
+      XtreamCodeDataLoaderScreenState();
 }
 
 class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
@@ -33,12 +35,12 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
   late Animation<double> _waveAnimation;
   late IptvController _controller;
 
-  final Map<ProgressStep, String> stepTitles = {
-    ProgressStep.userInfo: 'Bağlantı kuruluyor',
-    ProgressStep.categories: 'Kategoriler hazırlanıyor',
-    ProgressStep.liveChannels: 'Canlı kanallar yükleniyor',
-    ProgressStep.movies: 'Film kütüphanesi açılıyor',
-    ProgressStep.series: 'Dizi arşivi hazırlanıyor',
+  Map<ProgressStep, String> get stepTitles => {
+    ProgressStep.userInfo: context.loc.connecting,
+    ProgressStep.categories: context.loc.preparing_categories,
+    ProgressStep.liveChannels: context.loc.preparing_live_streams,
+    ProgressStep.movies: context.loc.preparing_movies,
+    ProgressStep.series: context.loc.preparing_series,
   };
 
   final Map<ProgressStep, IconData> stepIcons = {
@@ -210,7 +212,7 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
                           ),
                           SizedBox(height: 24),
                           Text(
-                            'IPTV Player',
+                            'Another IPTV Player',
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.w300,
@@ -220,7 +222,7 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Premium Streaming Experience',
+                            context.loc.slogan,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white.withOpacity(0.7),
@@ -398,7 +400,7 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
                                   ),
                                   SizedBox(height: 12),
                                   Text(
-                                    'Bir hata oluştu',
+                                    context.loc.error_occurred,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -407,7 +409,10 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    controller.errorMessage!,
+                                    _getLocalizedError(
+                                      controller.errorKey,
+                                      controller.errorMessage!,
+                                    ),
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.white.withOpacity(0.8),
@@ -433,7 +438,7 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    child: Text('Kapat'),
+                                    child: Text(context.loc.close),
                                   ),
                                 ],
                               ),
@@ -450,5 +455,32 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
         ),
       ),
     );
+  }
+
+  String _getLocalizedError(String? errorKey, String fallbackMessage) {
+    if (errorKey == null) return fallbackMessage;
+
+    switch (errorKey) {
+      case 'preparing_user_info_exception_1':
+        return context.loc.preparing_user_info_exception_1;
+      case 'preparing_user_info_exception_2':
+        return context.loc.preparing_user_info_exception_2(fallbackMessage);
+      case 'preparing_categories_exception':
+        return context.loc.preparing_categories_exception(fallbackMessage);
+      case 'preparing_live_streams_exception_1':
+        return context.loc.preparing_live_streams_exception_1;
+      case 'preparing_live_streams_exception_2':
+        return context.loc.preparing_live_streams_exception_2(fallbackMessage);
+      case 'preparing_movies_exception_1':
+        return context.loc.preparing_movies_exception_1;
+      case 'preparing_movies_exception_2':
+        return context.loc.preparing_movies_exception_2(fallbackMessage);
+      case 'preparing_series_exception_1':
+        return context.loc.preparing_series_exception_1;
+      case 'preparing_series_exception_2':
+        return context.loc.preparing_series_exception_2(fallbackMessage);
+      default:
+        return fallbackMessage;
+    }
   }
 }

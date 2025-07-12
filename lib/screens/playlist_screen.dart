@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/playlist_controller.dart';
@@ -31,7 +32,7 @@ class _PlaylistScreenBody extends StatelessWidget {
     });
 
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Consumer<PlaylistController>(
         builder: (context, controller, child) =>
             _buildBodyFromState(context, controller),
@@ -49,10 +50,10 @@ class _PlaylistScreenBody extends StatelessWidget {
     }
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text(
-        'Playlistlerim',
+      title: Text(
+        context.loc.my_playlists,
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
     );
@@ -110,7 +111,7 @@ class _PlaylistScreenBody extends StatelessWidget {
   Widget _buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () => _navigateToCreatePlaylist(context),
-      tooltip: 'Yeni Playlist Oluştur',
+      tooltip: context.loc.create_new_playlist,
       child: const Icon(Icons.add, color: Colors.white),
     );
   }
@@ -144,7 +145,7 @@ class _PlaylistScreenBody extends StatelessWidget {
   void _showSuccessSnackBar(BuildContext context, String playlistName) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$playlistName silindi'),
+        content: Text(context.loc.playlist_deleted(playlistName)),
         backgroundColor: Colors.green,
       ),
     );
@@ -160,18 +161,14 @@ class _DeletePlaylistDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Playlist\'i Sil'),
+      title: Text(context.loc.playlist_delete_confirmation_title),
       content: RichText(
         text: TextSpan(
           children: [
-            const TextSpan(text: '"'),
             TextSpan(
-              text: playlist.name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const TextSpan(
-              text:
-                  '" playlist\'ini silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz.',
+              text: context.loc.playlist_delete_confirmation_message(
+                playlist.name,
+              ),
             ),
           ],
         ),
@@ -179,7 +176,7 @@ class _DeletePlaylistDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('İptal'),
+          child: Text(context.loc.cancel),
         ),
         ElevatedButton(
           onPressed: () {
@@ -190,7 +187,7 @@ class _DeletePlaylistDialog extends StatelessWidget {
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
           ),
-          child: const Text('Sil'),
+          child: Text(context.loc.delete),
         ),
       ],
     );

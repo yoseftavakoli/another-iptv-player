@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/api_response.dart';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 
 class StatusCardWidget extends StatelessWidget {
   final ApiResponse? serverInfo;
 
   const StatusCardWidget({super.key, required this.serverInfo});
 
-  String _getRemainingDays() {
+  String _getRemainingDays(BuildContext context) {
     if (serverInfo?.userInfo.expDate != null) {
       final expDate = serverInfo!.userInfo.expDate;
       try {
@@ -15,26 +16,34 @@ class StatusCardWidget extends StatelessWidget {
         );
         final now = DateTime.now();
         final difference = expiryDate.difference(now).inDays;
-        return difference > 0 ? '$difference gün' : 'Süresi dolmuş';
+        return difference > 0
+            ? context.loc.remaining_day(difference.toString())
+            : context.loc.expired;
       } catch (e) {
-        return 'Bilinmiyor';
+        return context.loc.not_found_in_category;
       }
     }
-    return 'Bilinmiyor';
+    return context.loc.not_found_in_category;
   }
 
-  String _getServerStatus() {
-    return serverInfo != null ? 'Bağlı' : 'Bağlantı yok';
+  String _getServerStatus(BuildContext context) {
+    return serverInfo != null
+        ? context.loc.connected
+        : context.loc.no_connection;
   }
 
-  Color _getStatusColor() {
+  Color _getStatusColor(BuildContext context) {
     if (serverInfo != null) {
-      final remaining = _getRemainingDays();
-      if (remaining == 'Süresi dolmuş') return Colors.red;
-      if (remaining.contains('gün')) {
-        final days = int.tryParse(remaining.split(' ')[0]) ?? 0;
-        if (days <= 7) return Colors.orange;
-        return Colors.green;
+      final remaining = _getRemainingDays(context);
+      if (remaining == context.loc.expired) return Colors.red;
+      if (remaining.contains(context.loc.day)) {
+        final RegExp numberRegex = RegExp(r'\d+');
+        final match = numberRegex.firstMatch(remaining);
+        if (match != null) {
+          final days = int.tryParse(match.group(0)!) ?? 0;
+          if (days <= 7) return Colors.orange;
+          return Colors.green;
+        }
       }
     }
     return Colors.grey;
@@ -45,21 +54,21 @@ class StatusCardWidget extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: Icon(
-          _getStatusColor() == Colors.green
+          _getStatusColor(context) == Colors.green
               ? Icons.check_circle
-              : _getStatusColor() == Colors.orange
+              : _getStatusColor(context) == Colors.orange
               ? Icons.warning
               : Icons.error,
-          color: _getStatusColor(),
+          color: _getStatusColor(context),
           size: 36,
         ),
         title: Text(
-          _getServerStatus(),
-          style: TextStyle(
-            color: _getStatusColor(),
-          ),
+          _getServerStatus(context),
+          style: TextStyle(color: _getStatusColor(context)),
         ),
-        subtitle: Text('Abonelik: ${_getRemainingDays()}'),
+        subtitle: Text(
+          context.loc.subscription_remaining_day(_getRemainingDays(context)),
+        ),
       ),
     );
   }

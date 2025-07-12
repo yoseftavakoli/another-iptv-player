@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:another_iptv_player/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,31 +59,35 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
     return ChangeNotifierProvider.value(
       value: _controller,
       child: Consumer<XtreamCodeHomeController>(
-        builder: (context, controller, child) => _buildMainContent(controller),
+        builder: (context, controller, child) =>
+            _buildMainContent(context, controller),
       ),
     );
   }
 
-  Widget _buildMainContent(XtreamCodeHomeController controller) {
+  Widget _buildMainContent(
+    BuildContext context,
+    XtreamCodeHomeController controller,
+  ) {
     if (controller.isLoading) {
-      return _buildLoadingScreen();
+      return _buildLoadingScreen(context);
     }
 
     return Scaffold(
       body: _buildPageView(controller),
-      bottomNavigationBar: _buildBottomNavigationBar(controller),
+      bottomNavigationBar: _buildBottomNavigationBar(context, controller),
     );
   }
 
-  Widget _buildLoadingScreen() {
-    return const Scaffold(
+  Widget _buildLoadingScreen(BuildContext context) {
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Playlistler yükleniyor...'),
+            const CircularProgressIndicator(),
+            const SizedBox(height: 16),
+            Text(context.loc.loading_playlists),
           ],
         ),
       ),
@@ -119,20 +124,23 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
     ];
   }
 
-  Widget _buildContentPage(List<CategoryViewModel> categories,
-      ContentType contentType,
-      XtreamCodeHomeController controller,) {
+  Widget _buildContentPage(
+    List<CategoryViewModel> categories,
+    ContentType contentType,
+    XtreamCodeHomeController controller,
+  ) {
     return NestedScrollView(
-      headerSliverBuilder: (context, innerBoxIsScrolled) =>
-      [
+      headerSliverBuilder: (context, innerBoxIsScrolled) => [
         _buildSliverAppBar(controller, contentType),
       ],
       body: _buildCategoryList(categories, contentType),
     );
   }
 
-  SliverAppBar _buildSliverAppBar(XtreamCodeHomeController controller,
-      ContentType contentType,) {
+  SliverAppBar _buildSliverAppBar(
+    XtreamCodeHomeController controller,
+    ContentType contentType,
+  ) {
     return SliverAppBar(
       title: SelectableText(
         controller.getPageTitle(),
@@ -144,20 +152,21 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
       actions: [
         IconButton(
           icon: const Icon(Icons.search),
-          onPressed: () =>
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SearchScreen(contentType: contentType),
-                ),
-              ),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchScreen(contentType: contentType),
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildCategoryList(List<CategoryViewModel> categories,
-      ContentType contentType,) {
+  Widget _buildCategoryList(
+    List<CategoryViewModel> categories,
+    ContentType contentType,
+  ) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: categories.length,
@@ -166,18 +175,10 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
     );
   }
 
-  Widget _buildCategorySection(CategoryViewModel category,
-      ContentType contentType,) {
-    var title = "";
-    switch (contentType) {
-      case ContentType.liveStream:
-        title = "live";
-      case ContentType.vod:
-        title = "vod";
-      case ContentType.series:
-        title = "series";
-    }
-
+  Widget _buildCategorySection(
+    CategoryViewModel category,
+    ContentType contentType,
+  ) {
     return CategorySection(
       category: category,
       cardWidth: ResponsiveHelper.getCardWidth(context),
@@ -197,22 +198,41 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
   }
 
   BottomNavigationBar _buildBottomNavigationBar(
-      XtreamCodeHomeController controller,) {
+    BuildContext context,
+    XtreamCodeHomeController controller,
+  ) {
     return BottomNavigationBar(
       currentIndex: controller.currentIndex,
       onTap: controller.onNavigationTap,
       type: BottomNavigationBarType.fixed,
-      items: _buildBottomNavigationItems(),
+      items: _buildBottomNavigationItems(context),
     );
   }
 
-  List<BottomNavigationBarItem> _buildBottomNavigationItems() {
-    return const [
-      BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Geçmiş'),
-      BottomNavigationBarItem(icon: Icon(Icons.live_tv), label: 'Canlı'),
-      BottomNavigationBarItem(icon: Icon(Icons.movie_outlined), label: 'Film'),
-      BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Dizi'),
-      BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Ayarlar'),
+  List<BottomNavigationBarItem> _buildBottomNavigationItems(
+    BuildContext context,
+  ) {
+    return [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.history),
+        label: context.loc.history,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.live_tv),
+        label: context.loc.live,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.movie_outlined),
+        label: context.loc.movie,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.tv),
+        label: context.loc.series_plural,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.settings),
+        label: context.loc.settings,
+      ),
     ];
   }
 }

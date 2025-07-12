@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/services/event_bus.dart';
 import 'package:another_iptv_player/services/player_state.dart';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState;
 
 class VideoSettingsWidget extends StatefulWidget {
@@ -89,25 +89,25 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
               ),
               SizedBox(height: 20),
               Text(
-                'Settings',
+                context.loc.settings,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
               _buildSettingsItem(
                 icon: Icons.video_settings,
-                title: 'Video Track',
+                title: context.loc.video_track,
                 subtitle: selectedVideoTrack,
                 onTap: () => _showVideoTrackSelection(context),
               ),
               _buildSettingsItem(
                 icon: Icons.audiotrack,
-                title: 'Audio Track',
+                title: context.loc.audio_track,
                 subtitle: selectedAudioTrack,
                 onTap: () => _showAudioTrackSelection(context),
               ),
               _buildSettingsItem(
                 icon: Icons.subtitles,
-                title: 'Subtitles Track',
+                title: context.loc.subtitle_track,
                 subtitle: selectedSubtitleTrack,
                 onTap: () => _showSubtitleTrackSelection(context),
               ),
@@ -174,7 +174,7 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                     },
                   ),
                   Text(
-                    'Video Quality',
+                    context.loc.quality,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -186,22 +186,22 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                     children: videoTracks
                         .map(
                           (track) => ListTile(
-                        title: Text(track.id),
-                        trailing: selectedVideoTrack == track.id
-                            ? Icon(Icons.check, color: Colors.blue)
-                            : null,
-                        onTap: () {
-                          EventBus().emit('video_track_changed', track);
+                            title: Text(track.id),
+                            trailing: selectedVideoTrack == track.id
+                                ? Icon(Icons.check, color: Colors.blue)
+                                : null,
+                            onTap: () {
+                              EventBus().emit('video_track_changed', track);
 
-                          if (mounted) {
-                            setState(() {
-                              selectedVideoTrack = track.id;
-                            });
-                          }
-                          Navigator.pop(context);
-                        },
-                      ),
-                    )
+                              if (mounted) {
+                                setState(() {
+                                  selectedVideoTrack = track.id;
+                                });
+                              }
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
                         .toList(),
                   ),
                 ),
@@ -254,7 +254,7 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                     },
                   ),
                   Text(
-                    'Audio Language',
+                    context.loc.audio_track,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -266,22 +266,23 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                     children: audioTracks
                         .map(
                           (track) => ListTile(
-                        title: Text(track.language ?? 'NULL'),
-                        trailing: selectedAudioTrack == (track.language ?? 'NULL')
-                            ? Icon(Icons.check, color: Colors.blue)
-                            : null,
-                        onTap: () {
-                          EventBus().emit('audio_track_changed', track);
+                            title: Text(track.language ?? 'NULL'),
+                            trailing:
+                                selectedAudioTrack == (track.language ?? 'NULL')
+                                ? Icon(Icons.check, color: Colors.blue)
+                                : null,
+                            onTap: () {
+                              EventBus().emit('audio_track_changed', track);
 
-                          if (mounted) {
-                            setState(() {
-                              selectedAudioTrack = track.language ?? 'NULL';
-                            });
-                          }
-                          Navigator.pop(context);
-                        },
-                      ),
-                    )
+                              if (mounted) {
+                                setState(() {
+                                  selectedAudioTrack = track.language ?? 'NULL';
+                                });
+                              }
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
                         .toList(),
                   ),
                 ),
@@ -334,7 +335,7 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                     },
                   ),
                   Text(
-                    'Subtitles',
+                    context.loc.subtitle_track,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -346,23 +347,25 @@ class _VideoSettingsWidgetState extends State<VideoSettingsWidget> {
                     children: subtitleTracks
                         .map(
                           (track) => ListTile(
-                        title: Text(track.language ?? 'NULL'),
-                        trailing:
-                        selectedSubtitleTrack == (track.language ?? 'NULL')
-                            ? Icon(Icons.check, color: Colors.blue)
-                            : null,
-                        onTap: () {
-                          EventBus().emit('subtitle_track_changed', track);
+                            title: Text(track.language ?? 'NULL'),
+                            trailing:
+                                selectedSubtitleTrack ==
+                                    (track.language ?? 'NULL')
+                                ? Icon(Icons.check, color: Colors.blue)
+                                : null,
+                            onTap: () {
+                              EventBus().emit('subtitle_track_changed', track);
 
-                          if (mounted) {
-                            setState(() {
-                              selectedSubtitleTrack = track.language ?? 'NULL';
-                            });
-                          }
-                          Navigator.pop(context);
-                        },
-                      ),
-                    )
+                              if (mounted) {
+                                setState(() {
+                                  selectedSubtitleTrack =
+                                      track.language ?? 'NULL';
+                                });
+                              }
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
                         .toList(),
                   ),
                 ),

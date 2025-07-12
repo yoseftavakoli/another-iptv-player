@@ -1,5 +1,5 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
-
 import 'xtream-codes/new_xtream_code_playlist_screen.dart';
 
 class PlaylistTypeScreen extends StatelessWidget {
@@ -10,113 +10,109 @@ class PlaylistTypeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Playlist Oluştur',
+          context.loc.create_new_playlist,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 0,
       ),
-      body: Container(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 20),
-                        Text(
-                          'Playlist Türü Seçin',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+                      Text(
+                        context.loc.select_playlist_type,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Oluşturmak istediğiniz playlist türünü seçin',
-                          style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        context.loc.select_playlist_message,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(height: 40),
+                      _buildPlaylistTypeCard(
+                        context,
+                        title: 'Xtream Codes',
+                        subtitle: context.loc.xtream_code_title,
+                        description: context.loc.xtream_code_description,
+                        icon: Icons.stream,
+                        color: Colors.blue,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NewXtreamCodePlaylistScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      // SizedBox(height: 20),
+                      // _buildPlaylistTypeCard(
+                      //   context,
+                      //   title: 'M3U Playlist',
+                      //   subtitle: 'M3U dosyası veya URL ile playlist ekleyin',
+                      //   description:
+                      //       'Geleneksel M3U format dosyalarını destekler',
+                      //   icon: Icons.playlist_play,
+                      //   color: Colors.green,
+                      //   onTap: () {
+                      //     ScaffoldMessenger.of(context).showSnackBar(
+                      //       SnackBar(
+                      //         content: Row(
+                      //           children: [
+                      //             Icon(Icons.info, color: Colors.white),
+                      //             SizedBox(width: 8),
+                      //             Text('M3U özelliği yakında eklenecek'),
+                      //           ],
+                      //         ),
+                      //         backgroundColor: Colors.orange,
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
+                      Spacer(),
+                      // Bu alan büyük ekranlarda genişleyecek
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        SizedBox(height: 40),
-                        _buildPlaylistTypeCard(
-                          context,
-                          title: 'Xtream Codes',
-                          subtitle:
-                              'API URL, kullanıcı adı ve şifre ile bağlanın',
-                          description:
-                              'IPTV sağlayıcınızdan aldığınız bilgilerle kolayca bağlanın',
-                          icon: Icons.stream,
-                          color: Colors.blue,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    NewXtreamCodePlaylistScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                        // SizedBox(height: 20),
-                        // _buildPlaylistTypeCard(
-                        //   context,
-                        //   title: 'M3U Playlist',
-                        //   subtitle: 'M3U dosyası veya URL ile playlist ekleyin',
-                        //   description:
-                        //       'Geleneksel M3U format dosyalarını destekler',
-                        //   icon: Icons.playlist_play,
-                        //   color: Colors.green,
-                        //   onTap: () {
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       SnackBar(
-                        //         content: Row(
-                        //           children: [
-                        //             Icon(Icons.info, color: Colors.white),
-                        //             SizedBox(width: 8),
-                        //             Text('M3U özelliği yakında eklenecek'),
-                        //           ],
-                        //         ),
-                        //         backgroundColor: Colors.orange,
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
-                        Spacer(),
-                        // Bu alan büyük ekranlarda genişleyecek
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.info_outline, color: Colors.blue),
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  'Playlist bilgileriniz güvenli bir şekilde cihazınızda saklanır.',
-                                  style: TextStyle(
-                                    color: Colors.blue[800],
-                                    fontSize: 14,
-                                  ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.info_outline, color: Colors.blue),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                context.loc.select_playlist_type_footer,
+                                style: TextStyle(
+                                  color: Colors.blue[800],
+                                  fontSize: 14,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 24),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 24),
+                    ],
                   ),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

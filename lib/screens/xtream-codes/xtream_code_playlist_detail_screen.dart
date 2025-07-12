@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/api_response.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/services/app_state.dart';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import '../../widgets/playlist_info_widget.dart';
 import '../../widgets/server_info_widget.dart';
 import '../../widgets/status_card_widget.dart';
@@ -42,7 +43,7 @@ class _XtreamCodePlaylistSettingsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ayarlar'), actions: []),
+      appBar: AppBar(title: Text(context.loc.settings), actions: []),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         children: [

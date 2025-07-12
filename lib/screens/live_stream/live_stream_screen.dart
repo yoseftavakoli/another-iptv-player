@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
 import 'package:another_iptv_player/services/app_state.dart';
@@ -118,9 +119,9 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                const SelectableText(
-                                  'CANLI',
-                                  style: TextStyle(
+                                SelectableText(
+                                  context.loc.live.toUpperCase(),
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -141,7 +142,7 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
                       ),
                       const SizedBox(height: 24),
                       SelectableText(
-                        'Diğer Kanallar',
+                        context.loc.other_channels,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -160,7 +161,7 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
 
                       // Kanal Bilgileri
                       SelectableText(
-                        'Kanal Bilgileri',
+                        context.loc.channel_information,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -169,7 +170,7 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
 
                       _buildInfoCard(
                         icon: Icons.tv,
-                        title: 'Kanal ID',
+                        title: context.loc.channel_id,
                         value: contentItem.id.toString(),
                         color: Colors.blue,
                       ),
@@ -177,16 +178,16 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
 
                       _buildInfoCard(
                         icon: Icons.category,
-                        title: 'Kategori ID',
+                        title: context.loc.category_id,
                         value:
-                        contentItem.liveStream?.categoryId ?? 'Belirtilmemiş',
+                        contentItem.liveStream?.categoryId ?? context.loc.not_found_in_category,
                         color: Colors.green,
                       ),
                       const SizedBox(height: 12),
 
                       _buildInfoCard(
                         icon: Icons.high_quality,
-                        title: 'Kalite',
+                        title: context.loc.quality,
                         value: _getQualityText(),
                         color: Colors.orange,
                       ),
@@ -194,10 +195,10 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
 
                       _buildInfoCard(
                         icon: Icons.signal_cellular_alt,
-                        title: 'Stream Türü',
+                        title: context.loc.stream_type,
                         value:
                         contentItem.containerExtension?.toUpperCase() ??
-                            'Canlı Yayın',
+                            context.loc.live,
                         color: Colors.purple,
                       ),
                       const SizedBox(height: 24),
@@ -281,7 +282,4 @@ class _LiveStreamScreenState extends State<LiveStreamScreen> {
       selectedContentItemIndex,
     );
   }
-
-
-
 }

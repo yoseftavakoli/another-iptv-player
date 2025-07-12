@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/category_view_model.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
@@ -10,6 +11,7 @@ class CategorySection extends StatelessWidget {
   final double cardHeight;
   final VoidCallback? onSeeAllTap;
   final Function(ContentItem)? onContentTap;
+
   const CategorySection({
     super.key,
     required this.category,
@@ -42,7 +44,10 @@ class CategorySection extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: onSeeAllTap,
-                  child: Text('Tümünü Gör', style: TextStyle(fontSize: 11)),
+                  child: Text(
+                    context.loc.see_all,
+                    style: TextStyle(fontSize: 11),
+                  ),
                 ),
               ],
             ),
@@ -60,4 +65,3 @@ class CategorySection extends StatelessWidget {
     );
   }
 }
-

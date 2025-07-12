@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 
 class WatchHistoryAppBar extends StatelessWidget {
@@ -9,7 +10,7 @@ class WatchHistoryAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: const Text('İzleme Geçmişi'),
+      title: Text(context.loc.history),
       floating: true,
       snap: true,
       elevation: 0,
@@ -17,23 +18,26 @@ class WatchHistoryAppBar extends StatelessWidget {
         PopupMenuButton<String>(
           onSelected: (action) => _handleMenuAction(action, context),
           itemBuilder: (context) => [
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'refresh',
               child: Row(
                 children: [
                   Icon(Icons.refresh),
                   SizedBox(width: 8),
-                  Text('Yenile'),
+                  Text(context.loc.refresh),
                 ],
               ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'clear_all',
               child: Row(
                 children: [
                   Icon(Icons.clear_all, color: Colors.red),
                   SizedBox(width: 8),
-                  Text('Tümünü Temizle', style: TextStyle(color: Colors.red)),
+                  Text(
+                    context.loc.clear_all,
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ],
               ),
             ),
@@ -58,21 +62,22 @@ class WatchHistoryAppBar extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Tümünü Temizle'),
-        content: const Text(
-          'Tüm izleme geçmişini silmek istediğinize emin misiniz?',
-        ),
+        title: Text(context.loc.clear_all),
+        content: Text(context.loc.clear_all_confirmation_message),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('İptal'),
+            child: Text(context.loc.cancel),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               onClearAll?.call();
             },
-            child: const Text('Sil', style: TextStyle(color: Colors.red)),
+            child: Text(
+              context.loc.delete,
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),

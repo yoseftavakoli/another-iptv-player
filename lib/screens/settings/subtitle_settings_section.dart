@@ -1,5 +1,6 @@
 import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import '../../widgets/color_picker_tile_widget.dart';
 import '../../widgets/dropdown_tile_widget.dart';
 import '../../widgets/slider_tile_widget.dart';
@@ -138,7 +139,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Önizleme',
+                    context.loc.preview,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -154,7 +155,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  'Örnek altyazı metni\nBu şekilde görünecek',
+                  context.loc.sample_text,
                   textAlign: _textAlign,
                   textScaler: TextScaler.linear(.38),
                   style: TextStyle(
@@ -179,12 +180,12 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Altyazı Ayarları'),
+        title: Text(context.loc.subtitle_settings),
         actions: [
           if (!_isLoading)
             TextButton(
               onPressed: _resetToDefaults,
-              child: const Text('Sıfırla'),
+              child: Text(context.loc.reset),
             ),
         ],
       ),
@@ -218,7 +219,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    'Font Ayarları',
+                                    context.loc.font_settings,
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleSmall
@@ -229,7 +230,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                             ),
                             SliderTileWidget(
                               icon: Icons.format_size,
-                              label: 'Font Boyutu',
+                              label: context.loc.font_size,
                               value: _fontSize,
                               min: 24,
                               max: 96,
@@ -239,7 +240,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                             const Divider(height: 1),
                             SliderTileWidget(
                               icon: Icons.format_line_spacing,
-                              label: 'Satır Yüksekliği',
+                              label: context.loc.font_height,
                               value: _height,
                               min: 1.0,
                               max: 2.5,
@@ -249,7 +250,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                             const Divider(height: 1),
                             SliderTileWidget(
                               icon: Icons.space_bar,
-                              label: 'Harf Aralığı',
+                              label: context.loc.letter_spacing,
                               value: _letterSpacing,
                               min: -2.0,
                               max: 5.0,
@@ -259,7 +260,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                             const Divider(height: 1),
                             SliderTileWidget(
                               icon: Icons.format_textdirection_l_to_r,
-                              label: 'Kelime Aralığı',
+                              label: context.loc.word_spacing,
                               value: _wordSpacing,
                               min: -2.0,
                               max: 10.0,
@@ -269,7 +270,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                             const Divider(height: 1),
                             SliderTileWidget(
                               icon: Icons.padding,
-                              label: 'İç Boşluk',
+                              label: context.loc.padding,
                               value: _padding,
                               min: 8.0,
                               max: 48.0,
@@ -302,7 +303,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    'Renk Ayarları',
+                                    context.loc.color_settings,
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleSmall
@@ -312,14 +313,14 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                               ),
                             ),
                             ColorPickerTileWidget(
-                              title: 'Metin Rengi',
+                              title: context.loc.text_color,
                               icon: Icons.format_color_text,
                               color: _textColor,
                               onChanged: _updateTextColor,
                             ),
                             const Divider(height: 1),
                             ColorPickerTileWidget(
-                              title: 'Arka Plan Rengi',
+                              title: context.loc.background_color,
                               icon: Icons.format_color_fill,
                               color: _backgroundColor,
                               onChanged: _updateBackgroundColor,
@@ -349,7 +350,7 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    'Stil Ayarları',
+                                    context.loc.style_settings,
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleSmall
@@ -360,28 +361,28 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                             ),
                             DropdownTileWidget<FontWeight>(
                               icon: Icons.format_bold,
-                              label: 'Font Kalınlığı',
+                              label: context.loc.font_weight,
                               value: _fontWeight,
-                              items: const [
+                              items: [
                                 DropdownMenuItem(
                                   value: FontWeight.w300,
-                                  child: Text('İnce'),
+                                  child: Text(context.loc.thin),
                                 ),
                                 DropdownMenuItem(
                                   value: FontWeight.normal,
-                                  child: Text('Normal'),
+                                  child: Text(context.loc.normal),
                                 ),
                                 DropdownMenuItem(
                                   value: FontWeight.w500,
-                                  child: Text('Orta'),
+                                  child: Text(context.loc.medium),
                                 ),
                                 DropdownMenuItem(
                                   value: FontWeight.bold,
-                                  child: Text('Kalın'),
+                                  child: Text(context.loc.bold),
                                 ),
                                 DropdownMenuItem(
                                   value: FontWeight.w900,
-                                  child: Text('Çok Kalın'),
+                                  child: Text(context.loc.extreme_bold),
                                 ),
                               ],
                               onChanged: (v) => _updateFontWeight(v!),
@@ -389,24 +390,24 @@ class _SubtitleSettingsScreenState extends State<SubtitleSettingsScreen> {
                             const Divider(height: 1),
                             DropdownTileWidget<TextAlign>(
                               icon: Icons.format_align_center,
-                              label: 'Metin Hizalama',
+                              label: context.loc.text_align,
                               value: _textAlign,
-                              items: const [
+                              items: [
                                 DropdownMenuItem(
                                   value: TextAlign.left,
-                                  child: Text('Sol'),
+                                  child: Text(context.loc.left),
                                 ),
                                 DropdownMenuItem(
                                   value: TextAlign.center,
-                                  child: Text('Merkez'),
+                                  child: Text(context.loc.center),
                                 ),
                                 DropdownMenuItem(
                                   value: TextAlign.right,
-                                  child: Text('Sağ'),
+                                  child: Text(context.loc.right),
                                 ),
                                 DropdownMenuItem(
                                   value: TextAlign.justify,
-                                  child: Text('İki Yana'),
+                                  child: Text(context.loc.justify),
                                 ),
                               ],
                               onChanged: (v) => _updateTextAlign(v!),

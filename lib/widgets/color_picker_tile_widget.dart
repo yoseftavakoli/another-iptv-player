@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 
 class ColorPickerTileWidget extends StatelessWidget {
   final String title;
@@ -18,10 +19,7 @@ class ColorPickerTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      leading: Icon(
-        icon,
-        size: 20,
-      ),
+      leading: Icon(icon, size: 20),
       title: Text(
         title,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
@@ -63,35 +61,39 @@ class ColorPickerTileWidget extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Renk Seç'),
+        title: Text(context.loc.pick_color),
         content: Wrap(
           spacing: 8,
           runSpacing: 8,
           children: colors
-              .map((c) => GestureDetector(
-            onTap: () {
-              onChanged(c);
-              Navigator.pop(context);
-            },
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: c,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: color == c ? Theme.of(context).primaryColor : Colors.grey,
-                  width: color == c ? 3 : 1,
+              .map(
+                (c) => GestureDetector(
+                  onTap: () {
+                    onChanged(c);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: c,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: color == c
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                        width: color == c ? 3 : 1,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ))
+              )
               .toList(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('İptal'),
+            child: Text(context.loc.cancel),
           ),
         ],
       ),

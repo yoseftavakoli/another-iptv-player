@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/database/database.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
@@ -159,7 +160,9 @@ class _EpisodeScreenState extends State<EpisodeScreen> {
                                       ),
                                     ),
                                     Text(
-                                      '${allContents.length} Bölüm',
+                                      context.loc.episode_count(
+                                        allContents.length.toString(),
+                                      ),
                                       style: TextStyle(
                                         color: Colors.grey.shade600,
                                         fontSize: 14,
@@ -170,9 +173,9 @@ class _EpisodeScreenState extends State<EpisodeScreen> {
                               ),
                               Expanded(
                                 child: allContents.isEmpty
-                                    ? const Center(
+                                    ? Center(
                                         child: Text(
-                                          'Bu sezona ait bölüm bulunamadı',
+                                          context.loc.not_found_in_category,
                                         ),
                                       )
                                     : ListView.builder(
@@ -290,7 +293,7 @@ class _EpisodeScreenState extends State<EpisodeScreen> {
                         episode.duration!.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Text(
-                        'Süre: ${episode.duration}',
+                        context.loc.duration(episode.duration!),
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey.shade600,

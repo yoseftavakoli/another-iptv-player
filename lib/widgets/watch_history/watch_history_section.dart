@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:another_iptv_player/widgets/watch_history/watch_history_card.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/watch_history.dart';
@@ -45,7 +46,10 @@ class WatchHistorySection extends StatelessWidget {
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               if (onSeeAllTap != null && histories.length > 5)
-                TextButton(onPressed: onSeeAllTap, child: Text('Tümünü Gör')),
+                TextButton(
+                  onPressed: onSeeAllTap,
+                  child: Text(context.loc.see_all),
+                ),
             ],
           ),
         ),

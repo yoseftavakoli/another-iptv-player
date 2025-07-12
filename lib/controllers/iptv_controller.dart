@@ -26,6 +26,7 @@ class IptvController extends ChangeNotifier {
 
   bool _isLoading = false;
   String? _errorMessage;
+  String? _errorKey; // Localization key için
   ProgressStep _currentStep = ProgressStep.userInfo;
 
   // Getters
@@ -38,6 +39,7 @@ class IptvController extends ChangeNotifier {
   List<SeriesStream>? get series => _series;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  String? get errorKey => _errorKey; // Localization key getter'ı
   ProgressStep get currentStep => _currentStep;
 
   void _setLoading(bool loading) {
@@ -45,8 +47,9 @@ class IptvController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setError(String? error) {
+  void _setError(String? error, [String? errorKey]) {
     _errorMessage = error;
+    _errorKey = errorKey;
     notifyListeners();
   }
 
@@ -63,12 +66,16 @@ class IptvController extends ChangeNotifier {
       _userInfo = await _repository.getPlayerInfo(forceRefresh: refreshAll);
 
       if (_userInfo == null) {
-        throw Exception('Kullanıcı bilgileri alınamadı');
+        throw Exception('preparing_user_info_exception_1');
       }
 
       return true;
     } catch (e) {
-      _setError('Kullanıcı bilgileri yüklenirken hata: $e');
+      if (e.toString().contains('preparing_user_info_exception_1')) {
+        _setError(e.toString(), 'preparing_user_info_exception_1');
+      } else {
+        _setError('preparing_user_info_exception_2', 'preparing_user_info_exception_2');
+      }
       return false;
     }
   }
@@ -90,7 +97,7 @@ class IptvController extends ChangeNotifier {
 
       return false;
     } catch (e) {
-      _setError('Kategoriler yüklenemedi: $e');
+      _setError('preparing_categories_exception', 'preparing_categories_exception');
       return false;
     }
   }
@@ -117,7 +124,7 @@ class IptvController extends ChangeNotifier {
       notifyListeners();
       return categories != null;
     } catch (e) {
-      _setError('${type.value} kategorileri yüklenemedi: $e');
+      _setError('preparing_categories_exception', 'preparing_categories_exception');
       return false;
     }
   }
@@ -130,12 +137,16 @@ class IptvController extends ChangeNotifier {
       _liveChannels = await _repository.getLiveChannels();
 
       if (_liveChannels == null) {
-        throw Exception('Canlı kanallar alınamadı');
+        throw Exception('preparing_live_streams_exception_1');
       }
 
       return true;
     } catch (e) {
-      _setError('Canlı kanallar yüklenirken hata: $e');
+      if (e.toString().contains('preparing_live_streams_exception_1')) {
+        _setError(e.toString(), 'preparing_live_streams_exception_1');
+      } else {
+        _setError('preparing_live_streams_exception_2', 'preparing_live_streams_exception_2');
+      }
       return false;
     }
   }
@@ -148,12 +159,16 @@ class IptvController extends ChangeNotifier {
       _movies = await _repository.getMovies();
 
       if (_movies == null) {
-        throw Exception('Filmler alınamadı');
+        throw Exception('preparing_movies_exception_1');
       }
 
       return true;
     } catch (e) {
-      _setError('Filmler yüklenirken hata: $e');
+      if (e.toString().contains('preparing_movies_exception_1')) {
+        _setError(e.toString(), 'preparing_movies_exception_1');
+      } else {
+        _setError('preparing_movies_exception_2', 'preparing_movies_exception_2');
+      }
       return false;
     }
   }
@@ -166,12 +181,16 @@ class IptvController extends ChangeNotifier {
       _series = await _repository.getSeries();
 
       if (_series == null) {
-        throw Exception('Diziler alınamadı');
+        throw Exception('preparing_series_exception_1');
       }
 
       return true;
     } catch (e) {
-      _setError('Diziler yüklenirken hata: $e');
+      if (e.toString().contains('preparing_series_exception_1')) {
+        _setError(e.toString(), 'preparing_series_exception_1');
+      } else {
+        _setError('preparing_series_exception_2', 'preparing_series_exception_2');
+      }
       return false;
     }
   }
@@ -227,6 +246,7 @@ class IptvController extends ChangeNotifier {
     _series = null;
     _isLoading = false;
     _errorMessage = null;
+    _errorKey = null;
     _currentStep = ProgressStep.userInfo;
     notifyListeners();
   }

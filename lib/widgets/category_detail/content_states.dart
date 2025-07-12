@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:flutter/material.dart';
 
 class LoadingState extends StatelessWidget {
@@ -13,11 +14,7 @@ class ErrorState extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
 
-  const ErrorState({
-    super.key,
-    required this.message,
-    required this.onRetry,
-  });
+  const ErrorState({super.key, required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +38,16 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.video_library_outlined, size: 64, color: Colors.grey),
           SizedBox(height: 16),
-          Text('Bu kategoride içerik bulunamadı', style: TextStyle(color: Colors.grey)),
+          Text(
+            context.loc.not_found_in_category,
+            style: TextStyle(color: Colors.grey),
+          ),
         ],
       ),
     );

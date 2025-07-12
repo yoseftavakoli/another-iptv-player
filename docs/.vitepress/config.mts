@@ -5,6 +5,9 @@ export default defineConfig({
   title: "Another IPTV Player",
   description: "Free & Open Source",
   base: '/another-iptv-player/',
+  sitemap: {
+    hostname: 'https://bsogulcan.github.io/another-iptv-player'
+  },
   themeConfig: {
     logo: '/logo.png',
     nav: [
@@ -19,6 +22,5 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/bsogulcan/another-iptv-player' }
     ],
-    
   }
 })

@@ -95,11 +95,4 @@ class WatchHistoryService {
   Future<void> clearAllHistory() async {
     await _database.delete(_database.watchHistories).go();
   }
-
-  Future<void> cleanOldHistory({int daysOld = 30}) async {
-    final cutoffDate = DateTime.now().subtract(Duration(days: daysOld));
-    await (_database.delete(
-      _database.watchHistories,
-    )..where((tbl) => tbl.lastWatched.isSmallerThanValue(cutoffDate))).go();
-  }
 }

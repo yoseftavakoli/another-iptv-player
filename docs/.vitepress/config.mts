@@ -1,12 +1,10 @@
 import { defineConfig } from 'vitepress'
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Another IPTV Player",
   description: "Free & Open Source",
-  base: '/another-iptv-player/',
   sitemap: {
-    hostname: 'https://bsogulcan.github.io/another-iptv-player'
+    hostname: 'https://another-iptv-player.com'
   },
   themeConfig: {
     logo: '/logo.png',

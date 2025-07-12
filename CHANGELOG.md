@@ -1,13 +1,29 @@
-# [](https://github.com/bsogulcan/iptv-player/compare/v0.5.5...v) (2025-07-10)
+# [](https://github.com/bsogulcan/iptv-player/compare/v0.6.0...v) (2025-07-12)
+
+
+
+# [0.6.0](https://github.com/bsogulcan/iptv-player/compare/v0.5.6...v0.6.0) (2025-07-12)
+
+
+### Bug Fixes
+
+* sqlite import ([0ab76e2](https://github.com/bsogulcan/iptv-player/commit/0ab76e2c52d3fe825043039944f3af024d03274e))
+
+
+### Features
+
+* settings page ([43b50a3](https://github.com/bsogulcan/iptv-player/commit/43b50a34099bfe45354454492db90bb6a624a039))
+* **settings:** background play option ([dfd4896](https://github.com/bsogulcan/iptv-player/commit/dfd4896f4a4f458ae92da446080128fd63cf175e))
+* **settings:** subtitle customization ([4b88106](https://github.com/bsogulcan/iptv-player/commit/4b8810626d97595997e222f5dcbc643ed9565894))
+
+
+
+## [0.5.6](https://github.com/bsogulcan/iptv-player/compare/v0.5.5...v0.5.6) (2025-07-10)
 
 
 ### Features
 
 * changelogs ([3ff5297](https://github.com/bsogulcan/iptv-player/commit/3ff5297be1798b155191d0ee46eb5c431681c441))
-
-
-
-# [](https://github.com/bsogulcan/iptv-player/compare/v0.5.5...v) (2025-07-09)
 
 
 

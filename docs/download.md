@@ -13,8 +13,8 @@ features:
     linkText: Download from App Store
     target: _blank
     rel: external
-  - title: Other App Stores Coming Soon
-    details: Google Play and Microsoft Store versions are in development and will be available soon.
+  - title: Google Play (Closed Beta)
+    details: The Android version is currently in closed beta. If you’d like to participate, please send your Google Play email address to us to join the beta.
   - title: GitHub Releases
     details: Download the latest release for Windows, macOS, Linux, Android, and iOS platforms.
     link: https://github.com/bsogulcan/another-iptv-player/releases/latest

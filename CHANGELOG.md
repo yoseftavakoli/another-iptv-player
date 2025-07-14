@@ -1,4 +1,13 @@
-# [](https://github.com/bsogulcan/iptv-player/compare/v0.6.0...v) (2025-07-12)
+# [](https://github.com/bsogulcan/iptv-player/compare/v0.7.0...v) (2025-07-14)
+
+
+
+# [0.7.0](https://github.com/bsogulcan/iptv-player/compare/v0.6.0...v0.7.0) (2025-07-14)
+
+
+### Features
+
+* localization ([e8936db](https://github.com/bsogulcan/iptv-player/commit/e8936db4663ab0a26d0b8c096808e44115029b14))
 
 
 

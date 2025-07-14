@@ -40,7 +40,7 @@ Official documentation: [https://www.another-iptv-player.com](https://www.anothe
 - [x] Video, Audio, and Subtitle Track Selection
 - [x] Track Selection Memory
 - [x] Subtitle Customization
-- [ ] Localization (Multi-language Support)
+- [x] Localization (Multi-language Support)
 - [ ] M3U & M3U8 Playlist Support
 - [ ] EPG (Electronic Program Guide) Support
 - [ ] Favorites & Custom Playlists

@@ -39,7 +39,7 @@ class IptvController extends ChangeNotifier {
   List<SeriesStream>? get series => _series;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-  String? get errorKey => _errorKey; // Localization key getter'ı
+  String? get errorKey => _errorKey;
   ProgressStep get currentStep => _currentStep;
 
   void _setLoading(bool loading) {

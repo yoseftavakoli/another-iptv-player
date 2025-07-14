@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/controllers/iptv_controller.dart';
@@ -117,6 +118,7 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
       await Future.delayed(Duration(milliseconds: 800));
 
       AppState.currentPlaylist = widget.playlist;
+      await UserPreferences.setLastPlaylist(widget.playlist.id);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(

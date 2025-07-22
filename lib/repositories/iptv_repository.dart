@@ -311,7 +311,6 @@ class IptvRepository {
     bool forceRefresh,
   ) async {
     try {
-      // Önce cache'den kontrol et
       if (!forceRefresh) {
         final cachedCategories = await _database.getCategoriesByTypeAndPlaylist(
           _playlistId,
@@ -322,7 +321,6 @@ class IptvRepository {
         }
       }
 
-      // API'den çek
       final additionalParams = <String, String>{'action': action};
 
       final response = await _makeRequest(
@@ -336,7 +334,6 @@ class IptvRepository {
             .map((json) => Category.fromJson(json, _playlistId, type))
             .toList();
 
-        // Eski kategorileri sil ve yenileri ekle
         await _database.deleteCategoriesByTypeAndPlaylist(_playlistId, type);
         await _database.insertCategories(categories);
 
@@ -411,7 +408,6 @@ class IptvRepository {
   }) async {
     try {
       if (!forceRefresh) {
-        // Önce database'den kontrol et
         final seriesInfo = await _database.getSeriesInfo(seriesId, _playlistId);
         final seasons = await _database.getSeasonsBySeriesId(
           seriesId,
@@ -432,7 +428,6 @@ class IptvRepository {
         }
       }
 
-      // API'den çek
       final response = await _makeRequest(
         'player_api.php',
         additionalParams: {'action': 'get_series_info', 'series_id': seriesId},
@@ -441,10 +436,8 @@ class IptvRepository {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
 
-        // Database'e kaydet
         await _saveSeriesDataToDatabase(seriesId, jsonData);
 
-        // Database'den tekrar oku ve return et
         final seriesInfo = await _database.getSeriesInfo(seriesId, _playlistId);
         final seasons = await _database.getSeasonsBySeriesId(
           seriesId,
@@ -508,10 +501,8 @@ class IptvRepository {
     Map<String, dynamic> data,
   ) async {
     try {
-      // Önce mevcut verileri temizle
       await _database.clearSeriesData(seriesId, _playlistId);
 
-      // Series Info kaydet
       final info = data['info'];
       if (info != null) {
         final seriesInfoCompanion = SeriesInfosCompanion(
@@ -538,7 +529,6 @@ class IptvRepository {
         await _database.insertSeriesInfo(seriesInfoCompanion);
       }
 
-      // Seasons kaydet
       final seasons = data['seasons'];
       if (seasons is List) {
         for (final season in seasons) {
@@ -560,7 +550,6 @@ class IptvRepository {
         }
       }
 
-      // Episodes kaydet
       final episodes = data['episodes'];
       if (episodes is Map<String, dynamic>) {
         for (final seasonKey in episodes.keys) {

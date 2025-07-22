@@ -9,18 +9,17 @@ import '../../widgets/status_card_widget.dart';
 import '../../widgets/subscription_info_widget.dart';
 import '../settings/general_settings_section.dart';
 
-class XtreamCodePlaylistSettingsScreen extends StatefulWidget {
+class M3uPlaylistSettingsScreen extends StatefulWidget {
   final Playlist playlist;
 
-  const XtreamCodePlaylistSettingsScreen({super.key, required this.playlist});
+  const M3uPlaylistSettingsScreen({super.key, required this.playlist});
 
   @override
-  State<XtreamCodePlaylistSettingsScreen> createState() =>
-      _XtreamCodePlaylistSettingsScreenState();
+  State<M3uPlaylistSettingsScreen> createState() =>
+      _N3uPlaylistSettingsScreenState();
 }
 
-class _XtreamCodePlaylistSettingsScreenState
-    extends State<XtreamCodePlaylistSettingsScreen> {
+class _N3uPlaylistSettingsScreenState extends State<M3uPlaylistSettingsScreen> {
   ApiResponse? _serverInfo;
 
   @override
@@ -30,8 +29,8 @@ class _XtreamCodePlaylistSettingsScreenState
   }
 
   Future<void> _loadServerInfo() async {
-    if (AppState.repository != null) {
-      final info = await AppState.repository!.getPlayerInfo();
+    if (AppState.xtreamCodeRepository != null) {
+      final info = await AppState.xtreamCodeRepository!.getPlayerInfo();
       if (mounted) {
         setState(() {
           _serverInfo = info;
@@ -53,18 +52,9 @@ class _XtreamCodePlaylistSettingsScreenState
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         children: [
-          StatusCardWidget(serverInfo: _serverInfo),
-          const SizedBox(height: 12),
           const GeneralSettingsWidget(),
           const SizedBox(height: 16),
           PlaylistInfoWidget(playlist: widget.playlist),
-          const SizedBox(height: 16),
-          SubscriptionInfoWidget(serverInfo: _serverInfo),
-          const SizedBox(height: 16),
-          if (_serverInfo?.serverInfo != null) ...[
-            ServerInfoWidget(serverInfo: _serverInfo!),
-            const SizedBox(height: 16),
-          ],
         ],
       ),
     );

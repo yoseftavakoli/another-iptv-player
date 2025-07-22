@@ -12,6 +12,8 @@ import 'package:another_iptv_player/models/user_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../models/category_type.dart';
+import '../models/m3u_item.dart';
+import '../models/m3u_series.dart';
 import '../models/playlist_model.dart';
 
 part 'database.g.dart';
@@ -146,7 +148,7 @@ class VodStreams extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
-  Set<Column> get primaryKey => {streamId, playlistId}; // Composite primary key
+  Set<Column> get primaryKey => {streamId, playlistId};
 }
 
 @DataClassName('SeriesStreamsData')
@@ -155,34 +157,35 @@ class SeriesStreams extends Table {
 
   TextColumn get name => text()();
 
-  TextColumn get cover => text()();
+  TextColumn get cover => text().nullable()();
 
-  TextColumn get plot => text()();
+  TextColumn get plot => text().nullable()();
 
-  TextColumn get cast => text()();
+  TextColumn get cast => text().nullable()();
 
-  TextColumn get director => text()();
+  TextColumn get director => text().nullable()();
 
-  TextColumn get genre => text()();
+  TextColumn get genre => text().nullable()();
 
-  TextColumn get releaseDate => text()();
+  TextColumn get releaseDate => text().nullable()();
 
-  TextColumn get rating => text()();
+  TextColumn get rating => text().nullable()();
 
-  RealColumn get rating5based => real()();
+  RealColumn get rating5based => real().nullable()();
 
-  TextColumn get youtubeTrailer => text()();
+  TextColumn get youtubeTrailer => text().nullable()();
 
-  TextColumn get episodeRunTime => text()();
+  TextColumn get episodeRunTime => text().nullable()();
 
-  TextColumn get categoryId => text()();
+  TextColumn get categoryId => text().nullable()();
 
-  TextColumn get playlistId => text()(); // Ekstra property
+  TextColumn get playlistId => text()();
+
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 
-  TextColumn get lastModified => text()();
+  TextColumn get lastModified => text().nullable()();
 
-  TextColumn get backdropPath => text()(); // JSON string olarak saklanacak
+  TextColumn get backdropPath => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {seriesId, playlistId};
@@ -318,6 +321,95 @@ class WatchHistories extends Table {
   Set<Column> get primaryKey => {playlistId, streamId};
 }
 
+@DataClassName('M3uItemData')
+class M3uItems extends Table {
+  TextColumn get playlistId => text()();
+
+  TextColumn get url => text()();
+
+  TextColumn get name => text().nullable()();
+
+  TextColumn get tvgId => text().nullable()();
+
+  TextColumn get tvgName => text().nullable()();
+
+  TextColumn get tvgLogo => text().nullable()();
+
+  TextColumn get tvgUrl => text().nullable()();
+
+  TextColumn get tvgRec => text().nullable()();
+
+  TextColumn get tvgShift => text().nullable()();
+
+  TextColumn get groupTitle => text().nullable()();
+
+  TextColumn get groupName => text().nullable()();
+
+  TextColumn get userAgent => text().nullable()();
+
+  TextColumn get referrer => text().nullable()();
+
+  TextColumn get categoryId => text().nullable()();
+
+  IntColumn get contentType => integer()();
+
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {playlistId, url};
+
+  @override
+  List<String> get customConstraints => [
+    'CHECK (LENGTH(url) > 0)',
+    'CHECK (LENGTH(playlist_id) > 0)', // playlistId değil playlist_id!
+  ];
+}
+
+@DataClassName('M3uSeriesData')
+class M3uSeries extends Table {
+  TextColumn get playlistId => text()();
+
+  TextColumn get seriesId => text()();
+
+  TextColumn get name => text()();
+
+  TextColumn get categoryId => text().nullable()();
+
+  TextColumn get cover => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {playlistId, seriesId};
+}
+
+@DataClassName('M3uEpisodesData')
+class M3uEpisodes extends Table {
+  TextColumn get playlistId => text()();
+
+  TextColumn get seriesId => text()();
+
+  IntColumn get seasonNumber => integer()();
+
+  IntColumn get episodeNumber => integer()();
+
+  TextColumn get name => text()();
+
+  TextColumn get url => text()();
+
+  TextColumn get categoryId => text().nullable()();
+
+  TextColumn get cover => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {
+    playlistId,
+    seriesId,
+    seasonNumber,
+    episodeNumber,
+  };
+}
+
 @DriftDatabase(
   tables: [
     Playlists,
@@ -331,6 +423,9 @@ class WatchHistories extends Table {
     Seasons,
     Episodes,
     WatchHistories,
+    M3uItems,
+    M3uSeries,
+    M3uEpisodes,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -358,7 +453,7 @@ class AppDatabase extends _$AppDatabase {
       );
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 5;
 
   // === PLAYLIST İŞLEMLERİ ===
 
@@ -437,7 +532,14 @@ class AppDatabase extends _$AppDatabase {
     return categoriesData.map((cat) => Category.fromDrift(cat)).toList();
   }
 
-  // Kategorileri ekle/güncelle
+  Future<List<Category>> getCategoriesByPlaylist(String playlistId) async {
+    final categoriesData = await (select(
+      categories,
+    )..where((tbl) => tbl.playlistId.equals(playlistId))).get();
+
+    return categoriesData.map((cat) => Category.fromDrift(cat)).toList();
+  }
+
   Future<void> insertCategories(List<Category> categoryList) async {
     await batch((batch) {
       batch.insertAllOnConflictUpdate(
@@ -960,7 +1062,6 @@ class AppDatabase extends _$AppDatabase {
         .go();
   }
 
-  // SeriesStreams için CRUD operations
   Future<void> insertSeriesStreams(List<SeriesStream> seriesStreams) async {
     final seriesStreamsCompanions = seriesStreams
         .map((seriesStream) => seriesStream.toDriftCompanion())
@@ -1211,6 +1312,78 @@ class AppDatabase extends _$AppDatabase {
     return movieList.map((x) => VodStream.fromDriftVodStream(x)).toList();
   }
 
+  Future<int> insertM3uItem(M3uItem item) {
+    return into(m3uItems).insert(item.toCompanion());
+  }
+
+  Future<void> insertM3uItems(List<M3uItem> items) {
+    return batch((batch) {
+      batch.insertAll(m3uItems, items.map((item) => item.toCompanion()));
+    });
+  }
+
+  Future<bool> updateM3uItem(M3uItem item) {
+    return update(m3uItems).replace(item.toCompanion());
+  }
+
+  Future<List<M3uItem>> getM3uItemsByCategoryId(
+    String playlistId,
+    String categoryId, {
+    int? top,
+    ContentType? contentType,
+  }) async {
+    var query = select(m3uItems)
+      ..where(
+        (ls) =>
+            ls.playlistId.equals(playlistId) & ls.categoryId.equals(categoryId),
+      );
+
+    if (top != null) {
+      query = query..limit(top);
+    }
+
+    if (contentType != null) {
+      query = query..where((x) => x.contentType.equals(contentType.index));
+    }
+
+    final rows = await query.get();
+
+    return rows.map((row) => M3uItem.fromData(row)).toList();
+  }
+
+  Future<int> deleteM3uItem(String playlistId, String url) {
+    return (delete(m3uItems)..where(
+          (tbl) => tbl.playlistId.equals(playlistId) & tbl.url.equals(url),
+        ))
+        .go();
+  }
+
+  Future<List<M3uItem>> getM3uItemsByPlaylist(String playlistId) async {
+    final data = await (select(
+      m3uItems,
+    )..where((tbl) => tbl.playlistId.equals(playlistId))).get();
+    return data.map((item) => M3uItem.fromData(item)).toList();
+  }
+
+  Future<M3uItem?> getM3uItemsByIdAndPlaylist(
+    String id,
+    String playlistId,
+  ) async {
+    final query = select(m3uItems)
+      ..where((tbl) => tbl.url.equals(id) & tbl.playlistId.equals(playlistId));
+    final data = await query.getSingleOrNull();
+
+    if (data == null) return null;
+    return M3uItem.fromData(data);
+  }
+
+  Future<List<M3uItem>> getM3uItemsByCategory(String categoryId) async {
+    final data = await (select(
+      m3uItems,
+    )..where((tbl) => tbl.categoryId.equals(categoryId))).get();
+    return data.map((item) => M3uItem.fromData(item)).toList();
+  }
+
   Future<List<SeriesStream>> searchSeries(
     String playlistId,
     String query,
@@ -1229,6 +1402,58 @@ class AppDatabase extends _$AppDatabase {
     return seriesList
         .map((x) => SeriesStream.fromDriftSeriesStream(x))
         .toList();
+  }
+
+  Future<void> insertM3uSeries(List<M3uSeriesCompanion> seriesList) async {
+    await batch((batch) {
+      batch.insertAll(m3uSeries, seriesList, mode: InsertMode.insertOrReplace);
+    });
+  }
+
+  Future<void> insertM3uEpisodes(
+    List<M3uEpisodesCompanion> episodesList,
+  ) async {
+    await batch((batch) {
+      batch.insertAll(
+        m3uEpisodes,
+        episodesList,
+        mode: InsertMode.insertOrReplace,
+      );
+    });
+  }
+
+  Future<List<M3uSerie>> getM3uSeriesByCategoryId(
+    String playlistId,
+    String categoryId, {
+    int? top,
+  }) async {
+    var query = select(m3uSeries)
+      ..where(
+        (ls) =>
+            ls.playlistId.equals(playlistId) & ls.categoryId.equals(categoryId),
+      );
+
+    if (top != null) {
+      query = query..limit(top);
+    }
+
+    final rows = await query.get();
+
+    return rows.map((row) => M3uSerie.fromData(row)).toList();
+  }
+
+  Future<List<M3uEpisode>> getM3uEpisodesBySeriesId(
+    String playlistId,
+    String seriesId,
+  ) async {
+    var query = select(m3uEpisodes)
+      ..where(
+        (ls) => ls.playlistId.equals(playlistId) & ls.seriesId.equals(seriesId),
+      );
+
+    final rows = await query.get();
+
+    return rows.map((row) => M3uEpisode.fromData(row)).toList();
   }
 
   @override
@@ -1263,6 +1488,15 @@ class AppDatabase extends _$AppDatabase {
           SET type = 'PlaylistType.xtream' 
           WHERE type = 'PlaylistType.xstream'
         ''');
+      }
+
+      if (from <= 4) {
+        await m.createTable(m3uItems);
+      }
+
+      if (from <= 5) {
+        await m.createTable(m3uSeries);
+        await m.createTable(m3uEpisodes);
       }
     },
   );

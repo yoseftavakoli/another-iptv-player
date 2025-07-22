@@ -1,4 +1,26 @@
-# [](https://github.com/bsogulcan/iptv-player/compare/v0.7.0...v) (2025-07-14)
+# [](https://github.com/bsogulcan/iptv-player/compare/v0.8.0...v) (2025-07-22)
+
+
+
+# [0.8.0](https://github.com/bsogulcan/iptv-player/compare/v0.7.1...v0.8.0) (2025-07-22)
+
+
+### Features
+
+* m3u support ([9af3bc0](https://github.com/bsogulcan/iptv-player/commit/9af3bc09ff6cdd37df66ef00560861857d125720))
+
+
+
+## [0.7.1](https://github.com/bsogulcan/iptv-player/compare/v0.7.0...v0.7.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* dialog text color ([54eed78](https://github.com/bsogulcan/iptv-player/commit/54eed7852f4165867f38ac9d70688c24ace71cb1))
+* dropdown text color ([4a768bf](https://github.com/bsogulcan/iptv-player/commit/4a768bf09cb6f8570431204f511126f641d762b7))
+* empty episode info exception ([8bf11d6](https://github.com/bsogulcan/iptv-player/commit/8bf11d64b683b0f8d0e12b804a11c4b1b62209a0))
+* set last playlist on data loader screen ([5306942](https://github.com/bsogulcan/iptv-player/commit/5306942039ce732802d602d016196a450f4e2222))
+* **xtream-code:** app bars localizations ([3f55990](https://github.com/bsogulcan/iptv-player/commit/3f55990cf35bee31cad3ac3de581700f3edf0dae))
 
 
 

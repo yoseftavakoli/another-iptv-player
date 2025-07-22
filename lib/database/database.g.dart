@@ -7665,6 +7665,15 @@ class $M3uItemsTable extends M3uItems
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $M3uItemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _playlistIdMeta = const VerificationMeta(
     'playlistId',
   );
@@ -7846,6 +7855,7 @@ class $M3uItemsTable extends M3uItems
   );
   @override
   List<GeneratedColumn> get $columns => [
+    id,
     playlistId,
     url,
     name,
@@ -7876,6 +7886,11 @@ class $M3uItemsTable extends M3uItems
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
     if (data.containsKey('playlist_id')) {
       context.handle(
         _playlistIdMeta,
@@ -7991,11 +8006,15 @@ class $M3uItemsTable extends M3uItems
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {playlistId, url};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   M3uItemData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return M3uItemData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
       playlistId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}playlist_id'],
@@ -8074,6 +8093,7 @@ class $M3uItemsTable extends M3uItems
 }
 
 class M3uItemData extends DataClass implements Insertable<M3uItemData> {
+  final String id;
   final String playlistId;
   final String url;
   final String? name;
@@ -8092,6 +8112,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
   final DateTime createdAt;
   final DateTime updatedAt;
   const M3uItemData({
+    required this.id,
     required this.playlistId,
     required this.url,
     this.name,
@@ -8113,6 +8134,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
     map['playlist_id'] = Variable<String>(playlistId);
     map['url'] = Variable<String>(url);
     if (!nullToAbsent || name != null) {
@@ -8159,6 +8181,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
 
   M3uItemsCompanion toCompanion(bool nullToAbsent) {
     return M3uItemsCompanion(
+      id: Value(id),
       playlistId: Value(playlistId),
       url: Value(url),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
@@ -8207,6 +8230,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return M3uItemData(
+      id: serializer.fromJson<String>(json['id']),
       playlistId: serializer.fromJson<String>(json['playlistId']),
       url: serializer.fromJson<String>(json['url']),
       name: serializer.fromJson<String?>(json['name']),
@@ -8230,6 +8254,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
       'playlistId': serializer.toJson<String>(playlistId),
       'url': serializer.toJson<String>(url),
       'name': serializer.toJson<String?>(name),
@@ -8251,6 +8276,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
   }
 
   M3uItemData copyWith({
+    String? id,
     String? playlistId,
     String? url,
     Value<String?> name = const Value.absent(),
@@ -8269,6 +8295,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => M3uItemData(
+    id: id ?? this.id,
     playlistId: playlistId ?? this.playlistId,
     url: url ?? this.url,
     name: name.present ? name.value : this.name,
@@ -8289,6 +8316,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
   );
   M3uItemData copyWithCompanion(M3uItemsCompanion data) {
     return M3uItemData(
+      id: data.id.present ? data.id.value : this.id,
       playlistId: data.playlistId.present
           ? data.playlistId.value
           : this.playlistId,
@@ -8320,6 +8348,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
   @override
   String toString() {
     return (StringBuffer('M3uItemData(')
+          ..write('id: $id, ')
           ..write('playlistId: $playlistId, ')
           ..write('url: $url, ')
           ..write('name: $name, ')
@@ -8343,6 +8372,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
 
   @override
   int get hashCode => Object.hash(
+    id,
     playlistId,
     url,
     name,
@@ -8365,6 +8395,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is M3uItemData &&
+          other.id == this.id &&
           other.playlistId == this.playlistId &&
           other.url == this.url &&
           other.name == this.name &&
@@ -8385,6 +8416,7 @@ class M3uItemData extends DataClass implements Insertable<M3uItemData> {
 }
 
 class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
+  final Value<String> id;
   final Value<String> playlistId;
   final Value<String> url;
   final Value<String?> name;
@@ -8404,6 +8436,7 @@ class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
   const M3uItemsCompanion({
+    this.id = const Value.absent(),
     this.playlistId = const Value.absent(),
     this.url = const Value.absent(),
     this.name = const Value.absent(),
@@ -8424,6 +8457,7 @@ class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
     this.rowid = const Value.absent(),
   });
   M3uItemsCompanion.insert({
+    required String id,
     required String playlistId,
     required String url,
     this.name = const Value.absent(),
@@ -8442,10 +8476,12 @@ class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : playlistId = Value(playlistId),
+  }) : id = Value(id),
+       playlistId = Value(playlistId),
        url = Value(url),
        contentType = Value(contentType);
   static Insertable<M3uItemData> custom({
+    Expression<String>? id,
     Expression<String>? playlistId,
     Expression<String>? url,
     Expression<String>? name,
@@ -8466,6 +8502,7 @@ class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (playlistId != null) 'playlist_id': playlistId,
       if (url != null) 'url': url,
       if (name != null) 'name': name,
@@ -8488,6 +8525,7 @@ class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
   }
 
   M3uItemsCompanion copyWith({
+    Value<String>? id,
     Value<String>? playlistId,
     Value<String>? url,
     Value<String?>? name,
@@ -8508,6 +8546,7 @@ class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
     Value<int>? rowid,
   }) {
     return M3uItemsCompanion(
+      id: id ?? this.id,
       playlistId: playlistId ?? this.playlistId,
       url: url ?? this.url,
       name: name ?? this.name,
@@ -8532,6 +8571,9 @@ class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
     if (playlistId.present) {
       map['playlist_id'] = Variable<String>(playlistId.value);
     }
@@ -8592,6 +8634,7 @@ class M3uItemsCompanion extends UpdateCompanion<M3uItemData> {
   @override
   String toString() {
     return (StringBuffer('M3uItemsCompanion(')
+          ..write('id: $id, ')
           ..write('playlistId: $playlistId, ')
           ..write('url: $url, ')
           ..write('name: $name, ')
@@ -13207,6 +13250,7 @@ typedef $$WatchHistoriesTableProcessedTableManager =
     >;
 typedef $$M3uItemsTableCreateCompanionBuilder =
     M3uItemsCompanion Function({
+      required String id,
       required String playlistId,
       required String url,
       Value<String?> name,
@@ -13228,6 +13272,7 @@ typedef $$M3uItemsTableCreateCompanionBuilder =
     });
 typedef $$M3uItemsTableUpdateCompanionBuilder =
     M3uItemsCompanion Function({
+      Value<String> id,
       Value<String> playlistId,
       Value<String> url,
       Value<String?> name,
@@ -13257,6 +13302,11 @@ class $$M3uItemsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get playlistId => $composableBuilder(
     column: $table.playlistId,
     builder: (column) => ColumnFilters(column),
@@ -13352,6 +13402,11 @@ class $$M3uItemsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get playlistId => $composableBuilder(
     column: $table.playlistId,
     builder: (column) => ColumnOrderings(column),
@@ -13447,6 +13502,9 @@ class $$M3uItemsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
   GeneratedColumn<String> get playlistId => $composableBuilder(
     column: $table.playlistId,
     builder: (column) => column,
@@ -13538,6 +13596,7 @@ class $$M3uItemsTableTableManager
               $$M3uItemsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String> id = const Value.absent(),
                 Value<String> playlistId = const Value.absent(),
                 Value<String> url = const Value.absent(),
                 Value<String?> name = const Value.absent(),
@@ -13557,6 +13616,7 @@ class $$M3uItemsTableTableManager
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => M3uItemsCompanion(
+                id: id,
                 playlistId: playlistId,
                 url: url,
                 name: name,
@@ -13578,6 +13638,7 @@ class $$M3uItemsTableTableManager
               ),
           createCompanionCallback:
               ({
+                required String id,
                 required String playlistId,
                 required String url,
                 Value<String?> name = const Value.absent(),
@@ -13597,6 +13658,7 @@ class $$M3uItemsTableTableManager
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => M3uItemsCompanion.insert(
+                id: id,
                 playlistId: playlistId,
                 url: url,
                 name: name,

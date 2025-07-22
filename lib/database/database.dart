@@ -323,6 +323,8 @@ class WatchHistories extends Table {
 
 @DataClassName('M3uItemData')
 class M3uItems extends Table {
+  TextColumn get id => text()();
+
   TextColumn get playlistId => text()();
 
   TextColumn get url => text()();
@@ -358,12 +360,13 @@ class M3uItems extends Table {
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
-  Set<Column> get primaryKey => {playlistId, url};
+  Set<Column> get primaryKey => {id};
 
   @override
   List<String> get customConstraints => [
+    'CHECK (LENGTH(id) > 0)',
     'CHECK (LENGTH(url) > 0)',
-    'CHECK (LENGTH(playlist_id) > 0)', // playlistId değil playlist_id!
+    'CHECK (LENGTH(playlist_id) > 0)',
   ];
 }
 
@@ -453,7 +456,7 @@ class AppDatabase extends _$AppDatabase {
       );
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   // === PLAYLIST İŞLEMLERİ ===
 
@@ -1497,6 +1500,11 @@ class AppDatabase extends _$AppDatabase {
       if (from <= 5) {
         await m.createTable(m3uSeries);
         await m.createTable(m3uEpisodes);
+      }
+
+      if (from <= 6) {
+        await m.deleteTable('m3u_items');
+        await m.createTable(m3uItems);
       }
     },
   );

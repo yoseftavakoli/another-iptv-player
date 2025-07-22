@@ -1,6 +1,7 @@
 import 'dart:convert' show utf8;
 import 'dart:io' show File, HttpClient;
 import 'package:another_iptv_player/models/content_type.dart';
+import 'package:uuid/uuid.dart';
 import '../models/m3u_item.dart';
 
 class M3uParser {
@@ -58,6 +59,8 @@ class M3uParser {
   }
 
   static List<M3uItem> parseM3u(String playlistId, String content) {
+    final uuid = Uuid();
+
     final lines = content.split('\n').map((e) => e.trim()).toList();
     final List<M3uItem> items = [];
 
@@ -94,6 +97,7 @@ class M3uParser {
 
         items.add(
           M3uItem(
+            id: uuid.v4(),
             playlistId: playlistId,
             url: url,
             contentType: _detectContentType(url),
@@ -144,12 +148,7 @@ class M3uTempSeries {
   final int episodeNumber;
   final M3uItem m3uItem;
 
-  M3uTempSeries(
-    this.name,
-    this.seasonNumber,
-    this.episodeNumber,
-    this.m3uItem,
-  );
+  M3uTempSeries(this.name, this.seasonNumber, this.episodeNumber, this.m3uItem);
 
   @override
   String toString() {
@@ -182,12 +181,7 @@ class SeriesParser {
       final seasonNumber = int.tryParse(match.group(2) ?? '') ?? 0;
       final episodeNumber = int.tryParse(match.group(3) ?? '') ?? 0;
 
-      return M3uTempSeries(
-        seriesName,
-        seasonNumber,
-        episodeNumber,
-        item,
-      );
+      return M3uTempSeries(seriesName, seasonNumber, episodeNumber, item);
     }
 
     return null;

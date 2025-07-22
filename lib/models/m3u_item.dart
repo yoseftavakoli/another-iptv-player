@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import '../database/database.dart';
 
 class M3uItem {
+  final String id;
   final String playlistId;
   final String? name;
   final String? tvgId;
@@ -21,6 +22,7 @@ class M3uItem {
   String? categoryId;
 
   M3uItem({
+    required this.id,
     required this.playlistId,
     required this.url,
     required this.contentType,
@@ -45,6 +47,7 @@ class M3uItem {
 
   M3uItemsCompanion toCompanion() {
     return M3uItemsCompanion(
+      id: Value(id),
       playlistId: Value(playlistId),
       name: Value(name),
       tvgId: Value(tvgId),
@@ -65,6 +68,7 @@ class M3uItem {
 
   factory M3uItem.fromData(M3uItemData data) {
     return M3uItem(
+      id: data.id,
       playlistId: data.playlistId,
       url: data.url,
       contentType: ContentType.values[data.contentType],

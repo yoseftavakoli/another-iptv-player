@@ -414,6 +414,7 @@ class M3uController extends ChangeNotifier {
 
         items.add(
           M3uItem(
+            id: uuid.v4(),
             playlistId: playlistId,
             url: url,
             contentType: _detectContentType(url),

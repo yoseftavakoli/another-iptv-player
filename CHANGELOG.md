@@ -1,4 +1,19 @@
-# [](https://github.com/bsogulcan/iptv-player/compare/v0.8.0...v) (2025-07-22)
+# [](https://github.com/bsogulcan/iptv-player/compare/v0.8.1...v) (2025-07-24)
+
+
+### Bug Fixes
+
+* live streams network issues ([#8](https://github.com/bsogulcan/iptv-player/issues/8)) ([cba25dd](https://github.com/bsogulcan/iptv-player/commit/cba25dd9b26bf1775e533b811aad88c1945afe97))
+
+
+
+## [0.8.1](https://github.com/bsogulcan/iptv-player/compare/v0.8.0...v0.8.1) (2025-07-22)
+
+
+### Bug Fixes
+
+* duplicate m3u urls ([bbeaa71](https://github.com/bsogulcan/iptv-player/commit/bbeaa71ab03b84c16153945fd77b2335455ddbdc))
+* permissions ([685458a](https://github.com/bsogulcan/iptv-player/commit/685458aab64c6c5752bf1d8560763693207c7c04))
 
 
 

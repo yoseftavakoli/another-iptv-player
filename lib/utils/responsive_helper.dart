@@ -40,4 +40,9 @@ class ResponsiveHelper {
       return 2;
     }
   }
+
+  static bool isDesktopOrTV(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    return screenWidth >= 900;
+  }
 }

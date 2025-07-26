@@ -1,5 +1,4 @@
 import 'package:another_iptv_player/l10n/localization_extension.dart';
-import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/screens/m3u/m3u_items_screen.dart';
 import 'package:another_iptv_player/screens/m3u/m3u_playlist_settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +26,17 @@ class M3UHomeScreen extends StatefulWidget {
 
 class _M3UHomeScreenState extends State<M3UHomeScreen> {
   late M3UHomeController _controller;
+
+  static const double _desktopBreakpoint = 900.0;
+  static const double _largeScreenBreakpoint = 1200.0;
+  static const double _defaultNavWidth = 80.0;
+  static const double _largeNavWidth = 100.0;
+  static const double _defaultItemHeight = 60.0;
+  static const double _largeItemHeight = 70.0;
+  static const double _defaultIconSize = 24.0;
+  static const double _largeIconSize = 28.0;
+  static const double _defaultFontSize = 10.0;
+  static const double _largeFontSize = 11.0;
 
   @override
   void initState() {
@@ -61,9 +71,14 @@ class _M3UHomeScreenState extends State<M3UHomeScreen> {
       return _buildLoadingScreen(context);
     }
 
-    return Scaffold(
-      body: _buildPageView(controller),
-      bottomNavigationBar: _buildBottomNavigationBar(context, controller),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= _desktopBreakpoint) {
+          return _buildDesktopLayout(context, controller, constraints);
+        }
+
+        return _buildMobileLayout(context, controller);
+      },
     );
   }
 
@@ -82,10 +97,36 @@ class _M3UHomeScreenState extends State<M3UHomeScreen> {
     );
   }
 
+  Widget _buildMobileLayout(
+    BuildContext context,
+    M3UHomeController controller,
+  ) {
+    return Scaffold(
+      body: _buildPageView(controller),
+      bottomNavigationBar: _buildBottomNavigationBar(context, controller),
+    );
+  }
+
+  Widget _buildDesktopLayout(
+    BuildContext context,
+    M3UHomeController controller,
+    BoxConstraints constraints,
+  ) {
+    return Scaffold(
+      body: Row(
+        children: [
+          _buildDesktopNavigationBar(context, controller, constraints),
+          Expanded(
+            child: _buildPageView(controller),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildPageView(M3UHomeController controller) {
-    return PageView(
-      controller: controller.pageController,
-      onPageChanged: controller.onPageChanged,
+    return IndexedStack(
+      index: controller.currentIndex,
       children: _buildPages(controller),
     );
   }
@@ -114,6 +155,26 @@ class _M3UHomeScreenState extends State<M3UHomeScreen> {
   }
 
   SliverAppBar _buildSliverAppBar(
+    BuildContext context,
+    M3UHomeController controller,
+  ) {
+    if (ResponsiveHelper.isDesktopOrTV(context)) {
+      return _buildDesktopSliverAppBar(context);
+    }
+
+    return _buildMobileSliverAppBar(context, controller);
+  }
+
+  SliverAppBar _buildDesktopSliverAppBar(BuildContext context) {
+    return SliverAppBar(
+      title: const SizedBox.shrink(),
+      floating: true,
+      snap: true,
+      elevation: 0,
+    );
+  }
+
+  SliverAppBar _buildMobileSliverAppBar(
     BuildContext context,
     M3UHomeController controller,
   ) {
@@ -171,31 +232,191 @@ class _M3UHomeScreenState extends State<M3UHomeScreen> {
   List<BottomNavigationBarItem> _buildBottomNavigationItems(
     BuildContext context,
   ) {
+    return _getNavigationItems(context).map((item) {
+      return BottomNavigationBarItem(
+        icon: Icon(item.icon),
+        label: item.label,
+      );
+    }).toList();
+  }
+
+  Widget _buildDesktopNavigationBar(
+    BuildContext context,
+    M3UHomeController controller,
+    BoxConstraints constraints,
+  ) {
+    final navWidth = _getNavigationWidth(constraints.maxWidth);
+    
+    return Container(
+      width: navWidth,
+      decoration: _getNavigationBarDecoration(context),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildDesktopNavigationItems(context, controller, constraints),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopNavigationItems(
+    BuildContext context,
+    M3UHomeController controller,
+    BoxConstraints constraints,
+  ) {
+    final items = _getNavigationItems(context);
+    final sizes = _getNavigationSizes(constraints.maxWidth);
+
+    return Column(
+      children: items.map((item) {
+        final isSelected = controller.currentIndex == item.index;
+        return _buildNavigationItem(
+          context,
+          item,
+          isSelected,
+          sizes,
+          () => controller.onNavigationTap(item.index),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildNavigationItem(
+    BuildContext context,
+    NavigationItem item,
+    bool isSelected,
+    NavigationSizes sizes,
+    VoidCallback onTap,
+  ) {
+    return Container(
+      width: double.infinity,
+      height: sizes.itemHeight,
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      decoration: BoxDecoration(
+        color: isSelected 
+            ? Theme.of(context).colorScheme.primaryContainer
+            : Colors.transparent,
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              item.icon,
+              color: _getIconColor(context, isSelected),
+              size: sizes.iconSize,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              item.label,
+              style: TextStyle(
+                color: _getTextColor(context, isSelected),
+                fontSize: sizes.fontSize,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  BoxDecoration _getNavigationBarDecoration(BuildContext context) {
+    return BoxDecoration(
+      color: Theme.of(context).colorScheme.surface,
+      border: Border(
+        right: BorderSide(
+          color: Theme.of(context).dividerColor,
+          width: 0.5,
+        ),
+      ),
+    );
+  }
+
+  double _getNavigationWidth(double screenWidth) {
+    return screenWidth >= _largeScreenBreakpoint ? _largeNavWidth : _defaultNavWidth;
+  }
+
+  NavigationSizes _getNavigationSizes(double screenWidth) {
+    final isLargeScreen = screenWidth >= _largeScreenBreakpoint;
+    
+    return NavigationSizes(
+      itemHeight: isLargeScreen ? _largeItemHeight : _defaultItemHeight,
+      iconSize: isLargeScreen ? _largeIconSize : _defaultIconSize,
+      fontSize: isLargeScreen ? _largeFontSize : _defaultFontSize,
+    );
+  }
+
+  Color _getIconColor(BuildContext context, bool isSelected) {
+    return isSelected 
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.onSurface;
+  }
+
+  Color _getTextColor(BuildContext context, bool isSelected) {
+    return isSelected 
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.onSurface;
+  }
+
+  List<NavigationItem> _getNavigationItems(BuildContext context) {
     return [
-      BottomNavigationBarItem(
-        icon: Icon(Icons.history),
+      NavigationItem(
+        icon: Icons.history,
         label: context.loc.history,
+        index: 0,
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.all_inbox),
+      NavigationItem(
+        icon: Icons.all_inbox,
         label: context.loc.all,
+        index: 1,
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.live_tv),
+      NavigationItem(
+        icon: Icons.live_tv,
         label: context.loc.live,
+        index: 2,
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.movie_outlined),
+      NavigationItem(
+        icon: Icons.movie_outlined,
         label: context.loc.movie,
+        index: 3,
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.tv),
+      NavigationItem(
+        icon: Icons.tv,
         label: context.loc.series_plural,
+        index: 4,
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.settings),
+      NavigationItem(
+        icon: Icons.settings,
         label: context.loc.settings,
+        index: 5,
       ),
     ];
   }
+}
+
+class NavigationItem {
+  final IconData icon;
+  final String label;
+  final int index;
+
+  const NavigationItem({
+    required this.icon,
+    required this.label,
+    required this.index,
+  });
+}
+
+class NavigationSizes {
+  final double itemHeight;
+  final double iconSize;
+  final double fontSize;
+
+  const NavigationSizes({
+    required this.itemHeight,
+    required this.iconSize,
+    required this.fontSize,
+  });
 }

@@ -72,19 +72,11 @@ class IptvRepository {
     }
   }
 
-  Future<List<LiveStream>?> getLiveChannels({
+  Future<List<LiveStream>?> getLiveChannelsFromApi({
     String? categoryId,
     bool forceRefresh = false,
   }) async {
     try {
-      if (!forceRefresh) {
-        var liveStreams = await _database.getLiveStreams(_playlistId);
-
-        if (liveStreams.isNotEmpty) {
-          return liveStreams;
-        }
-      }
-
       final additionalParams = <String, String>{'action': 'get_live_streams'};
 
       if (categoryId != null) {
@@ -116,46 +108,15 @@ class IptvRepository {
     }
   }
 
-  Future<List<LiveStream>?> getLiveChannelsByCategoryId({
-    required String categoryId,
+  Future<List<LiveStream>?> getLiveChannels({
+    String? categoryId,
     bool forceRefresh = false,
-    int? top,
   }) async {
     try {
-      if (!forceRefresh) {
-        var liveStreams = await _database.getLiveStreamsByCategoryId(
-          _playlistId,
-          categoryId,
-          top: top,
-        );
+      var liveStreams = await _database.getLiveStreams(_playlistId);
 
-        if (liveStreams.isNotEmpty) {
-          return liveStreams;
-        }
-      }
-
-      final additionalParams = <String, String>{'action': 'get_live_streams'};
-
-      additionalParams['category_id'] = categoryId;
-
-      final response = await _makeRequest(
-        'player_api.php',
-        additionalParams: additionalParams,
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-        var liveStreams = jsonData
-            .map((json) => LiveStream.fromJson(json, _playlistId))
-            .toList();
-
-        await _database.deleteLiveStreamsByPlaylistId(_playlistId);
-        await _database.insertLiveStreams(liveStreams);
+      if (liveStreams.isNotEmpty) {
         return liveStreams;
-      } else {
-        throw Exception(
-          'HTTP ${response.statusCode}: ${response.reasonPhrase}',
-        );
       }
     } catch (e) {
       print('Live Channels Error: $e');
@@ -163,34 +124,33 @@ class IptvRepository {
     }
   }
 
-  Future<List<VodStream>?> getMovies({
+  Future<List<LiveStream>?> getLiveChannelsByCategoryId({
+    required String categoryId,
+    bool forceRefresh = false,
+    int? top,
+  }) async {
+    try {
+      var liveStreams = await _database.getLiveStreamsByCategoryId(
+        _playlistId,
+        categoryId,
+        top: top,
+      );
+
+      if (liveStreams.isNotEmpty) {
+        return liveStreams;
+      }
+    } catch (e) {
+      print('Live Channels Error: $e');
+      return null;
+    }
+  }
+
+  Future<List<VodStream>?> getMoviesFromApi({
     String? categoryId,
     bool forceRefresh = false,
     int? top,
   }) async {
     try {
-      if (!forceRefresh) {
-        if (categoryId != null) {
-          var vodStreams = await _database.getVodStreamsByCategoryAndPlaylistId(
-            categoryId: categoryId,
-            playlistId: _playlistId,
-            top: top,
-          );
-
-          if (vodStreams.isNotEmpty) {
-            return vodStreams;
-          }
-        } else {
-          var vodStreams = await _database.getVodStreamsByPlaylistId(
-            _playlistId,
-          );
-
-          if (vodStreams.isNotEmpty) {
-            return vodStreams;
-          }
-        }
-      }
-
       final additionalParams = <String, String>{'action': 'get_vod_streams'};
 
       if (categoryId != null) {
@@ -223,34 +183,41 @@ class IptvRepository {
     }
   }
 
-  Future<List<SeriesStream>?> getSeries({
+  Future<List<VodStream>?> getMovies({
     String? categoryId,
     bool forceRefresh = false,
     int? top,
   }) async {
     try {
-      if (!forceRefresh) {
-        if (categoryId != null) {
-          var series = await _database.getSeriesStreamsByCategoryAndPlaylistId(
-            categoryId: categoryId,
-            playlistId: _playlistId,
-            top: top,
-          );
+      if (categoryId != null) {
+        var vodStreams = await _database.getVodStreamsByCategoryAndPlaylistId(
+          categoryId: categoryId,
+          playlistId: _playlistId,
+          top: top,
+        );
 
-          if (series.isNotEmpty) {
-            return series;
-          }
-        } else {
-          var series = await _database.getSeriesStreamsByPlaylistId(
-            _playlistId,
-          );
+        if (vodStreams.isNotEmpty) {
+          return vodStreams;
+        }
+      } else {
+        var vodStreams = await _database.getVodStreamsByPlaylistId(_playlistId);
 
-          if (series.isNotEmpty) {
-            return series;
-          }
+        if (vodStreams.isNotEmpty) {
+          return vodStreams;
         }
       }
+    } catch (e) {
+      print('Movies Error: $e');
+      return null;
+    }
+  }
 
+  Future<List<SeriesStream>?> getSeriesFromApi({
+    String? categoryId,
+    bool forceRefresh = false,
+    int? top,
+  }) async {
+    try {
       final additionalParams = <String, String>{'action': 'get_series'};
 
       if (categoryId != null) {
@@ -276,6 +243,35 @@ class IptvRepository {
         throw Exception(
           'HTTP ${response.statusCode}: ${response.reasonPhrase}',
         );
+      }
+    } catch (e) {
+      print('Series Error: $e');
+      return null;
+    }
+  }
+
+  Future<List<SeriesStream>?> getSeries({
+    String? categoryId,
+    bool forceRefresh = false,
+    int? top,
+  }) async {
+    try {
+      if (categoryId != null) {
+        var series = await _database.getSeriesStreamsByCategoryAndPlaylistId(
+          categoryId: categoryId,
+          playlistId: _playlistId,
+          top: top,
+        );
+
+        if (series.isNotEmpty) {
+          return series;
+        }
+      } else {
+        var series = await _database.getSeriesStreamsByPlaylistId(_playlistId);
+
+        if (series.isNotEmpty) {
+          return series;
+        }
       }
     } catch (e) {
       print('Series Error: $e');

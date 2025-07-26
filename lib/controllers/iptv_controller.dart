@@ -134,7 +134,7 @@ class IptvController extends ChangeNotifier {
       _setCurrentStep(ProgressStep.liveChannels);
       _setError(null);
 
-      _liveChannels = await _repository.getLiveChannels();
+      _liveChannels = await _repository.getLiveChannelsFromApi();
 
       if (_liveChannels == null) {
         throw Exception('preparing_live_streams_exception_1');
@@ -156,7 +156,7 @@ class IptvController extends ChangeNotifier {
       _setCurrentStep(ProgressStep.movies);
       _setError(null);
 
-      _movies = await _repository.getMovies();
+      _movies = await _repository.getMoviesFromApi();
 
       if (_movies == null) {
         throw Exception('preparing_movies_exception_1');
@@ -178,7 +178,7 @@ class IptvController extends ChangeNotifier {
       _setCurrentStep(ProgressStep.series);
       _setError(null);
 
-      _series = await _repository.getSeries();
+      _series = await _repository.getSeriesFromApi();
 
       if (_series == null) {
         throw Exception('preparing_series_exception_1');

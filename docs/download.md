@@ -13,8 +13,12 @@ features:
     linkText: Download from App Store
     target: _blank
     rel: external
-  - title: Google Play (Closed Beta)
-    details: The Android version is currently in closed beta. If you’d like to participate, please send your Google Play email address to us to join the beta.
+  - title: Google Play
+    details: Now available on Google Play! Download the official Android version with automatic updates.
+    link: https://play.google.com/store/apps/details?id=dev.ogos.anotheriptvplayer
+    linkText: Download from Google Play
+    target: _blank
+    rel: external
   - title: GitHub Releases
     details: Download the latest release for Windows, macOS, Linux, Android, and iOS platforms.
     link: https://github.com/bsogulcan/another-iptv-player/releases/latest

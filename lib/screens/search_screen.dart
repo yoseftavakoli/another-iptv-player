@@ -175,7 +175,10 @@ class SearchScreenState extends State<SearchScreen> {
                 autofocus: true,
                 onChanged: _performSearch,
               )
-            : Text(_getScreenTitle(context)),
+            : SelectableText(
+                _getScreenTitle(context),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
         actions: [
           if (isSearching)
             IconButton(icon: Icon(Icons.clear), onPressed: stopSearch)

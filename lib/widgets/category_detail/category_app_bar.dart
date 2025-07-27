@@ -24,7 +24,10 @@ class CategoryAppBar extends StatelessWidget {
     return SliverAppBar(
       floating: true,
       snap: true,
-      title: isSearching ? _buildSearchField(context) : Text(title),
+      title: isSearching ? _buildSearchField(context) : SelectableText(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       actions: [
         IconButton(
           icon: Icon(isSearching ? Icons.clear : Icons.search),

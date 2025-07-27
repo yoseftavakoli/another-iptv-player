@@ -199,7 +199,10 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
     ContentType contentType,
   ) {
     return SliverAppBar(
-      title: const SizedBox.shrink(),
+      title: SelectableText(
+        _getDesktopTitle(context, contentType),
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       floating: true,
       snap: true,
       elevation: 0,
@@ -210,6 +213,17 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
         ),
       ],
     );
+  }
+
+  String _getDesktopTitle(BuildContext context, ContentType contentType) {
+    switch (contentType) {
+      case ContentType.liveStream:
+        return context.loc.live_streams;
+      case ContentType.vod:
+        return context.loc.movies;
+      case ContentType.series:
+        return context.loc.series_plural;
+    }
   }
 
   SliverAppBar _buildMobileSliverAppBar(

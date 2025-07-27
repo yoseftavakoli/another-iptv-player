@@ -168,7 +168,10 @@ class _M3UHomeScreenState extends State<M3UHomeScreen> {
 
   SliverAppBar _buildDesktopSliverAppBar(BuildContext context) {
     return SliverAppBar(
-      title: const SizedBox.shrink(),
+      title: SelectableText(
+        context.loc.live_streams,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       floating: true,
       snap: true,
       elevation: 0,

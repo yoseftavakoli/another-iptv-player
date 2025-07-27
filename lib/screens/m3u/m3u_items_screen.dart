@@ -86,7 +86,10 @@ class _M3uItemsScreenState extends State<M3uItemsScreen> {
                 ),
                 onChanged: _filterItems,
               )
-            : Text(context.loc.iptv_channels_count(filteredItems.length)),
+            : SelectableText(
+                context.loc.iptv_channels_count(filteredItems.length),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
         actions: [
           IconButton(
             icon: Icon(isSearching ? Icons.close : Icons.search),

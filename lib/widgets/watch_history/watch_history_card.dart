@@ -111,7 +111,7 @@ class WatchHistoryCard extends StatelessWidget {
         imageUrl: history.imagePath!,
         width: double.infinity,
         height: double.infinity,
-        fit: BoxFit.contain,
+        fit: _getFitForContentType(),
         placeholder: (context, url) => Container(
           color: Colors.grey[300],
           child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
@@ -121,6 +121,15 @@ class WatchHistoryCard extends StatelessWidget {
     } else {
       return _buildDefaultThumbnail();
     }
+  }
+
+  BoxFit _getFitForContentType() {
+    // Canlı yayınlar için contain kullan (logolar için)
+    if (history.contentType == ContentType.liveStream) {
+      return BoxFit.contain;
+    }
+    // Film ve diziler için cover kullan (posterler için)
+    return BoxFit.cover;
   }
 
   Widget _buildDefaultThumbnail() {

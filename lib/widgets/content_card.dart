@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:another_iptv_player/models/playlist_content_model.dart';
+import 'package:another_iptv_player/models/content_type.dart';
 
 
 class ContentCard extends StatelessWidget {
@@ -35,7 +36,7 @@ class ContentCard extends StatelessWidget {
               child: content.imagePath.isNotEmpty
                   ? CachedNetworkImage(
                       imageUrl: content.imagePath,
-                      fit: BoxFit.contain,
+                      fit: _getFitForContentType(),
                       placeholder: (context, url) => Container(
                         color: Theme.of(context).colorScheme.surfaceContainerHighest,
                         child: Center(
@@ -57,6 +58,15 @@ class ContentCard extends StatelessWidget {
     );
 
     return cardWidget;
+  }
+
+  BoxFit _getFitForContentType() {
+    // Canlı yayınlar için contain kullan (logolar için)
+    if (content.contentType == ContentType.liveStream) {
+      return BoxFit.contain;
+    }
+    // Film ve diziler için cover kullan (posterler için)
+    return BoxFit.cover;
   }
 
   Widget _buildTitleCard(BuildContext context) {

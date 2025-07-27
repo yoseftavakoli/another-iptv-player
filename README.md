@@ -42,7 +42,7 @@ Official documentation: [https://www.another-iptv-player.com](https://www.anothe
 - [x] Subtitle Customization
 - [x] Localization (Multi-language Support)
 - [x] M3U & M3U8 Playlist Support
-- [ ] Favorites
+- [x] Favorites
 - [ ] Improved UI/UX - TV Support
 - [ ] EPG (Electronic Program Guide) Support
 

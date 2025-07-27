@@ -1,4 +1,25 @@
-# [](https://github.com/bsogulcan/iptv-player/compare/v0.8.1...v) (2025-07-24)
+# [](https://github.com/bsogulcan/iptv-player/compare/v0.9.0...v) (2025-07-27)
+
+
+
+# [0.9.0](https://github.com/bsogulcan/iptv-player/compare/v0.8.2...v0.9.0) (2025-07-27)
+
+
+### Bug Fixes
+
+* **docs:** google play store link in downloads ([c19720d](https://github.com/bsogulcan/iptv-player/commit/c19720df1550514d587ec786f80d2d7766d39a31))
+* responsive home page ([297697f](https://github.com/bsogulcan/iptv-player/commit/297697ffbb3bea28ea21036c06baed0645743473))
+* separate api call and get services ([0f4809e](https://github.com/bsogulcan/iptv-player/commit/0f4809ed484003f98e24b513022b45fd09b42bc1))
+* ui improvements ([dc28f08](https://github.com/bsogulcan/iptv-player/commit/dc28f0803b5609f7edac7f68d73f6eeaf63c762b))
+
+
+### Features
+
+* favorites ([#13](https://github.com/bsogulcan/iptv-player/issues/13)) ([3fb1743](https://github.com/bsogulcan/iptv-player/commit/3fb17431498b50b0b3f7258dcf2cd9a6f340193c))
+
+
+
+## [0.8.2](https://github.com/bsogulcan/iptv-player/compare/v0.8.1...v0.8.2) (2025-07-24)
 
 
 ### Bug Fixes

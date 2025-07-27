@@ -49,11 +49,13 @@ class XtreamCodeHomeController extends ChangeNotifier {
     _currentIndex = index;
     notifyListeners();
 
-    _pageController.animateToPage(
-      index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        index,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void onPageChanged(int index) {

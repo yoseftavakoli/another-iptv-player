@@ -4,11 +4,13 @@ import 'package:another_iptv_player/screens/m3u/m3u_data_loader_screen.dart';
 import 'package:another_iptv_player/services/m3u_parser.dart';
 import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit_video/media_kit_video_controls/src/controls/methods/video_state.dart';
 import 'package:provider/provider.dart';
 import '../../../../controllers/playlist_controller.dart';
 import '../../models/m3u_item.dart';
+import '../../utils/show_loading_dialog.dart';
 
 class NewM3uPlaylistScreen extends StatefulWidget {
   const NewM3uPlaylistScreen({super.key});
@@ -21,11 +23,11 @@ class NewM3uPlaylistScreenState extends State<NewM3uPlaylistScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController(text: 'M3U Playlist-1');
   final _urlController = TextEditingController();
-
   bool _isUrlSource = true;
   bool _isFormValid = false;
   String? _selectedFilePath;
   String? _selectedFileName;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -104,6 +106,11 @@ class NewM3uPlaylistScreenState extends State<NewM3uPlaylistScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  if (isLoading)
+                    Container(
+                      color: Colors.black.withOpacity(0.5),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
                   _buildHeader(colorScheme),
                   SizedBox(height: 32),
                   _buildPlaylistNameField(colorScheme),
@@ -568,9 +575,6 @@ class NewM3uPlaylistScreenState extends State<NewM3uPlaylistScreen> {
 
       playlistController.clearError();
 
-      print('Playlist Name: ${_nameController.text.trim()}');
-      print('Is URL Source: $_isUrlSource');
-
       var playlist = await playlistController.createPlaylist(
         name: _nameController.text.trim(),
         type: PlaylistType.m3u,
@@ -578,17 +582,28 @@ class NewM3uPlaylistScreenState extends State<NewM3uPlaylistScreen> {
       );
 
       List<M3uItem> m3uItems = [];
-      if (_isUrlSource) {
-        print('URL: ${_urlController.text.trim()}');
-        m3uItems = await M3uParser.parseUrl(playlist!.id, _urlController.text);
-      } else {
-        print('File Path: $_selectedFilePath');
-        print('File Name: $_selectedFileName');
-        m3uItems = await M3uParser.parseFile(playlist!.id, _selectedFilePath!);
-      }
+      showLoadingDialog(context, context.loc.loading_m3u);
+
+      try {
+        if (_isUrlSource) {
+          print('URL: ${_urlController.text.trim()}');
+          final params = {'id': playlist!.id, 'url': _urlController.text};
+
+          m3uItems = await compute(M3uParser.parseM3uUrl, params);
+        } else {
+          print('File Path: $_selectedFilePath');
+          print('File Name: $_selectedFileName');
+          final params = {'id': playlist!.id, 'filePath': _selectedFilePath!};
+
+          m3uItems = await compute(M3uParser.parseM3uFile, params);
+        }
+      } catch (ex) {}
+
+      Navigator.of(context).pop();
 
       if (m3uItems.length == 0) {
         playlistController.setError(context.loc.m3u_error);
+        await playlistController.deletePlaylist(playlist!.id);
         return;
       }
 

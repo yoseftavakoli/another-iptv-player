@@ -110,6 +110,7 @@ class M3UHomeController extends ChangeNotifier {
       notifyListeners();
 
       _m3uItems = await _repository.getM3uItems();
+      AppState.m3uItems = _m3uItems;
 
       _isLoading = false;
       notifyListeners();

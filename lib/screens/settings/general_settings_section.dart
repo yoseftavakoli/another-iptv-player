@@ -1,14 +1,22 @@
+import 'package:another_iptv_player/database/database.dart';
 import 'package:another_iptv_player/screens/settings/subtitle_settings_section.dart';
+import 'package:another_iptv_player/services/service_locator.dart';
 import 'package:another_iptv_player/utils/get_playlist_type.dart';
+import 'package:another_iptv_player/utils/show_loading_dialog.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:another_iptv_player/l10n/localization_extension.dart';
 import '../../controllers/locale_provider.dart';
 import '../../l10n/supported_languages.dart';
+import '../../models/m3u_item.dart';
 import '../../repositories/user_preferences.dart';
 import '../../services/app_state.dart';
+import '../../services/m3u_parser.dart';
 import '../../widgets/dropdown_tile_widget.dart';
 import '../../widgets/section_title_widget.dart';
+import '../m3u/m3u_data_loader_screen.dart';
 import '../playlist_screen.dart';
 import '../xtream-codes/xtream_code_data_loader_screen.dart';
 
@@ -20,9 +28,12 @@ class GeneralSettingsWidget extends StatefulWidget {
 }
 
 class _GeneralSettingsWidgetState extends State<GeneralSettingsWidget> {
+  final AppDatabase database = getIt<AppDatabase>();
+
   bool _backgroundPlayEnabled = false;
-  Locale _appLanguage = Locale('tr');
   bool _isLoading = true;
+  String? _selectedFilePath;
+  String? _selectedFileName;
 
   @override
   void initState() {
@@ -103,21 +114,27 @@ class _GeneralSettingsWidgetState extends State<GeneralSettingsWidget> {
                   );
                 },
               ),
-              if (isXtreamCode) const Divider(height: 1),
-              if (isXtreamCode) ListTile(
+              const Divider(height: 1),
+              ListTile(
                 leading: const Icon(Icons.refresh),
                 title: Text(context.loc.refresh_contents),
                 trailing: const Icon(Icons.cloud_download),
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => XtreamCodeDataLoaderScreen(
-                        playlist: AppState.currentPlaylist!,
-                        refreshAll: true,
+                  if (isXtreamCode) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => XtreamCodeDataLoaderScreen(
+                          playlist: AppState.currentPlaylist!,
+                          refreshAll: true,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
+
+                  if (isM3u) {
+                    refreshM3uPlaylist();
+                  }
                 },
               ),
 
@@ -146,5 +163,117 @@ class _GeneralSettingsWidgetState extends State<GeneralSettingsWidget> {
         ),
       ],
     );
+  }
+
+  refreshM3uPlaylist() async {
+    List<M3uItem> oldM3uItems = AppState.m3uItems!;
+    List<M3uItem> newM3uItems = [];
+
+    if (AppState.currentPlaylist!.url!.startsWith('http')) {
+      showLoadingDialog(context, context.loc.loading_m3u);
+      final params = {
+        'id': AppState.currentPlaylist!.id,
+        'url': AppState.currentPlaylist!.url!,
+      };
+      newM3uItems = await compute(M3uParser.parseM3uUrl, params);
+    } else {
+      await _pickFile();
+      if (_selectedFilePath == null) {
+        return;
+      }
+
+      showLoadingDialog(context, context.loc.loading_m3u);
+      final params = {
+        'id': AppState.currentPlaylist!.id,
+        'filePath': _selectedFilePath!,
+      };
+      newM3uItems = await compute(M3uParser.parseM3uFile, params);
+    }
+
+    newM3uItems = updateM3UItemIdsByPosition(
+      oldItems: oldM3uItems,
+      newItems: newM3uItems,
+    );
+
+    await database.deleteAllM3uItems(AppState.currentPlaylist!.id);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => M3uDataLoaderScreen(
+          playlist: AppState.currentPlaylist!,
+          m3uItems: newM3uItems,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickFile() async {
+    _selectedFilePath = null;
+    _selectedFileName = null;
+
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['m3u', 'm3u8'],
+        allowMultiple: false,
+        withData: false,
+        withReadStream: false,
+      );
+
+      if (result != null) {
+        setState(() {
+          _selectedFilePath = result.files.single.path;
+          _selectedFileName = result.files.single.name;
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.loc.file_selection_error)));
+    }
+  }
+
+  List<M3uItem> updateM3UItemIdsByPosition({
+    required List<M3uItem> oldItems,
+    required List<M3uItem> newItems,
+  }) {
+    Map<String, List<MapEntry<int, String>>> groupedOldItems = {};
+
+    for (int i = 0; i < oldItems.length; i++) {
+      M3uItem item = oldItems[i];
+      String key = "${item.url}|||${item.name}";
+
+      if (!groupedOldItems.containsKey(key)) {
+        groupedOldItems[key] = [];
+      }
+      groupedOldItems[key]!.add(MapEntry(i, item.id));
+    }
+
+    Map<String, int> groupUsageCounter = {};
+    List<M3uItem> updatedItems = [];
+
+    for (int i = 0; i < newItems.length; i++) {
+      print(i);
+      M3uItem newItem = newItems[i];
+      String key = "${newItem.url}|||${newItem.name}";
+
+      if (groupedOldItems.containsKey(key)) {
+        List<MapEntry<int, String>> oldGroup = groupedOldItems[key]!;
+        int usageCount = groupUsageCounter[key] ?? 0;
+
+        if (usageCount < oldGroup.length) {
+          String oldId = oldGroup[usageCount].value;
+          updatedItems.add(newItem.copyWith(id: oldId));
+          groupUsageCounter[key] = usageCount + 1;
+        } else {
+          updatedItems.add(newItem);
+        }
+      } else {
+        updatedItems.add(newItem);
+      }
+    }
+
+    return updatedItems;
   }
 }

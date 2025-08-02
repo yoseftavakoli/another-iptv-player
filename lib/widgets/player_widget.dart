@@ -250,7 +250,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
         if (_wasDisconnected &&
             contentItem.contentType == ContentType.liveStream &&
             liveStreamContentItem != null &&
-            liveStreamContentItem!.url.isNotEmpty) {
+            liveStreamContentItem.url.isNotEmpty) {
           try {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

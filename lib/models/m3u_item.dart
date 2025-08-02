@@ -86,4 +86,42 @@ class M3uItem {
       categoryId: data.categoryId,
     );
   }
+
+  M3uItem copyWith({
+    String? id,
+    String? playlistId,
+    String? name,
+    String? tvgId,
+    String? tvgName,
+    String? tvgLogo,
+    String? tvgUrl,
+    String? tvgRec,
+    String? tvgShift,
+    String? groupTitle,
+    String? groupName,
+    String? userAgent,
+    String? referrer,
+    String? url,
+    ContentType? contentType,
+    String? categoryId,
+  }) {
+    return M3uItem(
+      id: id ?? this.id,
+      playlistId: playlistId ?? this.playlistId,
+      name: name ?? this.name,
+      tvgId: tvgId ?? this.tvgId,
+      tvgName: tvgName ?? this.tvgName,
+      tvgLogo: tvgLogo ?? this.tvgLogo,
+      tvgUrl: tvgUrl ?? this.tvgUrl,
+      tvgRec: tvgRec ?? this.tvgRec,
+      tvgShift: tvgShift ?? this.tvgShift,
+      groupTitle: groupTitle ?? this.groupTitle,
+      groupName: groupName ?? this.groupName,
+      userAgent: userAgent ?? this.userAgent,
+      referrer: referrer ?? this.referrer,
+      url: url ?? this.url,
+      contentType: contentType ?? this.contentType,
+      categoryId: categoryId ?? this.categoryId,
+    );
+  }
 }

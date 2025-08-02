@@ -5,6 +5,11 @@ import 'package:uuid/uuid.dart';
 import '../models/m3u_item.dart';
 
 class M3uParser {
+
+  static Future<List<M3uItem>> parseM3uFile(Map<String, String> params) async {
+    return await M3uParser.parseFile(params['id']!, params['filePath']!);
+  }
+
   static Future<List<M3uItem>> parseFile(
     String playlistId,
     String filePath,
@@ -17,6 +22,10 @@ class M3uParser {
       print('M3U file parse error: $e');
       throw Exception('M3U dosyası okunamadı: ${e.toString()}');
     }
+  }
+
+  static Future<List<M3uItem>> parseM3uUrl(Map<String, String> params) async {
+    return await M3uParser.parseUrl(params['id']!, params['url']!);
   }
 
   static Future<List<M3uItem>> parseUrl(String playlistId, String url) async {

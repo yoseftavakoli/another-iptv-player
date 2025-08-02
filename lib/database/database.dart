@@ -1388,6 +1388,12 @@ class AppDatabase extends _$AppDatabase {
         .go();
   }
 
+  Future<int> deleteAllM3uItems(String playlistId) {
+    return (delete(
+      m3uItems,
+    )..where((tbl) => tbl.playlistId.equals(playlistId))).go();
+  }
+
   Future<List<M3uItem>> getM3uItemsByPlaylist(String playlistId) async {
     final data = await (select(
       m3uItems,

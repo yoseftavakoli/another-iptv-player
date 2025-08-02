@@ -14,12 +14,14 @@ class M3uDataLoaderScreen extends StatefulWidget {
   final Playlist playlist;
   final List<M3uItem> m3uItems;
   bool refreshAll = false;
+  final List<M3uItem>? oldM3uItems;
 
   M3uDataLoaderScreen({
     super.key,
     required this.playlist,
     required this.m3uItems,
     this.refreshAll = false,
+    this.oldM3uItems,
   });
 
   @override

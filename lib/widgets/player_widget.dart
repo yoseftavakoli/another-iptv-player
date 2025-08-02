@@ -348,10 +348,14 @@ class _PlayerWidgetState extends State<PlayerWidget>
       );
     });
 
-    _player.stream.error.listen((error) {
+    _player.stream.error.listen((error) async {
       print('PLAYER ERROR -> $error');
 
       if (error.contains('Failed to open')) {
+        if (contentItem.contentType == ContentType.liveStream) {
+          await _player.open(Media(liveStreamContentItem!.url));
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('$error'), duration: Duration(seconds: 3)),
         );
@@ -370,6 +374,12 @@ class _PlayerWidgetState extends State<PlayerWidget>
       PlayerState.title = contentItem.name;
       EventBus().emit('player_content_item', contentItem);
       EventBus().emit('player_content_item_index', playlist.index);
+    });
+
+    _player.stream.completed.listen((playlist) async {
+      if (contentItem.contentType == ContentType.liveStream) {
+        await _player.open(Media(liveStreamContentItem!.url));
+      }
     });
 
     contentItemIndexChangedSubscription = EventBus()

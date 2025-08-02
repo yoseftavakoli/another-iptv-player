@@ -353,22 +353,25 @@ class _PlayerWidgetState extends State<PlayerWidget>
     });
 
     _player.stream.error.listen((error) async {
-      _errorHandler.handleError(
-        error,
-        () async {
-          if (contentItem.contentType == ContentType.liveStream) {
-            await _player.open(Media(liveStreamContentItem!.url));
-          }
-        },
-        (errorMessage) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorMessage),
-              duration: Duration(seconds: 3),
-            ),
-          );
-        },
-      );
+      print('PLAYER ERROR -> $error');
+      if (error.contains('Failed to open')) {
+        _errorHandler.handleError(
+          error,
+          () async {
+            if (contentItem.contentType == ContentType.liveStream) {
+              await _player.open(Media(liveStreamContentItem!.url));
+            }
+          },
+          (errorMessage) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorMessage),
+                duration: Duration(seconds: 3),
+              ),
+            );
+          },
+        );
+      }
     });
 
     _player.stream.playlist.listen((playlist) {

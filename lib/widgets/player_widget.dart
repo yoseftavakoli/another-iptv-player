@@ -17,6 +17,7 @@ import '../../models/content_type.dart';
 import '../../services/player_state.dart';
 import '../../services/service_locator.dart';
 import '../../utils/audio_handler.dart';
+import '../utils/player_error_handler.dart';
 
 class PlayerWidget extends StatefulWidget {
   final ContentItem contentItem;
@@ -54,6 +55,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
   final MyAudioHandler _audioHandler = getIt<MyAudioHandler>();
   List<ContentItem>? _queue;
   late ContentItem contentItem;
+  final PlayerErrorHandler _errorHandler = PlayerErrorHandler();
 
   bool isLoading = true;
   bool hasError = false;
@@ -105,6 +107,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
     subtitleTrackSubscription.cancel();
     contentItemIndexChangedSubscription.cancel();
     _connectivitySubscription.cancel();
+    _errorHandler.reset();
     super.dispose();
   }
 
@@ -252,6 +255,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
             liveStreamContentItem != null &&
             liveStreamContentItem.url.isNotEmpty) {
           try {
+            ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text("Online", style: TextStyle(color: Colors.white)),
@@ -349,18 +353,22 @@ class _PlayerWidgetState extends State<PlayerWidget>
     });
 
     _player.stream.error.listen((error) async {
-      print('PLAYER ERROR -> $error');
-
-      if (error.contains('Failed to open')) {
-        if (contentItem.contentType == ContentType.liveStream) {
-          await _player.open(Media(liveStreamContentItem!.url));
-        }
-
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$error'), duration: Duration(seconds: 3)),
-        );
-      }
+      _errorHandler.handleError(
+        error,
+        () async {
+          if (contentItem.contentType == ContentType.liveStream) {
+            await _player.open(Media(liveStreamContentItem!.url));
+          }
+        },
+        (errorMessage) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        },
+      );
     });
 
     _player.stream.playlist.listen((playlist) {
@@ -392,6 +400,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
             await _player.open(Playlist([Media(item.url)]), play: true);
             EventBus().emit('player_content_item', item);
             EventBus().emit('player_content_item_index', index);
+            _errorHandler.reset();
           } else {
             _player.jump(index);
           }

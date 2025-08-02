@@ -1,4 +1,21 @@
-# [](https://github.com/bsogulcan/iptv-player/compare/v0.9.0...v) (2025-07-27)
+# [](https://github.com/bsogulcan/iptv-player/compare/v0.9.1...v) (2025-08-02)
+
+
+
+## [0.9.1](https://github.com/bsogulcan/iptv-player/compare/v0.9.0...v0.9.1) (2025-08-02)
+
+
+### Bug Fixes
+
+* exponential retry ([0ea33a5](https://github.com/bsogulcan/iptv-player/commit/0ea33a5ee129bf79b522a6f4a31c89318a2ea7d1))
+* live stream playing continuesly ([924748d](https://github.com/bsogulcan/iptv-player/commit/924748df7a498f5a133fa3d39da7fab8091c2b57))
+* player error ([8a891c9](https://github.com/bsogulcan/iptv-player/commit/8a891c988818eaea7d5285663760e106699789d7))
+* snack bar queue ([f3bfa6e](https://github.com/bsogulcan/iptv-player/commit/f3bfa6ef51ad1914279e5c7e422e374853349a8f))
+
+
+### Features
+
+* refresh m3u playlist ([3bdafb8](https://github.com/bsogulcan/iptv-player/commit/3bdafb8f69e4c3e3d4fd3d40173ad8bc1bbf354a))
 
 
 

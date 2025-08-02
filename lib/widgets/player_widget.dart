@@ -356,6 +356,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
           await _player.open(Media(liveStreamContentItem!.url));
         }
 
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('$error'), duration: Duration(seconds: 3)),
         );

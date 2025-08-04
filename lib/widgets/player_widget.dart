@@ -127,7 +127,6 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
     List<MediaItem> mediaItems = [];
     var currentItemIndex = 0;
-    ContentItem? liveStreamContentItem = null;
 
     if (_queue != null) {
       for (int i = 0; i < _queue!.length; i++) {
@@ -157,7 +156,6 @@ class _PlayerWidgetState extends State<PlayerWidget>
           currentItemIndex = i;
 
           if (contentItem.contentType == ContentType.liveStream) {
-            liveStreamContentItem = item;
             currentItemIndex = 0;
             contentItem = item;
 
@@ -195,7 +193,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
           play: true,
         );
       } else {
-        await _player.open(Media(liveStreamContentItem!.url));
+        await _player.open(Media(contentItem.url));
       }
     } else {
       final mediaItem = MediaItem(
@@ -211,9 +209,9 @@ class _PlayerWidgetState extends State<PlayerWidget>
         },
       );
 
-      if (contentItem.contentType == ContentType.liveStream) {
-        liveStreamContentItem = contentItem;
-      }
+      // if (contentItem.contentType == ContentType.liveStream) {
+      //   liveStreamContentItem = contentItem;
+      // }
 
       await _audioHandler.setQueue([mediaItem]);
 
@@ -252,8 +250,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
       if (hasConnection) {
         if (_wasDisconnected &&
             contentItem.contentType == ContentType.liveStream &&
-            liveStreamContentItem != null &&
-            liveStreamContentItem.url.isNotEmpty) {
+            contentItem.url.isNotEmpty) {
           try {
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -264,7 +261,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
             );
 
             // TODO: Implement watch history duration for vod and series
-            await _player.open(Media(liveStreamContentItem.url));
+            await _player.open(Media(contentItem.url));
           } catch (e) {
             print('Error opening media: $e');
           }
@@ -359,7 +356,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
           error,
           () async {
             if (contentItem.contentType == ContentType.liveStream) {
-              await _player.open(Media(liveStreamContentItem!.url));
+              await _player.open(Media(contentItem.url));
             }
           },
           (errorMessage) {
@@ -390,7 +387,7 @@ class _PlayerWidgetState extends State<PlayerWidget>
 
     _player.stream.completed.listen((playlist) async {
       if (contentItem.contentType == ContentType.liveStream) {
-        await _player.open(Media(liveStreamContentItem!.url));
+        await _player.open(Media(contentItem.url));
       }
     });
 

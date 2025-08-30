@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/screens/xtream-codes/new_xtream_code_playlist_screen.dart';
 import 'package:another_iptv_player/database/database.dart';
 import 'package:another_iptv_player/screens/settings/subtitle_settings_section.dart';
 import 'package:another_iptv_player/services/service_locator.dart';
@@ -86,7 +87,7 @@ class _GeneralSettingsWidgetState extends State<GeneralSettingsWidget> {
                   if (mounted) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => PlaylistScreen()),
+                      MaterialPageRoute(builder: (context) => NewXtreamCodePlaylistScreen()),
                     );
                   }
                 },

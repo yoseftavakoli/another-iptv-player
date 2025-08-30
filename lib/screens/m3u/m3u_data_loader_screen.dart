@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/screens/xtream-codes/new_xtream_code_playlist_screen.dart';
 import 'package:another_iptv_player/models/m3u_item.dart';
 import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
@@ -426,7 +427,7 @@ class M3uDataLoaderScreenState extends State<M3uDataLoaderScreen>
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              PlaylistScreen(),
+                                              NewXtreamCodePlaylistScreen(),
                                         ),
                                         (route) => false,
                                       );

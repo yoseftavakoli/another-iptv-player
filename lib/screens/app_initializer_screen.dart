@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/screens/xtream-codes/new_xtream_code_playlist_screen.dart';
 import 'package:another_iptv_player/models/playlist_model.dart';
 import 'package:another_iptv_player/screens/m3u/m3u_home_screen.dart';
 import 'package:another_iptv_player/screens/playlist_screen.dart';
@@ -47,7 +48,7 @@ class _AppInitializerScreenState extends State<AppInitializerScreen> {
     }
 
     if (_lastPlaylist == null) {
-      return const PlaylistScreen();
+      return const NewXtreamCodePlaylistScreen();
     } else {
       switch (_lastPlaylist!.type) {
         case PlaylistType.xtream:

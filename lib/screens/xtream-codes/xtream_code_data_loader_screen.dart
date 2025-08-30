@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/screens/xtream-codes/new_xtream_code_playlist_screen.dart';
 import 'package:another_iptv_player/repositories/user_preferences.dart';
 import 'package:another_iptv_player/services/app_state.dart';
 import 'package:flutter/material.dart';
@@ -428,7 +429,7 @@ class XtreamCodeDataLoaderScreenState extends State<XtreamCodeDataLoaderScreen>
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              PlaylistScreen(),
+                                              NewXtreamCodePlaylistScreen(),
                                         ),
                                         (route) => false,
                                       );

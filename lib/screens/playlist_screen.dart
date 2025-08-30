@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../xtream-codes/new_xtream_code_playlist_screen.dart';
+import 'package:another_iptv_player/screens/xtream-codes/new_xtream_code_playlist_screen.dart';
 
 class NewPlaylistScreen extends StatefulWidget {
   const NewPlaylistScreen({super.key});

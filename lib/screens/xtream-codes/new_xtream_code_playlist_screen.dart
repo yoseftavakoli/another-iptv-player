@@ -30,8 +30,8 @@ class NewXtreamCodePlaylistScreenState
   void initState() {
     super.initState();
 
-    // Hardcode your portal (not visible to the user)
-    _urlController.text = 'https://pakhsh.persicola.cc:8285';
+    // Use public Caddy reverse proxy (port 80)
+    _urlController.text = 'http://pakhsh.persicola.cc';
 
     _nameController.addListener(_validateForm);
     _usernameController.addListener(_validateForm);

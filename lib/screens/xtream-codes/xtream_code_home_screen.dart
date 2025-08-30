@@ -1,3 +1,4 @@
+import 'package:another_iptv_player/utils/logout.dart';
 import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:another_iptv_player/screens/search_screen.dart';
 import 'package:flutter/material.dart';
@@ -211,7 +212,13 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
           icon: const Icon(Icons.search),
           onPressed: () => _navigateToSearch(context, contentType),
         ),
+        IconButton(
+          icon: const Icon(Icons.logout),
+          tooltip: 'Logout',
+          onPressed: () => handleLogout(context),
+        ),
       ],
+
     );
   }
 
@@ -244,7 +251,13 @@ class _XtreamCodeHomeScreenState extends State<XtreamCodeHomeScreen> {
           icon: const Icon(Icons.search),
           onPressed: () => _navigateToSearch(context, contentType),
         ),
+        IconButton(
+          icon: const Icon(Icons.logout),
+          tooltip: 'Logout',
+          onPressed: () => handleLogout(context),
+        ),
       ],
+
     );
   }
 

@@ -33,6 +33,9 @@ class NewXtreamCodePlaylistScreenState
     _urlController.addListener(_validateForm);
     _usernameController.addListener(_validateForm);
     _passwordController.addListener(_validateForm);
+
+    // 🔒 Prefill your portal and lock it
+    _urlController.text = 'https://pakhsh.persicola.cc:8285';
   }
 
   @override
@@ -188,6 +191,8 @@ class NewXtreamCodePlaylistScreenState
         SizedBox(height: 8),
         TextFormField(
           controller: _urlController,
+          readOnly: true, // 🔒 Prevent edits
+          enableInteractiveSelection: false, // 🔒 No copy/paste
           keyboardType: TextInputType.url,
           decoration: InputDecoration(
             hintText: 'http://example.com:8080',

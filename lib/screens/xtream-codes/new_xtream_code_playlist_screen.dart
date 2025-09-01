@@ -1,27 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
 import 'package:another_iptv_player/l10n/localization_extension.dart';
 import 'package:another_iptv_player/screens/xtream-codes/xtream_code_data_loader_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../../../controllers/playlist_controller.dart';
-import '../../../../models/api_configuration_model.dart';
-import '../../../../models/playlist_model.dart';
-import '../../../../repositories/iptv_repository.dart';
+import 'package:another_iptv_player/controllers/playlist_controller.dart';
+import 'package:another_iptv_player/models/api_configuration_model.dart';
+import 'package:another_iptv_player/models/playlist_model.dart';
+import 'package:another_iptv_player/repositories/iptv_repository.dart';
 
 class NewXtreamCodePlaylistScreen extends StatefulWidget {
   const NewXtreamCodePlaylistScreen({super.key});
 
   @override
-  NewXtreamCodePlaylistScreenState createState() =>
+  State<NewXtreamCodePlaylistScreen> createState() =>
       NewXtreamCodePlaylistScreenState();
 }
 
 class NewXtreamCodePlaylistScreenState
     extends State<NewXtreamCodePlaylistScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  // hidden
   final _nameController = TextEditingController(text: 'Playlist-1');
-  final _urlController = TextEditingController(); // kept internal, never shown
+  final _urlController = TextEditingController(text: 'http://pakhsh.persicola.cc');
+
+  // visible
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  // TV focus
+  final _fUser = FocusNode(debugLabel: 'user');
+  final _fPass = FocusNode(debugLabel: 'pass');
+  final _fBtn  = FocusNode(debugLabel: 'btn');
 
   bool _obscurePassword = true;
   bool _isFormValid = false;
@@ -29,14 +40,8 @@ class NewXtreamCodePlaylistScreenState
   @override
   void initState() {
     super.initState();
-
-    // Use public Caddy reverse proxy (port 80)
-    _urlController.text = 'http://pakhsh.persicola.cc';
-
-    _nameController.addListener(_validateForm);
-    _usernameController.addListener(_validateForm);
-    _passwordController.addListener(_validateForm);
-    // NOTE: no listener for _urlController since it's hidden/fixed
+    _usernameController.addListener(_validate);
+    _passwordController.addListener(_validate);
   }
 
   @override
@@ -45,239 +50,255 @@ class NewXtreamCodePlaylistScreenState
     _urlController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
+    _fUser.dispose();
+    _fPass.dispose();
+    _fBtn.dispose();
     super.dispose();
   }
 
-  void _validateForm() {
-    setState(() {
-      _isFormValid =
-          _nameController.text.trim().isNotEmpty &&
-          _usernameController.text.trim().isNotEmpty &&
-          _passwordController.text.trim().isNotEmpty;
-    });
+  void _validate() {
+    final ok = _usernameController.text.trim().isNotEmpty &&
+        _passwordController.text.trim().isNotEmpty;
+    if (ok != _isFormValid) setState(() => _isFormValid = ok);
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final cs = Theme.of(context).colorScheme;
+
+    // Map D-pad arrows & Enter/Select to focus traversal / press
+    final shortcuts = <ShortcutActivator, Intent>{
+      const SingleActivator(LogicalKeyboardKey.arrowDown): const NextFocusIntent(),
+      const SingleActivator(LogicalKeyboardKey.arrowUp): const PreviousFocusIntent(),
+      const SingleActivator(LogicalKeyboardKey.arrowRight): const NextFocusIntent(),
+      const SingleActivator(LogicalKeyboardKey.arrowLeft): const PreviousFocusIntent(),
+      const SingleActivator(LogicalKeyboardKey.enter): const ActivateIntent(),
+      const SingleActivator(LogicalKeyboardKey.select): const ActivateIntent(),
+    };
 
     return Scaffold(
-      appBar: AppBar(title: Text('Sign in')),
-      body: Consumer<PlaylistController>(
-        builder: (context, controller, child) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildHeader(colorScheme),
-                  const SizedBox(height: 32),
-                  // (Optional) You can hide playlist name too; leave it for now.
-                  _buildUsernameField(colorScheme),
-                  const SizedBox(height: 20),
-                  _buildPasswordField(colorScheme),
-                  const SizedBox(height: 28),
-                  _buildSignInButton(controller, colorScheme),
-                  if (controller.error != null) ...[
-                    const SizedBox(height: 20),
-                    _buildErrorCard(controller.error!, colorScheme),
-                  ],
-                  const SizedBox(height: 16),
-                  _buildInfoCard(colorScheme),
-                ],
-              ),
+      appBar: AppBar(title: const Text('Sign in')),
+      body: Shortcuts(
+        shortcuts: shortcuts,
+        child: Actions(
+          actions: <Type, Action<Intent>>{
+            NextFocusIntent: CallbackAction<NextFocusIntent>(
+              onInvoke: (_) => FocusScope.of(context).nextFocus(),
             ),
-          );
+            PreviousFocusIntent: CallbackAction<PreviousFocusIntent>(
+              onInvoke: (_) => FocusScope.of(context).previousFocus(),
+            ),
+          },
+          child: Consumer<PlaylistController>(
+            builder: (context, controller, _) {
+              return FocusTraversalGroup(
+                policy: OrderedTraversalPolicy(),
+                child: ListView(
+                  padding: const EdgeInsets.all(24),
+                  children: [
+                    _header(cs),
+                    const SizedBox(height: 20),
+                    // order 1
+                    FocusTraversalOrder(
+                      order: const NumericFocusOrder(1),
+                      child: _fieldUsername(cs),
+                    ),
+                    const SizedBox(height: 14),
+                    // order 2
+                    FocusTraversalOrder(
+                      order: const NumericFocusOrder(2),
+                      child: _fieldPassword(cs),
+                    ),
+                    const SizedBox(height: 20),
+                    // order 3
+                    FocusTraversalOrder(
+                      order: const NumericFocusOrder(3),
+                      child: _btnSignIn(controller, cs),
+                    ),
+                    if (controller.error != null) ...[
+                      const SizedBox(height: 12),
+                      _error(controller.error!, cs),
+                    ],
+                    const SizedBox(height: 10),
+                    _info(cs),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _header(ColorScheme cs) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.live_tv, size: 40, color: cs.primary),
+          const SizedBox(height: 8),
+          Text('Enter your credentials',
+              style: TextStyle(
+                  fontSize: 22, fontWeight: FontWeight.bold, color: cs.onSurface)),
+          const SizedBox(height: 4),
+          Text('Sign in with your username and password.',
+              style:
+                  TextStyle(fontSize: 14, color: cs.onSurface.withOpacity(0.7))),
+        ],
+      );
+
+  Widget _fieldUsername(ColorScheme cs) => TextFormField(
+        controller: _usernameController,
+        focusNode: _fUser,
+        autofocus: true,
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          labelText: context.loc.username,
+          hintText: context.loc.username_placeholder,
+          prefixIcon: Icon(Icons.person, color: cs.primary),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          filled: true,
+          fillColor: cs.surface,
+        ),
+        validator: (v) {
+          if (v == null || v.trim().isEmpty) return context.loc.username_required;
+          if (v.trim().length < 3) return context.loc.username_min_3;
+          return null;
         },
-      ),
-    );
-  }
+        onFieldSubmitted: (_) => _fPass.requestFocus(),
+      );
 
-  Widget _buildHeader(ColorScheme colorScheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            color: colorScheme.primary,
-            borderRadius: BorderRadius.circular(30),
+  Widget _fieldPassword(ColorScheme cs) => TextFormField(
+        controller: _passwordController,
+        focusNode: _fPass,
+        textInputAction: TextInputAction.done,
+        obscureText: _obscurePassword,
+        decoration: InputDecoration(
+          labelText: context.loc.password,
+          hintText: context.loc.password_placeholder,
+          prefixIcon: Icon(Icons.lock, color: cs.primary),
+          suffixIcon: IconButton(
+            icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off,
+                color: cs.onSurface.withOpacity(0.6)),
+            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
           ),
-          child: Icon(Icons.stream, size: 30, color: colorScheme.onPrimary),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          filled: true,
+          fillColor: cs.surface,
         ),
-        const SizedBox(height: 16),
-        Text('Enter your credentials',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: colorScheme.onSurface,
-            )),
-        const SizedBox(height: 6),
-        Text('Sign in with your username and password.',
-            style: TextStyle(
-              fontSize: 14,
-              color: colorScheme.onSurface.withOpacity(0.7),
-            )),
-      ],
-    );
-  }
+        validator: (v) {
+          if (v == null || v.trim().isEmpty) return context.loc.password_required;
+          if (v.length < 3) return context.loc.password_min_3;
+          return null;
+        },
+        onFieldSubmitted: (_) => _fBtn.requestFocus(),
+      );
 
-  Widget _buildUsernameField(ColorScheme colorScheme) {
-    return TextFormField(
-      controller: _usernameController,
-      decoration: InputDecoration(
-        labelText: context.loc.username,
-        hintText: context.loc.username_placeholder,
-        prefixIcon: Icon(Icons.person, color: colorScheme.primary),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        filled: true,
-        fillColor: colorScheme.surface,
+  Widget _btnSignIn(PlaylistController controller, ColorScheme cs) {
+    final enabled = _isFormValid && !controller.isLoading;
+
+    final button = ElevatedButton.icon(
+      focusNode: _fBtn,
+      icon: const Icon(Icons.login, size: 20),
+      label: Text(
+        context.loc.submit_create_playlist,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
-      validator: (v) {
-        if (v == null || v.trim().isEmpty) return context.loc.username_required;
-        if (v.trim().length < 3) return context.loc.username_min_3;
-        return null;
-      },
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size.fromHeight(56),
+        backgroundColor:
+            enabled ? cs.primary : cs.onSurface.withOpacity(0.12),
+        foregroundColor:
+            enabled ? cs.onPrimary : cs.onSurface.withOpacity(0.7),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      onPressed: enabled ? _signIn : null,
     );
+
+    return controller.isLoading
+        ? const Center(
+            child: SizedBox(
+              height: 40,
+              width: 40,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          )
+        : button;
   }
 
-  Widget _buildPasswordField(ColorScheme colorScheme) {
-    return TextFormField(
-      controller: _passwordController,
-      obscureText: _obscurePassword,
-      decoration: InputDecoration(
-        labelText: context.loc.password,
-        hintText: context.loc.password_placeholder,
-        prefixIcon: Icon(Icons.lock, color: colorScheme.primary),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _obscurePassword ? Icons.visibility : Icons.visibility_off,
-            color: colorScheme.onSurface.withOpacity(0.6),
+  Widget _error(String error, ColorScheme cs) => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cs.errorContainer,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: cs.error),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.error_outline, color: cs.error),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(error,
+                  style: TextStyle(
+                      color: cs.onErrorContainer, fontSize: 14)),
+            ),
+          ],
+        ),
+      );
+
+  Widget _info(ColorScheme cs) => Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: cs.primaryContainer,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: cs.primary),
+        ),
+        child: Text(
+          '${context.loc.all_datas_are_stored_in_device}\n${context.loc.url_format_validate_message}',
+          style: TextStyle(
+            color: cs.onPrimaryContainer,
+            fontSize: 12.5,
+            height: 1.35,
           ),
-          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        filled: true,
-        fillColor: colorScheme.surface,
-      ),
-      validator: (v) {
-        if (v == null || v.trim().isEmpty) return context.loc.password_required;
-        if (v.length < 3) return context.loc.password_min_3;
-        return null;
-      },
-    );
-  }
-
-  Widget _buildSignInButton(
-    PlaylistController controller,
-    ColorScheme colorScheme,
-  ) {
-    return SizedBox(
-      height: 56,
-      child: ElevatedButton(
-        onPressed: controller.isLoading ? null : (_isFormValid ? _signIn : null),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: colorScheme.primary,
-          foregroundColor: colorScheme.onPrimary,
-          disabledBackgroundColor: colorScheme.onSurface.withOpacity(0.12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-        child: controller.isLoading
-            ? const CircularProgressIndicator(strokeWidth: 2)
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.login, size: 20),
-                  SizedBox(width: 8),
-                  Text('Sign in', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                ],
-              ),
-      ),
-    );
-  }
-
-  Widget _buildErrorCard(String error, ColorScheme colorScheme) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.errorContainer,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.error),
-      ),
-      child: Row(children: [
-        Icon(Icons.error_outline, color: colorScheme.error),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(error,
-              style: TextStyle(color: colorScheme.onErrorContainer, fontSize: 14)),
-        ),
-      ]),
-    );
-  }
-
-  Widget _buildInfoCard(ColorScheme colorScheme) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.primary),
-      ),
-      child: Text(
-        '${context.loc.all_datas_are_stored_in_device}\n${context.loc.url_format_validate_message}',
-        style: TextStyle(
-          color: colorScheme.onPrimaryContainer,
-          fontSize: 13,
-          height: 1.4,
-        ),
-      ),
-    );
-  }
+      );
 
   Future<void> _signIn() async {
-    if (_formKey.currentState!.validate()) {
-      final controller = Provider.of<PlaylistController>(context, listen: false);
-      controller.clearError();
+    if (!_formKey.currentState!.validate()) return;
 
-      final repository = IptvRepository(
-        ApiConfig(
-          baseUrl: _urlController.text.trim(),      // hidden, fixed
-          username: _usernameController.text.trim(),
-          password: _passwordController.text.trim(),
-        ),
-        _nameController.text.trim(),
-      );
+    final controller = Provider.of<PlaylistController>(context, listen: false);
+    controller.clearError();
 
-      final playerInfo = await repository.getPlayerInfo(forceRefresh: true);
-      if (playerInfo == null) {
-        controller.setError(context.loc.invalid_credentials);
-        return;
-      }
-
-      final playlist = await controller.createPlaylist(
-        name: _nameController.text.trim(),
-        type: PlaylistType.xtream,
-        url: _urlController.text.trim(),
+    final repository = IptvRepository(
+      ApiConfig(
+        baseUrl: _urlController.text.trim(), // hidden, fixed
         username: _usernameController.text.trim(),
         password: _passwordController.text.trim(),
-      );
+      ),
+      _nameController.text.trim(),
+    );
 
-      if (playlist != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => XtreamCodeDataLoaderScreen(playlist: playlist),
-          ),
-        );
-      }
+    final playerInfo = await repository.getPlayerInfo(forceRefresh: true);
+    if (playerInfo == null) {
+      controller.setError(context.loc.invalid_credentials);
+      return;
+    }
+
+    final playlist = await controller.createPlaylist(
+      name: _nameController.text.trim(),
+      type: PlaylistType.xtream,
+      url: _urlController.text.trim(),
+      username: _usernameController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    if (playlist != null) {
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => XtreamCodeDataLoaderScreen(playlist: playlist),
+        ),
+      );
     }
   }
 }
